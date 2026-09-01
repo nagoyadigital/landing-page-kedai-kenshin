@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel — Okayama Kedai Kenshin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary:      #8B1A1A;
+      --primary-dark: #5C0E0E;
+      --primary-light:#B52626;
+      --green:        #22C55E;
+      --red:          #EF4444;
+      --gold:         #C9A84C;
+      --white:        #FFFFFF;
+      --bg:           #F4F4F6;
+      --card:         #FFFFFF;
+      --text:         #2C2C2C;
+      --muted:        #7A7A7A;
+      --border:       #E5E5E5;
+      --radius:       12px;
+      --shadow:       0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN SCREEN ── */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, #C0392B 100%);
+      padding: 20px;
+    }
+
+    .login-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+
+    .login-logo {
+      font-size: 48px;
+      margin-bottom: 8px;
+    }
+
+    .login-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .login-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(139,26,26,0.1);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 13px;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-login:hover  { background: var(--primary-light); }
+    .btn-login:active { transform: scale(0.98); }
+    .btn-login:disabled { background: #CCC; cursor: not-allowed; }
+
+    .login-error {
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--red);
+      font-weight: 600;
+      min-height: 20px;
+    }
+
+    /* ── ADMIN LAYOUT ── */
+    #adminScreen { display: none; min-height: 100vh; flex-direction: column; }
+    #adminScreen.visible { display: flex; }
+
+    /* Topbar */
+    .topbar {
+      background: var(--primary-dark);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+
+    .topbar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--white);
+    }
+
+    .topbar-icon {
+      font-size: 20px;
+      width: 36px;
+      height: 36px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .topbar-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .topbar-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.6);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-view-site {
+      background: rgba(255,255,255,0.12);
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn-view-site:hover { background: rgba(255,255,255,0.22); }
+
+    .btn-logout {
+      background: rgba(239,68,68,0.2);
+      color: #FCA5A5;
+      border: 1.5px solid rgba(239,68,68,0.3);
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-logout:hover { background: rgba(239,68,68,0.35); }
+
+    /* Content area */
+    .admin-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px 60px;
+      width: 100%;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0;
+    }
+
+    .tab-btn {
+      padding: 12px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .tab-btn:hover:not(.active) { color: var(--text); }
+
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* Card */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    /* Form elements */
+    .field { margin-bottom: 20px; }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .field-hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .input-wrap:focus-within { border-color: var(--primary); }
+
+    .input-prefix {
+      background: var(--bg);
+      padding: 0 14px;
+      font-size: 14px;
+      color: var(--muted);
+      height: 46px;
+      display: flex;
+      align-items: center;
+      border-right: 1.5px solid var(--border);
+      flex-shrink: 0;
+      font-weight: 600;
+    }
+
+    .field input[type="text"],
+    .field input[type="password"],
+    .field input[type="number"],
+    .input-wrap input {
+      flex: 1;
+      width: 100%;
+      padding: 0 16px;
+      height: 46px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      background: var(--white);
+    }
+    .input-wrap input {
+      border: none;
+      border-radius: 0;
+      height: 46px;
+    }
+    .field input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(139,26,26,0.08);
+    }
+
+    textarea.field-textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text);
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.2s;
+      line-height: 1.6;
+    }
+    textarea.field-textarea:focus { border-color: var(--primary); }
+
+    /* Toggle */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg);
+      padding: 14px 18px;
+      border-radius: 10px;
+    }
+    .toggle-label { font-size: 14px; font-weight: 600; }
+    .toggle-hint  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .toggle-switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+    .toggle-switch input { display: none; }
+    .toggle-slider {
+      position: absolute; inset: 0;
+      background: #CCC; border-radius: 28px; cursor: pointer;
+      transition: background 0.25s;
+    }
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 22px; height: 22px;
+      left: 3px; top: 3px;
+      background: #fff; border-radius: 50%;
+      transition: transform 0.25s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .toggle-switch input:checked + .toggle-slider { background: var(--green); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(22px); }
+
+    /* Buttons */
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      padding: 13px 28px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-primary:hover  { background: var(--primary-light); }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .save-msg {
+      display: inline-block;
+      margin-left: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      vertical-align: middle;
+    }
+    .save-msg.success { color: var(--green); }
+    .save-msg.error   { color: var(--red); }
+
+    /* ── MENU TABLE ── */
+    .menu-toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-search {
+      flex: 1;
+      min-width: 160px;
+      padding: 11px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .toolbar-search:focus { border-color: var(--primary); }
+
+    .toolbar-select {
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+      background: var(--white);
+    }
+
+    .btn-save-all {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      padding: 11px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .btn-save-all:hover { background: var(--primary-light); }
+
+    .menu-table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    thead th {
+      background: var(--bg);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    tbody tr:hover { background: #FFF8F8; }
+    tbody tr:last-child { border-bottom: none; }
+
+    tbody td {
+      padding: 12px 16px;
+      vertical-align: middle;
+    }
+
+    .td-img {
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #EEE;
+      flex-shrink: 0;
+    }
+
+    .td-img-placeholder {
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      background: #EEE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .td-name { font-weight: 700; color: var(--text); }
+    .td-kat  { font-size: 11px; color: var(--primary); font-weight: 600; text-transform: uppercase; margin-top: 2px; }
+
+    .price-input {
+      width: 100px;
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .price-input:focus { border-color: var(--primary); }
+
+    .status-select {
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: inherit;
+      outline: none;
+      cursor: pointer;
+      border: 1.5px solid;
+      transition: border-color 0.2s;
+    }
+    .status-select.tersedia { color: var(--green); border-color: var(--green); background: #F0FFF4; }
+    .status-select.habis    { color: var(--red);   border-color: var(--red);   background: #FFF5F5; }
+
+    .badge-changed {
+      display: inline-block;
+      font-size: 10px;
+      background: var(--gold);
+      color: #fff;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-weight: 700;
+      margin-left: 6px;
+      vertical-align: middle;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .badge-changed.visible { opacity: 1; }
+
+    .empty-row td {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      flex: 1;
+      min-width: 140px;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--primary);
+    }
+    .stat-card.green { border-left-color: var(--green); }
+    .stat-card.red   { border-left-color: var(--red); }
+    .stat-card.gold  { border-left-color: var(--gold); }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+
+    /* Change password section */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 24px 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .admin-content { padding: 20px 14px 48px; }
+      .card { padding: 18px; }
+      .tabs { gap: 0; }
+      .tab-btn { padding: 10px 14px; font-size: 12px; }
+      .topbar { padding: 0 16px; }
+      .topbar-sub { display: none; }
+      thead th:nth-child(1) { display: none; }
+      tbody td:nth-child(1) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════════════ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">⚙️</div>
+    <h1 class="login-title">Admin Panel</h1>
+    <p class="login-sub">Okayama Kedai Kenshin</p>
+
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <input type="text" id="loginUser" class="form-input" placeholder="admin" autocomplete="username" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" id="loginPass" class="form-input" placeholder="••••••••" autocomplete="current-password" />
+    </div>
+    <button class="btn-login" id="btnLogin">Masuk</button>
+    <p class="login-error" id="loginError"></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     ADMIN SCREEN
+══════════════════════════════════════ -->
+<div id="adminScreen">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-icon">⚙️</div>
+      <div>
+        <div class="topbar-title">Admin Panel</div>
+        <div class="topbar-sub">Okayama Kedai Kenshin</div>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <a href="../index.html" target="_blank" class="btn-view-site">🌐 Lihat Website</a>
+      <button class="btn-logout" id="btnLogout">Keluar</button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="admin-content">
+
+    <!-- Stats -->
+    <div class="stats-bar" id="statsBar">
+      <div class="stat-card green">
+        <div class="stat-value" id="statTersedia">—</div>
+        <div class="stat-label">Menu Tersedia</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-value" id="statHabis">—</div>
+        <div class="stat-label">Menu Habis</div>
+      </div>
+      <div class="stat-card gold">
+        <div class="stat-value" id="statTotal">—</div>
+        <div class="stat-label">Total Menu</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="settings">🏪 Pengaturan</button>
+      <button class="tab-btn" data-tab="menu">🍽️ Editor Menu</button>
+      <button class="tab-btn" data-tab="security">🔒 Keamanan</button>
+    </div>
+
+    <!-- ── TAB: SETTINGS ── -->
+    <div class="tab-pane active" id="tab-settings">
+      <div class="card">
+        <div class="card-title">📱 Nomor WhatsApp</div>
+        <p class="card-desc">Digunakan untuk tombol "Pesan via WhatsApp" di semua menu.</p>
+        <div class="field">
+          <label>Nomor WhatsApp</label>
+          <div class="input-wrap">
+            <span class="input-prefix">+</span>
+            <input type="text" id="inputWA" placeholder="628123456789" maxlength="20" />
+          </div>
+          <p class="field-hint">Format: kode negara + nomor. Contoh: 628123456789</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📍 Informasi Kedai</div>
+        <p class="card-desc">Ditampilkan di bagian footer website.</p>
+        <div class="field">
+          <label>Alamat / Tagline Footer</label>
+          <textarea class="field-textarea" id="inputAlamat" rows="2"
+            placeholder="岡山 · Halal Japanese Cuisine"></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">🏪 Status Kedai</div>
+        <p class="card-desc">Mengubah badge status di header website.</p>
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Buka Sekarang</div>
+            <div class="toggle-hint">Aktifkan jika kedai sedang buka</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggleBuka" checked />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="btnSaveSettings">💾 Simpan Pengaturan</button>
+      <span class="save-msg" id="settingsMsg"></span>
+    </div>
+
+    <!-- ── TAB: MENU ── -->
+    <div class="tab-pane" id="tab-menu">
+      <div class="card">
+        <div class="card-title">🍽️ Editor Menu</div>
+        <p class="card-desc">Edit harga dan status ketersediaan tiap item. Klik "Simpan Semua Perubahan" setelah selesai.</p>
+
+        <div class="menu-toolbar">
+          <input type="text" id="menuSearch" class="toolbar-search" placeholder="🔍 Cari nama menu..." />
+          <select id="menuFilterKat" class="toolbar-select">
+            <option value="semua">Semua Kategori</option>
+          </select>
+          <button class="btn-save-all" id="btnSaveAllMenu">💾 Simpan Semua Perubahan</button>
+        </div>
+
+        <div class="menu-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Foto</th>
+                <th>Nama Menu</th>
+                <th>Harga (¥)</th>
+                <th>Status</th>
+                <th>Perubahan</th>
+              </tr>
+            </thead>
+            <tbody id="menuTableBody">
+              <tr class="empty-row"><td colspan="5">Memuat data...</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <span class="save-msg" id="menuMsg" style="display:block;margin-top:12px;"></span>
+      </div>
+    </div>
+
+    <!-- ── TAB: SECURITY ── -->
+    <div class="tab-pane" id="tab-security">
+      <div class="card">
+        <div class="card-title">🔑 Ganti Password Admin</div>
+        <p class="card-desc">Password disimpan di file <code>admin/auth.php</code> di server. Setelah ganti di sini, update juga file PHP-nya.</p>
+
+        <div class="field">
+          <label>Password Baru</label>
+          <input type="password" id="newPass" placeholder="Minimal 8 karakter" />
+        </div>
+        <div class="field">
+          <label>Konfirmasi Password</label>
+          <input type="password" id="confirmPass" placeholder="Ulangi password baru" />
+        </div>
+        <button class="btn-primary" id="btnChangePass">🔒 Update Password</button>
+        <span class="save-msg" id="passMsg"></span>
+
+        <hr class="divider" />
+        <div class="card-title" style="font-size:14px;margin-bottom:8px;">📋 Informasi Session</div>
+        <p style="font-size:13px;color:var(--muted);">Login sebagai: <strong id="sessionUser">admin</strong></p>
+        <p style="font-size:13px;color:var(--muted);margin-top:4px;">Session aktif sejak halaman dibuka. Akan otomatis logout jika browser ditutup.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── Inject menuData dari parent script (load via script tag) ──
+// Admin panel perlu data yang sama dengan website utama.
+// Kita load script.js dari parent folder untuk ambil menuData & kategoriData.
+
+// Fungsi helper untuk baca dari main script
+let menuData = [];
+let kategoriData = [];
+
+// Load script.js dari folder parent
+const scriptEl = document.createElement('script');
+scriptEl.src = '../script.js';
+scriptEl.onload = () => {
+  // script.js akan auto-run DOMContentLoaded — tapi elemen tidak ada.
+  // Kita akses variabel global setelah load.
+  initAdminPage();
+};
+scriptEl.onerror = () => {
+  console.error('Gagal load script.js');
+  initAdminPage();
+};
+document.head.appendChild(scriptEl);
+
+// ── State ──────────────────────────────────────────────────
+let pendingChanges = {}; // { id: { harga, status } }
+let currentSettings = {};
+
+// ── API helpers ────────────────────────────────────────────
+const API_AUTH  = '../admin/auth.php';
+const API_SAVE  = '../api/save.php';
+const API_LOAD  = '../api/load.php';
+
+async function apiPost(url, data) {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+    credentials: 'include',
+  });
+  return res.json();
+}
+
+async function apiGet(url) {
+  const res = await fetch(url, { credentials: 'include' });
+  return res.json();
+}
+
+// ── LOGIN ──────────────────────────────────────────────────
+document.getElementById('btnLogin').addEventListener('click', doLogin);
+document.getElementById('loginPass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+async function doLogin() {
+  const btn  = document.getElementById('btnLogin');
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const err  = document.getElementById('loginError');
+
+  if (!user || !pass) { err.textContent = 'Isi username dan password.'; return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Masuk...';
+  err.textContent = '';
+
+  try {
+    const res = await apiPost(API_AUTH, { action: 'login', username: user, password: pass });
+    if (res.success) {
+      showAdminScreen();
+    } else {
+      err.textContent = res.message || 'Login gagal.';
+    }
+  } catch {
+    err.textContent = 'Server tidak tersedia. Pastikan PHP berjalan.';
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Masuk';
+}
+
+// ── LOGOUT ────────────────────────────────────────────────
+document.getElementById('btnLogout').addEventListener('click', async () => {
+  await apiPost(API_AUTH, { action: 'logout' });
+  document.getElementById('adminScreen').classList.remove('visible');
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginPass').value = '';
+});
+
+// ── CHECK SESSION on load ──────────────────────────────────
+async function checkSession() {
+  try {
+    const res = await apiGet(API_AUTH + '?action=check');
+    if (res.logged_in) showAdminScreen();
+  } catch { /* offline / no PHP */ }
+}
+
+function showAdminScreen() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminScreen').classList.add('visible');
+  loadSettings();
+}
+
+// ── INIT TABS ─────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'menu') renderMenuTable();
+  });
+});
+
+// ── LOAD SETTINGS ─────────────────────────────────────────
+async function loadSettings() {
+  try {
+    const res = await apiGet(API_LOAD);
+    if (res.success) {
+      currentSettings = res.settings;
+      document.getElementById('inputWA').value    = res.settings.wa_number || '';
+      document.getElementById('inputAlamat').value = res.settings.alamat   || '';
+      document.getElementById('toggleBuka').checked = res.settings.status_buka !== false;
+
+      // Apply overrides to menuData
+      if (res.menu_overrides) {
+        Object.entries(res.menu_overrides).forEach(([id, ov]) => {
+          const item = menuData.find(m => m.id === parseInt(id));
+          if (item) {
+            if (ov.harga  !== null) item.harga  = ov.harga;
+            if (ov.status !== null) item.status = ov.status;
+          }
+        });
+      }
+      updateStats();
+    }
+  } catch { /* no PHP */ }
+}
+
+// ── STATS ──────────────────────────────────────────────────
+function updateStats() {
+  const tersedia = menuData.filter(m => m.status === 'tersedia').length;
+  const habis    = menuData.filter(m => m.status === 'habis').length;
+  document.getElementById('statTersedia').textContent = tersedia;
+  document.getElementById('statHabis').textContent    = habis;
+  document.getElementById('statTotal').textContent    = menuData.length;
+}
+
+// ── SAVE SETTINGS ──────────────────────────────────────────
+document.getElementById('btnSaveSettings').addEventListener('click', async () => {
+  const msg  = document.getElementById('settingsMsg');
+  const data = {
+    wa_number:   document.getElementById('inputWA').value.trim(),
+    alamat:      document.getElementById('inputAlamat').value.trim(),
+    status_buka: document.getElementById('toggleBuka').checked,
+  };
+
+  msg.textContent = 'Menyimpan...';
+  msg.className = 'save-msg';
+
+  try {
+    const res = await apiPost(API_SAVE, { type: 'settings', data });
+    if (res.success) {
+      msg.textContent = '✅ ' + res.message;
+      msg.className = 'save-msg success';
+    } else {
+      msg.textContent = '⚠️ ' + res.message;
+      msg.className = 'save-msg error';
+    }
+  } catch {
+    msg.textContent = '❌ Gagal terhubung ke server.';
+    msg.className = 'save-msg error';
+  }
+  setTimeout(() => msg.textContent = '', 4000);
+});
+
+// ── MENU TABLE ─────────────────────────────────────────────
+function populateKatFilter() {
+  const sel = document.getElementById('menuFilterKat');
+  // Clear existing options except first
+  while (sel.options.length > 1) sel.remove(1);
+
+  kategoriData.filter(k => k.id !== 'semua').forEach(k => {
+    const count = menuData.filter(m => m.kategori === k.id).length;
+    if (count === 0) return;
+    const opt = document.createElement('option');
+    opt.value = k.id;
+    opt.textContent = k.icon + ' ' + k.name + ' (' + count + ')';
+    sel.appendChild(opt);
+  });
+}
+
+function renderMenuTable() {
+  populateKatFilter();
+  filterAndRender();
+}
+
+function filterAndRender() {
+  const search = document.getElementById('menuSearch').value.toLowerCase();
+  const kat    = document.getElementById('menuFilterKat').value;
+
+  const filtered = menuData.filter(item => {
+    const matchText = item.name.toLowerCase().includes(search);
+    const matchKat  = kat === 'semua' || item.kategori === kat;
+    return matchText && matchKat;
+  });
+
+  const tbody = document.getElementById('menuTableBody');
+  tbody.innerHTML = '';
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">Tidak ada menu ditemukan</td></tr>';
+    return;
+  }
+
+  filtered.forEach(item => {
+    const katName = (kategoriData.find(k => k.id === item.kategori) || {}).name || item.kategori;
+    const katIcon = (kategoriData.find(k => k.id === item.kategori) || {}).icon || '🍽️';
+    const changed = pendingChanges[item.id];
+
+    const tr = document.createElement('tr');
+    tr.dataset.id = item.id;
+
+    tr.innerHTML = `
+      <td>
+        ${item.img
+          ? `<img class="td-img" src="../${item.img}" alt="${item.name}"
+                  onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+             <div class="td-img-placeholder" style="display:none">${katIcon}</div>`
+          : `<div class="td-img-placeholder">${katIcon}</div>`
+        }
+      </td>
+      <td>
+        <div class="td-name">${item.name}</div>
+        <div class="td-kat">${katName}</div>
+      </td>
+      <td>
+        <input type="number" class="price-input" value="${item.harga}"
+               min="0" step="10" data-id="${item.id}" />
+      </td>
+      <td>
+        <select class="status-select ${item.status}" data-id="${item.id}">
+          <option value="tersedia" ${item.status === 'tersedia' ? 'selected' : ''}>✅ Tersedia</option>
+          <option value="habis"    ${item.status === 'habis'    ? 'selected' : ''}>❌ Habis</option>
+        </select>
+      </td>
+      <td>
+        <span class="badge-changed ${changed ? 'visible' : ''}" data-id="${item.id}">● Diubah</span>
+      </td>
+    `;
+
+    // Price change listener
+    tr.querySelector('.price-input').addEventListener('input', e => {
+      const id = parseInt(e.target.dataset.id);
+      if (!pendingChanges[id]) pendingChanges[id] = {};
+      pendingChanges[id].harga = parseInt(e.target.value);
+      tr.querySelector('.badge-changed').classList.add('visible');
+    });
+
+    // Status change listener
+    const statusSel = tr.querySelector('.status-select');
+    statusSel.addEventListener('change', e => {
+      const id = parseInt(e.target.dataset.id);
+      if (!pendingChanges[id]) pendingChanges[id] = {};
+      pendingChanges[id].status = e.target.value;
+      statusSel.className = 'status-select ' + e.target.value;
+      tr.querySelector('.badge-changed').classList.add('visible');
+    });
+
+    tbody.appendChild(tr);
+  });
+}
+
+// Search & filter listeners
+document.getElementById('menuSearch').addEventListener('input', filterAndRender);
+document.getElementById('menuFilterKat').addEventListener('change', filterAndRender);
+
+// ── SAVE ALL MENU ──────────────────────────────────────────
+document.getElementById('btnSaveAllMenu').addEventListener('click', async () => {
+  if (Object.keys(pendingChanges).length === 0) {
+    const msg = document.getElementById('menuMsg');
+    msg.textContent = 'Tidak ada perubahan.';
+    msg.className = 'save-msg';
+    setTimeout(() => msg.textContent = '', 3000);
+    return;
+  }
+
+  const msg = document.getElementById('menuMsg');
+  msg.textContent = 'Menyimpan...';
+  msg.className = 'save-msg';
+
+  // Apply to menuData in memory
+  Object.entries(pendingChanges).forEach(([id, ov]) => {
+    const item = menuData.find(m => m.id === parseInt(id));
+    if (item) {
+      if (ov.harga  !== undefined) item.harga  = ov.harga;
+      if (ov.status !== undefined) item.status = ov.status;
+    }
+  });
+
+  try {
+    const res = await apiPost(API_SAVE, { type: 'menu', data: pendingChanges });
+    if (res.success) {
+      msg.textContent = '✅ ' + res.message;
+      msg.className = 'save-msg success';
+      pendingChanges = {};
+      document.querySelectorAll('.badge-changed').forEach(b => b.classList.remove('visible'));
+      updateStats();
+    } else {
+      msg.textContent = '⚠️ ' + res.message;
+      msg.className = 'save-msg error';
+    }
+  } catch {
+    msg.textContent = '❌ Gagal terhubung ke server.';
+    msg.className = 'save-msg error';
+  }
+  setTimeout(() => msg.textContent = '', 4000);
+});
+
+// ── CHANGE PASSWORD (informasi) ────────────────────────────
+document.getElementById('btnChangePass').addEventListener('click', () => {
+  const np  = document.getElementById('newPass').value;
+  const cp  = document.getElementById('confirmPass').value;
+  const msg = document.getElementById('passMsg');
+
+  if (!np || np.length < 8) {
+    msg.textContent = '⚠️ Password minimal 8 karakter.';
+    msg.className = 'save-msg error';
+    return;
+  }
+  if (np !== cp) {
+    msg.textContent = '⚠️ Password tidak cocok.';
+    msg.className = 'save-msg error';
+    return;
+  }
+
+  msg.innerHTML = `✅ Salin password ini ke file <code>admin/auth.php</code> baris <code>ADMIN_PASSWORD</code>:<br>
+    <strong style="font-size:15px;color:#8B1A1A;">${np}</strong>`;
+  msg.className = 'save-msg success';
+});
+
+// ── INIT ───────────────────────────────────────────────────
+function initAdminPage() {
+  // Ambil data dari variabel global yang di-load oleh script.js
+  if (typeof window.menuData !== 'undefined')     menuData     = window.menuData;
+  if (typeof window.kategoriData !== 'undefined') kategoriData = window.kategoriData;
+
+  checkSession();
+}
+
+// Fallback: jalankan jika script.js tidak bisa di-load
+window.addEventListener('DOMContentLoaded', () => {
+  // akan dipanggil oleh initAdminPage setelah script load
+});
+</script>
+</body>
+</html>
