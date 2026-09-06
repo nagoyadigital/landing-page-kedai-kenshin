@@ -28,11 +28,17 @@ ln -sfn ../../../shared/images/menu "$NEW_RELEASE/images/menu"
 # Ekstrak tarball (kode statis)
 tar -xzf "$TARBALL" -C "$NEW_RELEASE"
 
+# Symlink logo case-sensitivity fix (Linux is case-sensitive)
+if [ -f "$NEW_RELEASE/images/logo.PNG" ] && [ ! -e "$NEW_RELEASE/images/logo.png" ]; then
+  ln -sfn logo.PNG "$NEW_RELEASE/images/logo.png"
+  echo "Created logo.png -> logo.PNG symlink"
+fi
+
 # Ownership
 chown -R ubuntu:ubuntu "$NEW_RELEASE" 2>/dev/null || true
 chmod -R 755 "$NEW_RELEASE" 2>/dev/null || true
 find "$NEW_RELEASE" -type d -exec chmod 775 {} \; 2>/dev/null || true
-find "$NEW_RELEASE" -type f -exec chmod 664 {} \; 2>/dev/null || true
+find "$NEW_RELEASE" -type f ! -type l -exec chmod 664 {} \; 2>/dev/null || true
 
 # Backup current symlink target sebelum switch
 BEFORE=$(readlink "$CURRENT_LINK" 2>/dev/null || true)
@@ -71,8 +77,12 @@ if [ "$CODE_APP" != "200" ]; then
   exit 1
 fi
 
-# Cleanup: simpan 3 release terakhir
-ls -1d $RELEASES_DIR/*/ | sort | head -n -3 | xargs -r rm -rf
+# Cleanup: simpan 3 release terakhir (only if more than 3 exist)
+COUNT=$(ls -1d $RELEASES_DIR/*/ 2>/dev/null | wc -l)
+if [ "$COUNT" -gt 3 ]; then
+  ls -1d $RELEASES_DIR/*/ | sort | head -n -3 | xargs -r rm -rf
+  echo "Cleaned up old releases (kept 3 most recent)"
+fi
 
 # Cleanup tarball
 rm -f "$TARBALL"
