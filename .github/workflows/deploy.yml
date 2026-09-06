@@ -51,6 +51,8 @@ jobs:
       - name: Build release tarball (exclude runtime data)
         run: |
           tar --exclude='./.git' \
+              --exclude='./.github' \
+              --exclude='./.trae' \
               --exclude='./data' \
               --exclude='./images/menu' \
               --exclude='./server.js' \
@@ -58,13 +60,19 @@ jobs:
               --exclude='./redeploy.sh' \
               --exclude='./setup_symlinks.sh' \
               --exclude='./nginx-kedaikenshin-landing.conf' \
-              --exclude='./.github' \
-              --exclude='./.trae' \
+              --exclude='./setup-secrets.ps1' \
+              --exclude='./landing.tar.gz' \
               --exclude='./.DS_Store' \
               --exclude='./Thumbs.db' \
               --exclude='./Salinan index.html' \
               -czf landing.tar.gz .
           ls -la landing.tar.gz
+          # Verify tarball is valid (not empty)
+          tar -tzf landing.tar.gz | head -n 10
+          if [ "$(du -k landing.tar.gz | cut -f1)" -lt "1" ]; then
+            echo "ERROR: tarball too small"
+            exit 1
+          fi
 
       - name: Upload tarball to VPS
         run: scp landing.tar.gz vps-kedaikenshin:/tmp/kedaikenshin-release.tar.gz
