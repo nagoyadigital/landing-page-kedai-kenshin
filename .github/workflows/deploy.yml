@@ -50,32 +50,40 @@ jobs:
 
       - name: Build release tarball (exclude runtime data)
         run: |
-          tar --exclude='./.git' \
-              --exclude='./.github' \
-              --exclude='./.trae' \
-              --exclude='./data' \
-              --exclude='./images/menu' \
-              --exclude='./server.js' \
-              --exclude='./deploy.sh' \
-              --exclude='./redeploy.sh' \
-              --exclude='./setup_symlinks.sh' \
-              --exclude='./nginx-kedaikenshin-landing.conf' \
-              --exclude='./setup-secrets.ps1' \
-              --exclude='./landing.tar.gz' \
-              --exclude='./.DS_Store' \
-              --exclude='./Thumbs.db' \
-              --exclude='./Salinan index.html' \
-              -czf landing.tar.gz .
-          ls -la landing.tar.gz
-          # Verify tarball is valid (not empty)
-          tar -tzf landing.tar.gz | head -n 10
-          if [ "$(du -k landing.tar.gz | cut -f1)" -lt "1" ]; then
+          STAGING=/tmp/kedaikenshin-release-$$
+          mkdir -p "$STAGING"
+
+          # Copy required files into staging dir (outside working tree)
+          for f in index.html menu-data.js script.js style.css; do
+            if [ -f "$f" ]; then cp "$f" "$STAGING/"; fi
+          done
+          for d in admin api images; do
+            if [ -d "$d" ]; then
+              cp -r "$d" "$STAGING/"
+            fi
+          done
+
+          # Remove runtime data that must stay on VPS
+          rm -rf "$STAGING/images/menu"
+          rm -rf "$STAGING/data"
+          rm -f "$STAGING/server.js"
+          rm -f "$STAGING/.DS_Store"
+
+          # Build tarball from staging dir (avoid "file changed as we read it")
+          tar -czf /tmp/kedaikenshin-release.tar.gz -C "$STAGING" .
+          rm -rf "$STAGING"
+
+          ls -la /tmp/kedaikenshin-release.tar.gz
+          tar -tzf /tmp/kedaikenshin-release.tar.gz | head -n 15
+          SIZE=$(du -k /tmp/kedaikenshin-release.tar.gz | cut -f1)
+          echo "Tarball size: ${SIZE} KB"
+          if [ "$SIZE" -lt "1" ]; then
             echo "ERROR: tarball too small"
             exit 1
           fi
 
       - name: Upload tarball to VPS
-        run: scp landing.tar.gz vps-kedaikenshin:/tmp/kedaikenshin-release.tar.gz
+        run: scp /tmp/kedaikenshin-release.tar.gz vps-kedaikenshin:/tmp/kedaikenshin-release.tar.gz
 
       - name: Run deploy script on VPS (with automatic rollback)
         run: ssh vps-kedaikenshin 'sudo /usr/local/bin/deploy-kedaikenshin.sh /tmp/kedaikenshin-release.tar.gz'
