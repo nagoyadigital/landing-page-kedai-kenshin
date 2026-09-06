@@ -1,0 +1,88 @@
+name: Deploy Landing Page kedaikenshin.com
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'deploy.sh'
+      - 'redeploy.sh'
+      - 'setup_symlinks.sh'
+      - 'nginx-kedaikenshin-landing.conf'
+      - 'README*'
+      - '.gitignore'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-kedaikenshin-landing
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to VPS via SSH
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup SSH deploy key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          cat >> ~/.ssh/config <<EOF
+          Host vps-kedaikenshin
+            HostName ${{ secrets.VPS_HOST }}
+            User ${{ secrets.VPS_USER }}
+            Port ${{ secrets.VPS_PORT }}
+            IdentityFile ~/.ssh/deploy_key
+            StrictHostKeyChecking accept-new
+            UserKnownHostsFile /dev/null
+            LogLevel ERROR
+          EOF
+          chmod 600 ~/.ssh/config
+
+      - name: Verify SSH connectivity to VPS
+        run: ssh -o ConnectTimeout=15 vps-kedaikenshin 'echo OK; hostname; whoami'
+
+      - name: Build release tarball (exclude runtime data)
+        run: |
+          tar --exclude='./.git' \
+              --exclude='./data' \
+              --exclude='./images/menu' \
+              --exclude='./server.js' \
+              --exclude='./deploy.sh' \
+              --exclude='./redeploy.sh' \
+              --exclude='./setup_symlinks.sh' \
+              --exclude='./nginx-kedaikenshin-landing.conf' \
+              --exclude='./.github' \
+              --exclude='./.trae' \
+              --exclude='./.DS_Store' \
+              --exclude='./Thumbs.db' \
+              --exclude='./Salinan index.html' \
+              -czf landing.tar.gz .
+          ls -la landing.tar.gz
+
+      - name: Upload tarball to VPS
+        run: scp landing.tar.gz vps-kedaikenshin:/tmp/kedaikenshin-release.tar.gz
+
+      - name: Run deploy script on VPS (with automatic rollback)
+        run: ssh vps-kedaikenshin 'sudo /usr/local/bin/deploy-kedaikenshin.sh /tmp/kedaikenshin-release.tar.gz'
+
+      - name: Post-deploy health check
+        run: |
+          echo "=== Final health check ==="
+          echo "kedaikenshin.com (root):  $(curl -sk -o /dev/null -w '%{http_code}' --max-time 20 https://kedaikenshin.com/)"
+          echo "kedaikenshin.com (API):   $(curl -sk -o /dev/null -w '%{http_code}' --max-time 20 https://kedaikenshin.com/api/load.php)"
+          echo "app.kedaikenshin.com:     $(curl -sk -o /dev/null -w '%{http_code}' --max-time 20 https://app.kedaikenshin.com/)"
+          RC_ROOT=$(curl -sk -o /dev/null -w '%{http_code}' --max-time 20 https://kedaikenshin.com/)
+          RC_API=$(curl -sk -o /dev/null -w '%{http_code}' --max-time 20 https://kedaikenshin.com/api/load.php)
+          RC_APP=$(curl -sk -o /dev/null -w '%{http_code}' --max-time 20 https://app.kedaikenshin.com/)
+          if [ "$RC_ROOT" != "200" ] || [ "$RC_API" != "200" ] || [ "$RC_APP" != "200" ]; then
+            echo "Health check failed! root=$RC_ROOT api=$RC_API app=$RC_APP"
+            exit 1
+          fi
+          echo "All health checks passed"
