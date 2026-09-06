@@ -1,3 +1,6 @@
 .DS_Store
 Thumbs.db
 Salinan index.html
+
+# Session file (generated at runtime, tidak perlu di-commit)
+data/_sessions.json

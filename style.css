@@ -107,10 +107,7 @@ body {
 }
 
 .hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  display: none;
 }
 
 .hero-pattern {
@@ -121,6 +118,48 @@ body {
   height: 40px;
   background: var(--gray-light);
   clip-path: ellipse(55% 100% at 50% 100%);
+}
+
+/* ── FLOATING FOOD PARTICLES ── */
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.particle {
+  position: absolute;
+  left: -80px;
+  top: var(--x);
+  font-size: var(--size, 1.8rem);
+  opacity: 0;
+  animation: slideRight var(--dur, 12s) var(--delay, 0s) infinite linear;
+  user-select: none;
+  will-change: transform, opacity;
+  filter: grayscale(20%);
+}
+
+@keyframes slideRight {
+  0% {
+    transform: translateX(0) translateY(0) rotate(-5deg) scale(0.85);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.2;
+  }
+  50% {
+    transform: translateX(55vw) translateY(-8px) rotate(5deg) scale(1);
+    opacity: 0.15;
+  }
+  92% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: translateX(110vw) translateY(4px) rotate(-3deg) scale(0.9);
+    opacity: 0;
+  }
 }
 
 .hero-content {

@@ -10,7 +10,7 @@ header('Content-Type: application/json');
 
 // ── Konfigurasi ───────────────────────────────────────────
 define('ADMIN_USERNAME', 'admin');
-define('ADMIN_PASSWORD', 'kenshin2024'); // ← GANTI SEBELUM DEPLOY
+define('ADMIN_PASSWORD', 'kenshin2024'); // ← GANTI PASSWORD INI SEBELUM UPLOAD KE VPS!
 
 $body = json_decode(file_get_contents('php://input'), true);
 $action = $body['action'] ?? '';

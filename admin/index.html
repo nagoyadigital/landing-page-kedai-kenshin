@@ -6,136 +6,190 @@
   <title>Admin Panel — Okayama Kedai Kenshin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary:      #8B1A1A;
-      --primary-dark: #5C0E0E;
-      --primary-light:#B52626;
-      --green:        #22C55E;
-      --red:          #EF4444;
-      --gold:         #C9A84C;
+      --primary:      #7B1515;
+      --primary-dark: #4A0D0D;
+      --primary-mid:  #9B1C1C;
+      --primary-light:#C0392B;
+      --green:        #16A34A;
+      --green-bg:     #F0FDF4;
+      --red:          #DC2626;
+      --red-bg:       #FEF2F2;
+      --amber:        #B45309;
+      --amber-bg:     #FFFBEB;
+      --blue:         #1D4ED8;
+      --blue-bg:      #EFF6FF;
       --white:        #FFFFFF;
-      --bg:           #F4F4F6;
+      --bg:           #F1F3F6;
       --card:         #FFFFFF;
-      --text:         #2C2C2C;
-      --muted:        #7A7A7A;
-      --border:       #E5E5E5;
-      --radius:       12px;
-      --shadow:       0 4px 20px rgba(0,0,0,0.08);
+      --text:         #111827;
+      --text-2:       #374151;
+      --muted:        #6B7280;
+      --muted-light:  #9CA3AF;
+      --border:       #E5E7EB;
+      --border-2:     #D1D5DB;
+      --radius:       10px;
+      --radius-sm:    6px;
+      --shadow:       0 1px 3px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06);
+      --shadow-md:    0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+      --shadow-lg:    0 10px 25px rgba(0,0,0,0.12);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; font-size: 14px; }
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── LOGIN SCREEN ── */
+    /* ─── SVG ICON HELPER ─── */
+    .icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    svg   { display: block; }
+
+    /* ─────────────────────────────────────────
+       LOGIN SCREEN
+    ───────────────────────────────────────── */
     #loginScreen {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, #C0392B 100%);
+      background: linear-gradient(155deg, #2D0808 0%, var(--primary) 55%, #B52222 100%);
       padding: 20px;
     }
 
     .login-card {
       background: var(--white);
-      border-radius: 20px;
-      padding: 40px 36px;
+      border-radius: 16px;
+      padding: 44px 40px;
       width: 100%;
-      max-width: 400px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.3);
-      text-align: center;
+      max-width: 380px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.35);
     }
 
-    .login-logo {
-      font-size: 48px;
-      margin-bottom: 8px;
+    .login-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
     }
 
-    .login-title {
-      font-size: 20px;
+    .login-brand-icon {
+      width: 46px;
+      height: 46px;
+      background: var(--primary);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .login-brand-text h1 {
+      font-size: 16px;
       font-weight: 700;
       color: var(--text);
-      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+
+    .login-brand-text p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .login-heading {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
     }
 
     .login-sub {
       font-size: 13px;
       color: var(--muted);
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
 
-    .form-group {
-      text-align: left;
-      margin-bottom: 16px;
-    }
+    .form-group { margin-bottom: 16px; }
 
     .form-label {
       display: block;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
-      color: var(--text);
+      color: var(--text-2);
       margin-bottom: 6px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
     }
 
     .form-input {
       width: 100%;
-      padding: 12px 16px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border-2);
+      border-radius: var(--radius-sm);
       font-size: 14px;
       font-family: inherit;
       color: var(--text);
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      background: var(--white);
     }
     .form-input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(139,26,26,0.1);
+      box-shadow: 0 0 0 3px rgba(123,21,21,0.12);
     }
 
     .btn-login {
       width: 100%;
-      padding: 13px;
+      padding: 12px;
       background: var(--primary);
       color: var(--white);
       border: none;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 700;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
       font-family: inherit;
       cursor: pointer;
       margin-top: 8px;
-      transition: background 0.2s, transform 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.15s, transform 0.1s;
+      letter-spacing: 0.2px;
     }
-    .btn-login:hover  { background: var(--primary-light); }
-    .btn-login:active { transform: scale(0.98); }
-    .btn-login:disabled { background: #CCC; cursor: not-allowed; }
+    .btn-login:hover   { background: var(--primary-mid); }
+    .btn-login:active  { transform: scale(0.99); }
+    .btn-login:disabled { background: #C0C0C0; cursor: not-allowed; }
 
     .login-error {
       margin-top: 12px;
-      font-size: 13px;
+      font-size: 12px;
       color: var(--red);
-      font-weight: 600;
-      min-height: 20px;
+      font-weight: 500;
+      min-height: 18px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    /* ── ADMIN LAYOUT ── */
+    /* ─────────────────────────────────────────
+       ADMIN LAYOUT
+    ───────────────────────────────────────── */
     #adminScreen { display: none; min-height: 100vh; flex-direction: column; }
     #adminScreen.visible { display: flex; }
 
-    /* Topbar */
+    /* ── Topbar ── */
     .topbar {
       background: var(--primary-dark);
+      height: 56px;
       padding: 0 24px;
-      height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -143,490 +197,836 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
 
-    .topbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--white);
-    }
-
-    .topbar-icon {
-      font-size: 20px;
-      width: 36px;
-      height: 36px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .topbar-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--white);
-    }
-
-    .topbar-sub {
-      font-size: 11px;
-      color: rgba(255,255,255,0.6);
-    }
-
-    .topbar-right {
+    .topbar-left {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .btn-view-site {
-      background: rgba(255,255,255,0.12);
-      color: var(--white);
-      border: 1.5px solid rgba(255,255,255,0.2);
+    .topbar-logo {
+      width: 32px;
+      height: 32px;
+      background: rgba(255,255,255,0.1);
       border-radius: 8px;
-      padding: 7px 14px;
-      font-size: 12px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .topbar-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #FFFFFF;
+      letter-spacing: 0.1px;
+    }
+
+    .topbar-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.50);
+      margin-top: 1px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-topbar {
       display: flex;
       align-items: center;
       gap: 6px;
-      transition: background 0.2s;
-    }
-    .btn-view-site:hover { background: rgba(255,255,255,0.22); }
-
-    .btn-logout {
-      background: rgba(239,68,68,0.2);
-      color: #FCA5A5;
-      border: 1.5px solid rgba(239,68,68,0.3);
-      border-radius: 8px;
-      padding: 7px 14px;
+      padding: 6px 14px;
+      border-radius: 6px;
       font-size: 12px;
       font-weight: 600;
       font-family: inherit;
       cursor: pointer;
-      transition: background 0.2s;
+      border: none;
+      text-decoration: none;
+      transition: background 0.15s;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
     }
-    .btn-logout:hover { background: rgba(239,68,68,0.35); }
 
-    /* Content area */
+    .btn-topbar-ghost {
+      background: rgba(255,255,255,0.10);
+      color: rgba(255,255,255,0.90);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .btn-topbar-ghost:hover { background: rgba(255,255,255,0.18); }
+
+    .btn-topbar-danger {
+      background: rgba(220,38,38,0.20);
+      color: #FCA5A5;
+      border: 1px solid rgba(220,38,38,0.25);
+    }
+    .btn-topbar-danger:hover { background: rgba(220,38,38,0.32); }
+
+    /* ── Content ── */
     .admin-content {
       max-width: 1100px;
       margin: 0 auto;
-      padding: 32px 24px 60px;
+      padding: 28px 24px 64px;
       width: 100%;
     }
 
-    /* Tabs */
-    .tabs {
+    /* ── Stats bar ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
       display: flex;
-      gap: 8px;
-      margin-bottom: 28px;
-      border-bottom: 2px solid var(--border);
-      padding-bottom: 0;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .stat-icon-wrap {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .stat-card.green .stat-icon-wrap { background: var(--green-bg); }
+    .stat-card.red   .stat-icon-wrap { background: var(--red-bg);   }
+    .stat-card.blue  .stat-icon-wrap { background: var(--blue-bg);  }
+
+    .stat-info {}
+    .stat-value {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.1;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── Tabs ── */
+    .tabs-bar {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 20px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 5px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
     }
 
     .tab-btn {
-      padding: 12px 20px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 9px 14px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 500;
       font-family: inherit;
       background: none;
       border: none;
+      border-radius: var(--radius-sm);
       color: var(--muted);
       cursor: pointer;
-      border-bottom: 2px solid transparent;
-      margin-bottom: -2px;
-      transition: color 0.2s, border-color 0.2s;
+      transition: all 0.15s;
       white-space: nowrap;
     }
-    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
-    .tab-btn:hover:not(.active) { color: var(--text); }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      font-weight: 600;
+      box-shadow: 0 2px 5px rgba(123,21,21,0.30);
+    }
+
+    .tab-btn:hover:not(.active) {
+      background: var(--bg);
+      color: var(--text-2);
+    }
 
     .tab-pane { display: none; }
     .tab-pane.active { display: block; }
 
-    /* Card */
+    /* ── Card ── */
     .card {
-      background: var(--card);
+      background: var(--white);
       border-radius: var(--radius);
-      padding: 28px;
+      border: 1px solid var(--border);
       box-shadow: var(--shadow);
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+      overflow: hidden;
     }
 
-    .card-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 4px;
+    .card-header {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .card-header-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--bg);
+      border-radius: 8px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
     }
 
-    .card-desc {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
-
-    /* Form elements */
-    .field { margin-bottom: 20px; }
-
-    .field label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
+    .card-header-text {}
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
       color: var(--text);
+    }
+    .card-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .card-body { padding: 22px; }
+
+    /* ── Form fields ── */
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+
+    .field-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-2);
       margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
     }
 
     .field-hint {
       font-size: 11px;
-      color: var(--muted);
-      margin-top: 4px;
+      color: var(--muted-light);
+      margin-top: 5px;
     }
 
-    .input-wrap {
+    .input-group {
       display: flex;
-      align-items: center;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
+      border: 1.5px solid var(--border-2);
+      border-radius: var(--radius-sm);
       overflow: hidden;
-      transition: border-color 0.2s;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
-    .input-wrap:focus-within { border-color: var(--primary); }
+    .input-group:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(123,21,21,0.10);
+    }
 
-    .input-prefix {
+    .input-addon {
       background: var(--bg);
-      padding: 0 14px;
-      font-size: 14px;
+      padding: 0 13px;
+      font-size: 13px;
+      font-weight: 600;
       color: var(--muted);
-      height: 46px;
+      height: 42px;
       display: flex;
       align-items: center;
-      border-right: 1.5px solid var(--border);
+      border-right: 1.5px solid var(--border-2);
       flex-shrink: 0;
-      font-weight: 600;
     }
 
-    .field input[type="text"],
-    .field input[type="password"],
-    .field input[type="number"],
-    .input-wrap input {
-      flex: 1;
+    .field-input,
+    .input-group input {
       width: 100%;
-      padding: 0 16px;
-      height: 46px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
+      padding: 0 14px;
+      height: 42px;
+      border: 1.5px solid var(--border-2);
+      border-radius: var(--radius-sm);
       font-size: 14px;
       font-family: inherit;
       color: var(--text);
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.15s, box-shadow 0.15s;
       background: var(--white);
     }
-    .input-wrap input {
+
+    .input-group input {
       border: none;
       border-radius: 0;
-      height: 46px;
-    }
-    .field input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(139,26,26,0.08);
+      height: 42px;
     }
 
-    textarea.field-textarea {
+    .field-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(123,21,21,0.10);
+    }
+
+    .field-textarea {
       width: 100%;
-      padding: 12px 16px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border-2);
+      border-radius: var(--radius-sm);
       font-size: 14px;
       font-family: inherit;
       color: var(--text);
       resize: vertical;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.15s;
       line-height: 1.6;
+      background: var(--white);
     }
-    textarea.field-textarea:focus { border-color: var(--primary); }
+    .field-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(123,21,21,0.10);
+    }
 
-    /* Toggle */
+    /* ── Toggle ── */
     .toggle-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       background: var(--bg);
-      padding: 14px 18px;
-      border-radius: 10px;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
     }
-    .toggle-label { font-size: 14px; font-weight: 600; }
+
+    .toggle-info {}
+    .toggle-label { font-size: 14px; font-weight: 600; color: var(--text); }
     .toggle-hint  { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-    .toggle-switch { position: relative; display: inline-block; width: 50px; height: 28px; }
+    .toggle-switch { position: relative; display: inline-block; width: 46px; height: 26px; flex-shrink: 0; }
     .toggle-switch input { display: none; }
+
     .toggle-slider {
       position: absolute; inset: 0;
-      background: #CCC; border-radius: 28px; cursor: pointer;
-      transition: background 0.25s;
+      background: var(--border-2);
+      border-radius: 26px;
+      cursor: pointer;
+      transition: background 0.2s;
     }
     .toggle-slider::before {
       content: '';
       position: absolute;
-      width: 22px; height: 22px;
+      width: 20px; height: 20px;
       left: 3px; top: 3px;
-      background: #fff; border-radius: 50%;
-      transition: transform 0.25s;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+      background: #fff;
+      border-radius: 50%;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
     }
     .toggle-switch input:checked + .toggle-slider { background: var(--green); }
-    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(22px); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
 
-    /* Buttons */
+    /* ── Buttons ── */
     .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
       background: var(--primary);
       color: var(--white);
       border: none;
-      border-radius: 10px;
-      padding: 13px 28px;
-      font-size: 14px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
-    }
-    .btn-primary:hover  { background: var(--primary-light); }
-    .btn-primary:active { transform: scale(0.98); }
-
-    .save-msg {
-      display: inline-block;
-      margin-left: 12px;
+      border-radius: var(--radius-sm);
+      padding: 10px 20px;
       font-size: 13px;
       font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      letter-spacing: 0.2px;
+    }
+    .btn-primary:hover   { background: var(--primary-mid); }
+    .btn-primary:active  { transform: scale(0.99); }
+    .btn-primary:disabled { background: #C0C0C0; cursor: not-allowed; }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--white);
+      color: var(--text-2);
+      border: 1.5px solid var(--border-2);
+      border-radius: var(--radius-sm);
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .btn-secondary:hover { background: var(--bg); }
+
+    .save-msg {
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 10px;
       vertical-align: middle;
     }
     .save-msg.success { color: var(--green); }
     .save-msg.error   { color: var(--red); }
 
-    /* ── MENU TABLE ── */
+    .card-footer {
+      padding: 16px 22px;
+      border-top: 1px solid var(--border);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ─────────────────────────────────────────
+       MENU GRID CARDS
+    ───────────────────────────────────────── */
     .menu-toolbar {
       display: flex;
       gap: 10px;
-      margin-bottom: 20px;
+      padding: 16px 22px 14px;
+      border-bottom: 1px solid var(--border);
       flex-wrap: wrap;
-    }
-
-    .toolbar-search {
-      flex: 1;
-      min-width: 160px;
-      padding: 11px 16px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-size: 13px;
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .toolbar-search:focus { border-color: var(--primary); }
-
-    .toolbar-select {
-      padding: 11px 14px;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      font-size: 13px;
-      font-family: inherit;
-      outline: none;
-      cursor: pointer;
+      align-items: center;
       background: var(--white);
     }
 
-    .btn-save-all {
-      background: var(--primary);
-      color: var(--white);
-      border: none;
-      border-radius: 10px;
-      padding: 11px 20px;
-      font-size: 13px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: background 0.2s;
+    .search-wrap {
+      flex: 1;
+      min-width: 180px;
+      position: relative;
+      display: flex;
+      align-items: center;
     }
-    .btn-save-all:hover { background: var(--primary-light); }
 
-    .menu-table-wrap { overflow-x: auto; }
+    .search-icon {
+      position: absolute;
+      left: 11px;
+      color: var(--muted-light);
+      pointer-events: none;
+    }
 
-    table {
+    .search-input {
       width: 100%;
-      border-collapse: collapse;
+      padding: 9px 14px 9px 36px;
+      border: 1.5px solid var(--border-2);
+      border-radius: var(--radius-sm);
       font-size: 13px;
+      font-family: inherit;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.15s;
+      background: var(--white);
+    }
+    .search-input:focus { border-color: var(--primary); }
+
+    .filter-select {
+      padding: 9px 13px;
+      border: 1.5px solid var(--border-2);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-family: inherit;
+      color: var(--text);
+      outline: none;
+      cursor: pointer;
+      background: var(--white);
+      min-width: 160px;
     }
 
-    thead th {
+    /* ── Grid container ── */
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 16px;
+      padding: 22px;
       background: var(--bg);
-      padding: 12px 16px;
-      text-align: left;
+    }
+
+    /* ── Card ── */
+    .menu-edit-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.18s, transform 0.18s;
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+    .menu-edit-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.11);
+      transform: translateY(-2px);
+    }
+    .menu-edit-card.changed {
+      border-color: #F59E0B;
+      box-shadow: 0 0 0 2px rgba(245,158,11,0.20), var(--shadow);
+    }
+
+    /* Badge "Diubah" */
+    .card-changed-dot {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #F59E0B;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+      display: none;
+      z-index: 5;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .menu-edit-card.changed .card-changed-dot { display: block; }
+
+    /* ── Foto area ── */
+    .card-photo-wrap {
+      position: relative;
+      width: 100%;
+      padding-top: 72%; /* 4:3 ratio */
+      cursor: pointer;
+      background: #F3F4F6;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: block;
+    }
+
+    .card-photo-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s;
+    }
+    .card-photo-wrap:hover .card-photo-img { transform: scale(1.05); }
+
+    .card-photo-empty {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #CBD5E1;
+      background: #F8FAFC;
+    }
+    .card-photo-empty span {
+      font-size: 11px;
+      font-weight: 500;
+      color: #94A3B8;
+    }
+
+    .card-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15,20,30,0.55);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      opacity: 0;
+      transition: opacity 0.18s;
+      z-index: 3;
+    }
+    .card-photo-wrap:hover .card-photo-overlay { opacity: 1; }
+    .card-photo-overlay span {
       font-size: 11px;
       font-weight: 700;
-      color: var(--muted);
+      color: #fff;
+      letter-spacing: 0.4px;
+    }
+
+    .card-upload-input { display: none; }
+
+    .card-upload-spinner {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.82);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 4;
+    }
+    .card-upload-spinner.active { display: flex; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner-ring {
+      width: 26px; height: 26px;
+      border: 3px solid #E5E7EB;
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    /* ── Card body ── */
+    .card-body-edit {
+      padding: 12px 13px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      flex: 1;
+    }
+
+    .card-item-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.35;
+      /* max 2 baris, potong dengan ellipsis */
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 36px;
+    }
+
+    .card-item-kat {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--primary);
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      border-bottom: 2px solid var(--border);
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background 0.15s;
-    }
-    tbody tr:hover { background: #FFF8F8; }
-    tbody tr:last-child { border-bottom: none; }
-
-    tbody td {
-      padding: 12px 16px;
-      vertical-align: middle;
+    /* Divider tipis */
+    .card-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 -13px;
     }
 
-    .td-img {
-      width: 52px;
-      height: 52px;
-      border-radius: 8px;
-      object-fit: cover;
-      background: #EEE;
+    /* Harga row */
+    .card-price-row {
+      display: flex;
+      align-items: center;
+      background: var(--bg);
+      border: 1.5px solid var(--border-2);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+    .card-price-row:focus-within { border-color: var(--primary); }
+
+    .card-price-prefix {
+      padding: 0 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      background: var(--bg);
+      border-right: 1.5px solid var(--border-2);
+      height: 36px;
+      display: flex;
+      align-items: center;
       flex-shrink: 0;
     }
 
-    .td-img-placeholder {
-      width: 52px;
-      height: 52px;
-      border-radius: 8px;
-      background: #EEE;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-    }
-
-    .td-name { font-weight: 700; color: var(--text); }
-    .td-kat  { font-size: 11px; color: var(--primary); font-weight: 600; text-transform: uppercase; margin-top: 2px; }
-
-    .price-input {
-      width: 100px;
-      padding: 8px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
+    .card-price-input {
+      flex: 1;
+      padding: 0 10px;
+      height: 36px;
+      border: none;
+      outline: none;
       font-size: 13px;
       font-weight: 700;
       color: var(--primary);
-      font-family: inherit;
-      outline: none;
-      transition: border-color 0.2s;
+      font-family: 'Inter', monospace;
+      background: var(--white);
+      text-align: right;
+      min-width: 0;
     }
-    .price-input:focus { border-color: var(--primary); }
 
-    .status-select {
-      padding: 8px 12px;
-      border-radius: 8px;
+    /* Status toggle */
+    .card-status-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
       font-size: 12px;
       font-weight: 700;
       font-family: inherit;
-      outline: none;
       cursor: pointer;
       border: 1.5px solid;
-      transition: border-color 0.2s;
+      transition: all 0.15s;
+      letter-spacing: 0.2px;
     }
-    .status-select.tersedia { color: var(--green); border-color: var(--green); background: #F0FFF4; }
-    .status-select.habis    { color: var(--red);   border-color: var(--red);   background: #FFF5F5; }
+    .card-status-btn .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      flex-shrink: 0;
+    }
+    .card-status-btn.tersedia {
+      color: var(--green);
+      border-color: #86EFAC;
+      background: var(--green-bg);
+    }
+    .card-status-btn.tersedia:hover { background: #DCFCE7; }
+    .card-status-btn.habis {
+      color: var(--red);
+      border-color: #FCA5A5;
+      background: var(--red-bg);
+    }
+    .card-status-btn.habis:hover { background: #FEE2E2; }
 
-    .badge-changed {
-      display: inline-block;
-      font-size: 10px;
-      background: var(--gold);
-      color: #fff;
+    /* Empty state */
+    .menu-grid-empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 64px 20px;
+      color: var(--muted);
+    }
+    .menu-grid-empty-icon {
+      width: 56px; height: 56px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 14px;
+    }
+    .menu-grid-empty p { font-size: 14px; font-weight: 500; }
+    .menu-grid-empty small { font-size: 12px; color: var(--muted-light); }
+
+    @media (max-width: 700px) {
+      .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 14px; }
+      .menu-toolbar { padding: 12px 14px 10px; }
+    }
+
+    /* ─────────────────────────────────────────
+       SECURITY TAB
+    ───────────────────────────────────────── */
+    .info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+    .info-row-val   { font-size: 13px; font-weight: 600; color: var(--text); }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .badge-pill.active { background: var(--green-bg); color: var(--green); border: 1px solid #86EFAC; }
+    .badge-pill.server { background: var(--blue-bg);  color: var(--blue);  border: 1px solid #93C5FD; }
+    .badge-pill.local  { background: var(--amber-bg); color: var(--amber); border: 1px solid #FCD34D; }
+
+    code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 12px;
+      background: var(--bg);
+      border: 1px solid var(--border);
       border-radius: 4px;
       padding: 2px 6px;
+      color: var(--primary);
+    }
+
+    .pass-result-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+    .pass-result-box.visible { display: block; }
+    .pass-result-code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 15px;
       font-weight: 700;
-      margin-left: 6px;
-      vertical-align: middle;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .badge-changed.visible { opacity: 1; }
-
-    .empty-row td {
-      text-align: center;
-      padding: 40px;
-      color: var(--muted);
-      font-size: 14px;
+      color: var(--primary);
+      letter-spacing: 1px;
+      background: var(--white);
+      border: 1.5px solid var(--border-2);
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-top: 8px;
+      word-break: break-all;
     }
 
-    /* Stats bar */
-    .stats-bar {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
-
-    .stat-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-      flex: 1;
-      min-width: 140px;
-      box-shadow: var(--shadow);
-      border-left: 4px solid var(--primary);
-    }
-    .stat-card.green { border-left-color: var(--green); }
-    .stat-card.red   { border-left-color: var(--red); }
-    .stat-card.gold  { border-left-color: var(--gold); }
-
-    .stat-value {
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-    .stat-label { font-size: 12px; color: var(--muted); font-weight: 500; }
-
-    /* Change password section */
-    .divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 24px 0;
-    }
-
-    /* Responsive */
-    @media (max-width: 640px) {
-      .admin-content { padding: 20px 14px 48px; }
-      .card { padding: 18px; }
-      .tabs { gap: 0; }
-      .tab-btn { padding: 10px 14px; font-size: 12px; }
-      .topbar { padding: 0 16px; }
+    /* ─────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────── */
+    @media (max-width: 700px) {
+      .admin-content { padding: 16px 12px 48px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .stats-grid .stat-card:last-child { grid-column: 1/-1; }
+      .topbar { padding: 0 14px; }
       .topbar-sub { display: none; }
-      thead th:nth-child(1) { display: none; }
-      tbody td:nth-child(1) { display: none; }
+      .tabs-bar { flex-wrap: wrap; }
+      .tab-btn  { flex: none; font-size: 12px; }
+      .card-header { padding: 14px 16px 12px; }
+      .card-body   { padding: 16px; }
+      .card-footer { padding: 12px 16px; }
+      .menu-toolbar { padding: 12px 16px 10px; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     LOGIN SCREEN
-══════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════
+     LOGIN
+═══════════════════════════════════════ -->
 <div id="loginScreen">
   <div class="login-card">
-    <div class="login-logo">⚙️</div>
-    <h1 class="login-title">Admin Panel</h1>
-    <p class="login-sub">Okayama Kedai Kenshin</p>
+
+    <div class="login-brand">
+      <div class="login-brand-icon">
+        <!-- Gear / settings icon -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="login-brand-text">
+        <h1>Admin Panel</h1>
+        <p>Okayama Kedai Kenshin</p>
+      </div>
+    </div>
+
+    <h2 class="login-heading">Masuk ke Dashboard</h2>
+    <p class="login-sub">Masukkan kredensial untuk mengelola kedai Anda.</p>
 
     <div class="form-group">
       <label class="form-label">Username</label>
@@ -636,210 +1036,325 @@
       <label class="form-label">Password</label>
       <input type="password" id="loginPass" class="form-input" placeholder="••••••••" autocomplete="current-password" />
     </div>
-    <button class="btn-login" id="btnLogin">Masuk</button>
+
+    <button class="btn-login" id="btnLogin">
+      <!-- Lock icon -->
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Masuk
+    </button>
     <p class="login-error" id="loginError"></p>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
+<!-- ═══════════════════════════════════════
      ADMIN SCREEN
-══════════════════════════════════════ -->
+═══════════════════════════════════════ -->
 <div id="adminScreen">
 
   <!-- Topbar -->
-  <div class="topbar">
-    <div class="topbar-brand">
-      <div class="topbar-icon">⚙️</div>
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">
+        <!-- Store icon -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
       <div>
-        <div class="topbar-title">Admin Panel</div>
-        <div class="topbar-sub">Okayama Kedai Kenshin</div>
+        <div class="topbar-title">Kedai Kenshin</div>
+        <div class="topbar-sub">Admin Dashboard</div>
       </div>
     </div>
     <div class="topbar-right">
-      <a href="../index.html" target="_blank" class="btn-view-site">🌐 Lihat Website</a>
-      <button class="btn-logout" id="btnLogout">Keluar</button>
+      <a href="../index.html" target="_blank" class="btn-topbar btn-topbar-ghost">
+        <!-- External link -->
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Lihat Website
+      </a>
+      <button class="btn-topbar btn-topbar-danger" id="btnLogout">
+        <!-- Logout icon -->
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Keluar
+      </button>
     </div>
-  </div>
+  </header>
 
-  <!-- Content -->
-  <div class="admin-content">
+  <!-- Main -->
+  <main class="admin-content">
 
     <!-- Stats -->
-    <div class="stats-bar" id="statsBar">
+    <div class="stats-grid" id="statsBar">
       <div class="stat-card green">
-        <div class="stat-value" id="statTersedia">—</div>
-        <div class="stat-label">Menu Tersedia</div>
+        <div class="stat-icon-wrap">
+          <!-- Check circle -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value" id="statTersedia">—</div>
+          <div class="stat-label">Menu Tersedia</div>
+        </div>
       </div>
       <div class="stat-card red">
-        <div class="stat-value" id="statHabis">—</div>
-        <div class="stat-label">Menu Habis</div>
+        <div class="stat-icon-wrap">
+          <!-- X circle -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value" id="statHabis">—</div>
+          <div class="stat-label">Menu Habis</div>
+        </div>
       </div>
-      <div class="stat-card gold">
-        <div class="stat-value" id="statTotal">—</div>
-        <div class="stat-label">Total Menu</div>
+      <div class="stat-card blue">
+        <div class="stat-icon-wrap">
+          <!-- Grid / menu icon -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <div class="stat-info">
+          <div class="stat-value" id="statTotal">—</div>
+          <div class="stat-label">Total Menu</div>
+        </div>
       </div>
     </div>
 
     <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="settings">🏪 Pengaturan</button>
-      <button class="tab-btn" data-tab="menu">🍽️ Editor Menu</button>
-      <button class="tab-btn" data-tab="security">🔒 Keamanan</button>
+    <div class="tabs-bar">
+      <button class="tab-btn active" data-tab="settings">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Pengaturan
+      </button>
+      <button class="tab-btn" data-tab="menu">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Editor Menu
+      </button>
+      <button class="tab-btn" data-tab="security">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Keamanan
+      </button>
     </div>
 
-    <!-- ── TAB: SETTINGS ── -->
+    <!-- ══ TAB: PENGATURAN ══ -->
     <div class="tab-pane active" id="tab-settings">
+
+      <!-- WhatsApp -->
       <div class="card">
-        <div class="card-title">📱 Nomor WhatsApp</div>
-        <p class="card-desc">Digunakan untuk tombol "Pesan via WhatsApp" di semua menu.</p>
-        <div class="field">
-          <label>Nomor WhatsApp</label>
-          <div class="input-wrap">
-            <span class="input-prefix">+</span>
-            <input type="text" id="inputWA" placeholder="628123456789" maxlength="20" />
+        <div class="card-header">
+          <div class="card-header-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 1.19h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.69a16 16 0 0 0 6 6l1.27-.81a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
           </div>
-          <p class="field-hint">Format: kode negara + nomor. Contoh: 628123456789</p>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">📍 Informasi Kedai</div>
-        <p class="card-desc">Ditampilkan di bagian footer website.</p>
-        <div class="field">
-          <label>Alamat / Tagline Footer</label>
-          <textarea class="field-textarea" id="inputAlamat" rows="2"
-            placeholder="岡山 · Halal Japanese Cuisine"></textarea>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-title">🏪 Status Kedai</div>
-        <p class="card-desc">Mengubah badge status di header website.</p>
-        <div class="toggle-row">
-          <div>
-            <div class="toggle-label">Buka Sekarang</div>
-            <div class="toggle-hint">Aktifkan jika kedai sedang buka</div>
+          <div class="card-header-text">
+            <div class="card-title">Nomor WhatsApp</div>
+            <div class="card-desc">Digunakan untuk tombol "Pesan via WhatsApp" di semua menu.</div>
           </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="toggleBuka" checked />
-            <span class="toggle-slider"></span>
-          </label>
+        </div>
+        <div class="card-body">
+          <div class="field">
+            <label class="field-label">Nomor WA</label>
+            <div class="input-group">
+              <span class="input-addon">+</span>
+              <input type="text" id="inputWA" placeholder="628123456789" maxlength="20" />
+            </div>
+            <p class="field-hint">Format: kode negara + nomor tanpa spasi. Contoh: 628123456789</p>
+          </div>
         </div>
       </div>
 
-      <button class="btn-primary" id="btnSaveSettings">💾 Simpan Pengaturan</button>
-      <span class="save-msg" id="settingsMsg"></span>
-    </div>
+      <!-- Informasi kedai -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="card-header-text">
+            <div class="card-title">Informasi Kedai</div>
+            <div class="card-desc">Ditampilkan di bagian footer website.</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="field">
+            <label class="field-label">Alamat / Tagline Footer</label>
+            <textarea class="field-textarea" id="inputAlamat" rows="2" placeholder="岡山 · Halal Japanese Cuisine"></textarea>
+          </div>
+        </div>
+      </div>
 
-    <!-- ── TAB: MENU ── -->
+      <!-- Status kedai -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          </div>
+          <div class="card-header-text">
+            <div class="card-title">Status Kedai</div>
+            <div class="card-desc">Mengubah badge status di header website secara real-time.</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="toggle-label">Buka Sekarang</div>
+              <div class="toggle-hint">Aktifkan jika kedai sedang buka untuk umum</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggleBuka" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer" style="border-radius:var(--radius);background:var(--white);border:1px solid var(--border);box-shadow:var(--shadow);">
+        <button class="btn-primary" id="btnSaveSettings">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Simpan Pengaturan
+        </button>
+        <span class="save-msg" id="settingsMsg"></span>
+      </div>
+
+    </div><!-- /tab-settings -->
+
+    <!-- ══ TAB: EDITOR MENU ══ -->
     <div class="tab-pane" id="tab-menu">
-      <div class="card">
-        <div class="card-title">🍽️ Editor Menu</div>
-        <p class="card-desc">Edit harga dan status ketersediaan tiap item. Klik "Simpan Semua Perubahan" setelah selesai.</p>
+      <div class="card" style="padding:0;">
 
+        <!-- Toolbar -->
         <div class="menu-toolbar">
-          <input type="text" id="menuSearch" class="toolbar-search" placeholder="🔍 Cari nama menu..." />
-          <select id="menuFilterKat" class="toolbar-select">
+          <div class="search-wrap">
+            <span class="search-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </span>
+            <input type="text" id="menuSearch" class="search-input" placeholder="Cari nama menu..." />
+          </div>
+          <select id="menuFilterKat" class="filter-select">
             <option value="semua">Semua Kategori</option>
           </select>
-          <button class="btn-save-all" id="btnSaveAllMenu">💾 Simpan Semua Perubahan</button>
+          <button class="btn-primary" id="btnSaveAllMenu">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Simpan Perubahan
+          </button>
         </div>
 
-        <div class="menu-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Foto</th>
-                <th>Nama Menu</th>
-                <th>Harga (¥)</th>
-                <th>Status</th>
-                <th>Perubahan</th>
-              </tr>
-            </thead>
-            <tbody id="menuTableBody">
-              <tr class="empty-row"><td colspan="5">Memuat data...</td></tr>
-            </tbody>
-          </table>
+        <!-- Grid -->
+        <div class="menu-grid" id="menuGrid"></div>
+
+        <!-- Footer msg -->
+        <div style="padding:12px 22px;border-top:1px solid var(--border);min-height:42px;">
+          <span class="save-msg" id="menuMsg" style="font-size:13px;"></span>
         </div>
-        <span class="save-msg" id="menuMsg" style="display:block;margin-top:12px;"></span>
+
       </div>
-    </div>
+    </div><!-- /tab-menu -->
 
-    <!-- ── TAB: SECURITY ── -->
+    <!-- ══ TAB: KEAMANAN ══ -->
     <div class="tab-pane" id="tab-security">
+
+      <!-- Session info -->
       <div class="card">
-        <div class="card-title">🔑 Ganti Password Admin</div>
-        <p class="card-desc">Password disimpan di file <code>admin/auth.php</code> di server. Setelah ganti di sini, update juga file PHP-nya.</p>
-
-        <div class="field">
-          <label>Password Baru</label>
-          <input type="password" id="newPass" placeholder="Minimal 8 karakter" />
+        <div class="card-header">
+          <div class="card-header-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="card-header-text">
+            <div class="card-title">Informasi Sesi</div>
+            <div class="card-desc">Status koneksi dan sesi login aktif saat ini.</div>
+          </div>
         </div>
-        <div class="field">
-          <label>Konfirmasi Password</label>
-          <input type="password" id="confirmPass" placeholder="Ulangi password baru" />
+        <div class="card-body">
+          <div class="info-row">
+            <span class="info-row-label">Login sebagai</span>
+            <span class="info-row-val" id="sessionUser">admin</span>
+          </div>
+          <div class="info-row">
+            <span class="info-row-label">Mode koneksi</span>
+            <span id="sessionMode">
+              <span class="badge-pill local"><span class="dot"></span> Lokal (localStorage)</span>
+            </span>
+          </div>
+          <div class="info-row">
+            <span class="info-row-label">Total menu</span>
+            <span class="info-row-val" id="sessionMenuCount">—</span>
+          </div>
+          <div class="info-row" style="border-bottom:none;">
+            <span class="info-row-label">Sesi</span>
+            <span class="badge-pill active"><span class="dot"></span> Aktif</span>
+          </div>
         </div>
-        <button class="btn-primary" id="btnChangePass">🔒 Update Password</button>
-        <span class="save-msg" id="passMsg"></span>
-
-        <hr class="divider" />
-        <div class="card-title" style="font-size:14px;margin-bottom:8px;">📋 Informasi Session</div>
-        <p style="font-size:13px;color:var(--muted);">Login sebagai: <strong id="sessionUser">admin</strong></p>
-        <p style="font-size:13px;color:var(--muted);margin-top:4px;">Session aktif sejak halaman dibuka. Akan otomatis logout jika browser ditutup.</p>
       </div>
-    </div>
 
-  </div>
+      <!-- Change password -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </div>
+          <div class="card-header-text">
+            <div class="card-title">Ganti Password Admin</div>
+            <div class="card-desc">Setelah ganti, update juga nilai <code>ADMIN_PASSWORD</code> di <code>admin/auth.php</code>.</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="field">
+            <label class="field-label">Password Baru</label>
+            <input type="password" id="newPass" class="field-input" placeholder="Minimal 8 karakter" />
+          </div>
+          <div class="field">
+            <label class="field-label">Konfirmasi Password</label>
+            <input type="password" id="confirmPass" class="field-input" placeholder="Ulangi password baru" />
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn-primary" id="btnChangePass">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Update Password
+          </button>
+          <span class="save-msg" id="passMsg"></span>
+        </div>
+        <div class="pass-result-box" id="passResultBox">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:4px;">Salin password ini lalu tempelkan di <code>admin/auth.php</code> baris <code>ADMIN_PASSWORD</code>:</div>
+          <div class="pass-result-code" id="passResultCode"></div>
+        </div>
+      </div>
+
+    </div><!-- /tab-security -->
+
+  </main>
 </div>
 
+<!-- ═══════════════════════════════════════
+     DATA — script.js dimuat duluan (sync),
+     lalu admin script berjalan setelah
+     window.menuData tersedia.
+═══════════════════════════════════════ -->
+<script src="../menu-data.js"></script>
 <script>
-// ── Inject menuData dari parent script (load via script tag) ──
-// Admin panel perlu data yang sama dengan website utama.
-// Kita load script.js dari parent folder untuk ambil menuData & kategoriData.
+// ══════════════════════════════════════════════════════════
+//  ADMIN PANEL SCRIPT
+//  menu-data.js dimuat synchronous di atas — adminMenuData dan
+//  adminKategoriData sudah tersedia saat blok ini berjalan.
+// ══════════════════════════════════════════════════════════
 
-// Fungsi helper untuk baca dari main script
-let menuData = [];
-let kategoriData = [];
+// ── Kredensial fallback (hanya saat PHP tidak ada) ────────
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'kenshin2024';
 
-// Load script.js dari folder parent
-const scriptEl = document.createElement('script');
-scriptEl.src = '../script.js';
-scriptEl.onload = () => {
-  // script.js akan auto-run DOMContentLoaded — tapi elemen tidak ada.
-  // Kita akses variabel global setelah load.
-  initAdminPage();
-};
-scriptEl.onerror = () => {
-  console.error('Gagal load script.js');
-  initAdminPage();
-};
-document.head.appendChild(scriptEl);
+// ── localStorage keys ─────────────────────────────────────
+const SK_SETTINGS = 'kenshin_settings';
+const SK_MENU     = 'kenshin_menu_overrides';
+const SK_SESSION  = 'kenshin_admin_session';
 
-// ── State ──────────────────────────────────────────────────
-let pendingChanges = {}; // { id: { harga, status } }
-let currentSettings = {};
+// ── API endpoints (relatif dari admin/) ───────────────────
+const API_AUTH = 'auth.php';
+const API_LOAD = '../api/load.php';
+const API_SAVE = '../api/save.php';
 
-// ── API helpers ────────────────────────────────────────────
-const API_AUTH  = '../admin/auth.php';
-const API_SAVE  = '../api/save.php';
-const API_LOAD  = '../api/load.php';
+// ── State ─────────────────────────────────────────────────
+let useServer = false;
+// Buat salinan lokal dari data global (menu-data.js)
+// Pakai nama berbeda agar tidak conflict dengan const di menu-data.js
+let adminMenuData     = typeof menuData     !== 'undefined' ? menuData.map(m => ({...m}))     : [];
+let adminKategoriData = typeof kategoriData !== 'undefined' ? kategoriData.map(k => ({...k})) : [];
+let pendingChanges    = {};
 
-async function apiPost(url, data) {
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-    credentials: 'include',
-  });
-  return res.json();
-}
-
-async function apiGet(url) {
-  const res = await fetch(url, { credentials: 'include' });
-  return res.json();
-}
-
-// ── LOGIN ──────────────────────────────────────────────────
+// ── LOGIN ─────────────────────────────────────────────────
 document.getElementById('btnLogin').addEventListener('click', doLogin);
 document.getElementById('loginPass').addEventListener('keydown', e => {
   if (e.key === 'Enter') doLogin();
@@ -851,50 +1366,79 @@ async function doLogin() {
   const pass = document.getElementById('loginPass').value;
   const err  = document.getElementById('loginError');
 
+  err.textContent = '';
   if (!user || !pass) { err.textContent = 'Isi username dan password.'; return; }
 
-  btn.disabled = true;
-  btn.textContent = 'Masuk...';
-  err.textContent = '';
+  btn.disabled    = true;
+  btn.textContent = 'Memeriksa...';
 
+  let masuk = false;
+
+  // Coba server dulu
   try {
-    const res = await apiPost(API_AUTH, { action: 'login', username: user, password: pass });
-    if (res.success) {
-      showAdminScreen();
+    const res  = await fetch(API_AUTH, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'login', username: user, password: pass }),
+    });
+    const data = await res.json();
+    if (data.success) {
+      useServer = true;
+      masuk     = true;
     } else {
-      err.textContent = res.message || 'Login gagal.';
+      // Server menjawab dengan "salah password"
+      err.textContent = data.message || 'Username atau password salah.';
     }
   } catch {
-    err.textContent = 'Server tidak tersedia. Pastikan PHP berjalan.';
+    // Server tidak ada — cek kredensial lokal
+    if (user === ADMIN_USER && pass === ADMIN_PASS) {
+      useServer = false;
+      masuk     = true;
+    } else {
+      err.textContent = 'Username atau password salah.';
+    }
   }
 
-  btn.disabled = false;
+  btn.disabled    = false;
   btn.textContent = 'Masuk';
+
+  if (masuk) {
+    localStorage.setItem(SK_SESSION, '1');
+    await showAdminScreen();
+  }
 }
 
 // ── LOGOUT ────────────────────────────────────────────────
 document.getElementById('btnLogout').addEventListener('click', async () => {
-  await apiPost(API_AUTH, { action: 'logout' });
+  if (useServer) {
+    try {
+      await fetch(API_AUTH, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'logout' }) });
+    } catch { /* abaikan */ }
+  }
+  localStorage.removeItem(SK_SESSION);
   document.getElementById('adminScreen').classList.remove('visible');
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('loginPass').value = '';
+  pendingChanges = {};
 });
 
-// ── CHECK SESSION on load ──────────────────────────────────
+// ── CEK SESI ──────────────────────────────────────────────
 async function checkSession() {
-  try {
-    const res = await apiGet(API_AUTH + '?action=check');
-    if (res.logged_in) showAdminScreen();
-  } catch { /* offline / no PHP */ }
+  // Selalu tampilkan login screen dulu, jangan auto-login
+  // Ini paling reliable — user login sekali, masuk, selesai
+  // (tidak ada race condition dengan server check)
 }
 
-function showAdminScreen() {
+async function showAdminScreen() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('adminScreen').classList.add('visible');
-  loadSettings();
+  await loadSettings();
+  updateStats();
+  updateSessionInfo();
 }
 
-// ── INIT TABS ─────────────────────────────────────────────
+// ── TABS ──────────────────────────────────────────────────
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -907,80 +1451,121 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 // ── LOAD SETTINGS ─────────────────────────────────────────
 async function loadSettings() {
-  try {
-    const res = await apiGet(API_LOAD);
-    if (res.success) {
-      currentSettings = res.settings;
-      document.getElementById('inputWA').value    = res.settings.wa_number || '';
-      document.getElementById('inputAlamat').value = res.settings.alamat   || '';
-      document.getElementById('toggleBuka').checked = res.settings.status_buka !== false;
+  let settings  = {};
+  let overrides = {};
 
-      // Apply overrides to menuData
-      if (res.menu_overrides) {
-        Object.entries(res.menu_overrides).forEach(([id, ov]) => {
-          const item = menuData.find(m => m.id === parseInt(id));
-          if (item) {
-            if (ov.harga  !== null) item.harga  = ov.harga;
-            if (ov.status !== null) item.status = ov.status;
-          }
-        });
+  if (useServer) {
+    try {
+      const res  = await fetch(API_LOAD, { cache: 'no-store' });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        settings  = data.settings       || {};
+        overrides = data.menu_overrides || {};
       }
-      updateStats();
+    } catch { settings = null; }
+  }
+
+  if (!useServer || settings === null) {
+    settings  = JSON.parse(localStorage.getItem(SK_SETTINGS) || '{}');
+    overrides = JSON.parse(localStorage.getItem(SK_MENU)     || '{}');
+  }
+
+  document.getElementById('inputWA').value      = settings.wa_number   || '';
+  document.getElementById('inputAlamat').value  = settings.alamat      || '';
+  document.getElementById('toggleBuka').checked = settings.status_buka !== false;
+
+  // Terapkan override ke salinan lokal adminMenuData
+  Object.entries(overrides || {}).forEach(([id, ov]) => {
+    const item = adminMenuData.find(m => m.id === parseInt(id));
+    if (item && ov) {
+      if (ov.harga  != null) item.harga  = ov.harga;
+      if (ov.status != null) item.status = ov.status;
     }
-  } catch { /* no PHP */ }
+  });
 }
 
-// ── STATS ──────────────────────────────────────────────────
+// ── STATS ─────────────────────────────────────────────────
 function updateStats() {
-  const tersedia = menuData.filter(m => m.status === 'tersedia').length;
-  const habis    = menuData.filter(m => m.status === 'habis').length;
+  const tersedia = adminMenuData.filter(m => m.status === 'tersedia').length;
+  const habis    = adminMenuData.filter(m => m.status === 'habis').length;
   document.getElementById('statTersedia').textContent = tersedia;
   document.getElementById('statHabis').textContent    = habis;
-  document.getElementById('statTotal').textContent    = menuData.length;
+  document.getElementById('statTotal').textContent    = adminMenuData.length;
 }
 
-// ── SAVE SETTINGS ──────────────────────────────────────────
+function updateSessionInfo() {
+  const el = document.getElementById('sessionMode');
+  if (useServer) {
+    el.innerHTML = `<span class="badge-pill server"><span class="dot"></span> Server (PHP)</span>`;
+  } else {
+    el.innerHTML = `<span class="badge-pill local"><span class="dot"></span> Lokal (localStorage)</span>`;
+  }
+  const mc = document.getElementById('sessionMenuCount');
+  if (mc) mc.textContent = adminMenuData.length + ' item';
+}
+
+// ── SAVE SETTINGS ─────────────────────────────────────────
 document.getElementById('btnSaveSettings').addEventListener('click', async () => {
-  const msg  = document.getElementById('settingsMsg');
+  const btn = document.getElementById('btnSaveSettings');
+  const msg = document.getElementById('settingsMsg');
+  const wa  = document.getElementById('inputWA').value.trim();
+
+  if (wa && !/^\d{10,15}$/.test(wa)) {
+    msg.textContent = 'Format WA tidak valid. Contoh: 628123456789';
+    msg.className = 'save-msg error';
+    setTimeout(() => msg.textContent = '', 3500);
+    return;
+  }
+
   const data = {
-    wa_number:   document.getElementById('inputWA').value.trim(),
+    wa_number:   wa,
     alamat:      document.getElementById('inputAlamat').value.trim(),
     status_buka: document.getElementById('toggleBuka').checked,
   };
 
-  msg.textContent = 'Menyimpan...';
-  msg.className = 'save-msg';
-
-  try {
-    const res = await apiPost(API_SAVE, { type: 'settings', data });
-    if (res.success) {
-      msg.textContent = '✅ ' + res.message;
-      msg.className = 'save-msg success';
-    } else {
-      msg.textContent = '⚠️ ' + res.message;
+  if (useServer) {
+    btn.disabled = true;
+    try {
+      const res    = await fetch(API_SAVE, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'settings', data }) });
+      const result = await res.json();
+      if (res.ok && result.success) {
+        msg.textContent = result.message || 'Pengaturan berhasil disimpan.';
+        msg.className = 'save-msg success';
+      } else {
+        msg.textContent = result.message || 'Gagal menyimpan.';
+        msg.className = 'save-msg error';
+      }
+    } catch {
+      msg.textContent = 'Gagal terhubung ke server.';
       msg.className = 'save-msg error';
+    } finally {
+      btn.disabled = false;
+      setTimeout(() => msg.textContent = '', 3500);
     }
-  } catch {
-    msg.textContent = '❌ Gagal terhubung ke server.';
-    msg.className = 'save-msg error';
+    return;
   }
-  setTimeout(() => msg.textContent = '', 4000);
+
+  localStorage.setItem(SK_SETTINGS, JSON.stringify(data));
+  msg.textContent = 'Tersimpan secara lokal.';
+  msg.className = 'save-msg success';
+  setTimeout(() => msg.textContent = '', 3500);
 });
 
-// ── MENU TABLE ─────────────────────────────────────────────
+// ── MENU GRID ─────────────────────────────────────────────
 function populateKatFilter() {
-  const sel = document.getElementById('menuFilterKat');
-  // Clear existing options except first
+  const sel     = document.getElementById('menuFilterKat');
+  const current = sel.value;
   while (sel.options.length > 1) sel.remove(1);
-
-  kategoriData.filter(k => k.id !== 'semua').forEach(k => {
-    const count = menuData.filter(m => m.kategori === k.id).length;
-    if (count === 0) return;
+  adminKategoriData.filter(k => k.id !== 'semua').forEach(k => {
+    const count = adminMenuData.filter(m => m.kategori === k.id).length;
+    if (!count) return;
     const opt = document.createElement('option');
     opt.value = k.id;
-    opt.textContent = k.icon + ' ' + k.name + ' (' + count + ')';
+    opt.textContent = k.name + ' (' + count + ')';
     sel.appendChild(opt);
   });
+  sel.value = current;
 }
 
 function renderMenuTable() {
@@ -989,162 +1574,283 @@ function renderMenuTable() {
 }
 
 function filterAndRender() {
-  const search = document.getElementById('menuSearch').value.toLowerCase();
-  const kat    = document.getElementById('menuFilterKat').value;
+  const search   = document.getElementById('menuSearch').value.toLowerCase().trim();
+  const kat      = document.getElementById('menuFilterKat').value;
+  const filtered = adminMenuData.filter(item =>
+    (kat === 'semua' || item.kategori === kat) &&
+    (!search || item.name.toLowerCase().includes(search))
+  );
 
-  const filtered = menuData.filter(item => {
-    const matchText = item.name.toLowerCase().includes(search);
-    const matchKat  = kat === 'semua' || item.kategori === kat;
-    return matchText && matchKat;
-  });
+  const grid = document.getElementById('menuGrid');
+  grid.innerHTML = '';
 
-  const tbody = document.getElementById('menuTableBody');
-  tbody.innerHTML = '';
-
-  if (filtered.length === 0) {
-    tbody.innerHTML = '<tr class="empty-row"><td colspan="5">Tidak ada menu ditemukan</td></tr>';
+  if (!filtered.length) {
+    grid.innerHTML = `
+      <div class="menu-grid-empty">
+        <div class="menu-grid-empty-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </div>
+        <p>Tidak ada menu ditemukan</p>
+        <small>Coba ubah filter atau kata kunci pencarian</small>
+      </div>`;
     return;
   }
 
   filtered.forEach(item => {
-    const katName = (kategoriData.find(k => k.id === item.kategori) || {}).name || item.kategori;
-    const katIcon = (kategoriData.find(k => k.id === item.kategori) || {}).icon || '🍽️';
-    const changed = pendingChanges[item.id];
+    const katObj  = adminKategoriData.find(k => k.id === item.kategori) || {};
+    const katName = katObj.name || item.kategori;
+    const imgSrc  = item.img ? `../${item.img}` : null;
+    const isChanged = !!pendingChanges[item.id];
+    const statusClass = item.status === 'tersedia' ? 'tersedia' : 'habis';
+    const statusLabel = item.status === 'tersedia' ? 'Tersedia' : 'Habis';
 
-    const tr = document.createElement('tr');
-    tr.dataset.id = item.id;
+    const card = document.createElement('div');
+    card.className = 'menu-edit-card' + (isChanged ? ' changed' : '');
+    card.dataset.id = item.id;
 
-    tr.innerHTML = `
-      <td>
-        ${item.img
-          ? `<img class="td-img" src="../${item.img}" alt="${item.name}"
-                  onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-             <div class="td-img-placeholder" style="display:none">${katIcon}</div>`
-          : `<div class="td-img-placeholder">${katIcon}</div>`
-        }
-      </td>
-      <td>
-        <div class="td-name">${item.name}</div>
-        <div class="td-kat">${katName}</div>
-      </td>
-      <td>
-        <input type="number" class="price-input" value="${item.harga}"
-               min="0" step="10" data-id="${item.id}" />
-      </td>
-      <td>
-        <select class="status-select ${item.status}" data-id="${item.id}">
-          <option value="tersedia" ${item.status === 'tersedia' ? 'selected' : ''}>✅ Tersedia</option>
-          <option value="habis"    ${item.status === 'habis'    ? 'selected' : ''}>❌ Habis</option>
-        </select>
-      </td>
-      <td>
-        <span class="badge-changed ${changed ? 'visible' : ''}" data-id="${item.id}">● Diubah</span>
-      </td>
+    card.innerHTML = `
+      <!-- Badge diubah -->
+      <span class="card-changed-dot">Diubah</span>
+
+      <!-- Foto -->
+      <label class="card-photo-wrap" title="Klik untuk upload foto">
+        ${imgSrc
+          ? `<img class="card-photo-img" id="cimg-${item.id}" src="${imgSrc}" alt="${item.name}"
+                 onerror="this.style.display='none';document.getElementById('cempty-${item.id}').style.display='flex'">`
+          : ''}
+        <div class="card-photo-empty" id="cempty-${item.id}" style="${imgSrc ? 'display:none' : ''}">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"
+               stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+          <span style="font-size:10px;color:var(--muted-light);">Belum ada foto</span>
+        </div>
+        <div class="card-photo-overlay">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <span>Upload Foto</span>
+        </div>
+        <div class="card-upload-spinner" id="cspinner-${item.id}">
+          <div class="spinner-ring"></div>
+        </div>
+        <input type="file" class="card-upload-input" accept="image/jpeg,image/png,image/webp,image/gif"
+               data-id="${item.id}" />
+      </label>
+
+      <!-- Body -->
+      <div class="card-body-edit">
+        <div>
+          <div class="card-item-name" title="${item.name}">${item.name}</div>
+          <div class="card-item-kat">${katName}</div>
+        </div>
+
+        <div class="card-divider"></div>
+
+        <!-- Harga -->
+        <div class="card-price-row">
+          <span class="card-price-prefix">¥</span>
+          <input type="number" class="card-price-input" value="${item.harga}"
+                 min="0" step="10" data-id="${item.id}" />
+        </div>
+
+        <!-- Status toggle -->
+        <button class="card-status-btn ${statusClass}" data-id="${item.id}">
+          <span class="dot"></span>${statusLabel}
+        </button>
+      </div>
     `;
 
-    // Price change listener
-    tr.querySelector('.price-input').addEventListener('input', e => {
-      const id = parseInt(e.target.dataset.id);
-      if (!pendingChanges[id]) pendingChanges[id] = {};
-      pendingChanges[id].harga = parseInt(e.target.value);
-      tr.querySelector('.badge-changed').classList.add('visible');
+    // ── Upload foto ──────────────────────────────────────
+    card.querySelector('.card-upload-input').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 5 * 1024 * 1024) { alert('Ukuran file maksimal 5MB.'); e.target.value = ''; return; }
+
+      const spinner = document.getElementById(`cspinner-${item.id}`);
+      spinner.classList.add('active');
+
+      const fd = new FormData();
+      fd.append('menu_id', item.id);
+      fd.append('foto', file);
+
+      try {
+        const res    = await fetch('../api/upload-image', { method: 'POST', body: fd });
+        const result = await res.json();
+
+        if (result.success) {
+          item.img = result.img;
+          const emptyEl = document.getElementById(`cempty-${item.id}`);
+          let   imgEl   = document.getElementById(`cimg-${item.id}`);
+
+          if (!imgEl) {
+            imgEl = document.createElement('img');
+            imgEl.id        = `cimg-${item.id}`;
+            imgEl.className = 'card-photo-img';
+            imgEl.alt       = item.name;
+            card.querySelector('.card-photo-wrap').insertBefore(imgEl, emptyEl);
+          }
+          imgEl.src           = `../${result.img}?t=${Date.now()}`;
+          imgEl.style.display = 'block';
+          if (emptyEl) emptyEl.style.display = 'none';
+
+          markChanged(item.id, card);
+          if (!pendingChanges[item.id]) pendingChanges[item.id] = {};
+          pendingChanges[item.id].img = result.img;
+          showMenuMsg('✓ Foto berhasil diupload', 'success');
+        } else {
+          alert('Upload gagal: ' + (result.message || 'Error tidak diketahui'));
+        }
+      } catch {
+        alert('Gagal terhubung ke server.');
+      } finally {
+        spinner.classList.remove('active');
+        e.target.value = '';
+      }
     });
 
-    // Status change listener
-    const statusSel = tr.querySelector('.status-select');
-    statusSel.addEventListener('change', e => {
+    // ── Edit harga ───────────────────────────────────────
+    card.querySelector('.card-price-input').addEventListener('input', e => {
       const id = parseInt(e.target.dataset.id);
       if (!pendingChanges[id]) pendingChanges[id] = {};
-      pendingChanges[id].status = e.target.value;
-      statusSel.className = 'status-select ' + e.target.value;
-      tr.querySelector('.badge-changed').classList.add('visible');
+      pendingChanges[id].harga = parseInt(e.target.value) || 0;
+      markChanged(id, card);
     });
 
-    tbody.appendChild(tr);
+    // ── Toggle status ────────────────────────────────────
+    card.querySelector('.card-status-btn').addEventListener('click', e => {
+      const id    = parseInt(e.currentTarget.dataset.id);
+      const mItem = adminMenuData.find(m => m.id === id);
+      const next  = mItem.status === 'tersedia' ? 'habis' : 'tersedia';
+      mItem.status = next;
+      e.currentTarget.className = 'card-status-btn ' + next;
+      e.currentTarget.innerHTML = `<span class="dot"></span>${next === 'tersedia' ? 'Tersedia' : 'Habis'}`;
+      if (!pendingChanges[id]) pendingChanges[id] = {};
+      pendingChanges[id].status = next;
+      markChanged(id, card);
+    });
+
+    grid.appendChild(card);
   });
 }
 
-// Search & filter listeners
+function markChanged(id, card) {
+  card.classList.add('changed');
+}
+
 document.getElementById('menuSearch').addEventListener('input', filterAndRender);
 document.getElementById('menuFilterKat').addEventListener('change', filterAndRender);
 
-// ── SAVE ALL MENU ──────────────────────────────────────────
+// ── Helper: pesan footer ──────────────────────────────────
+function showMenuMsg(text, type) {
+  const msg = document.getElementById('menuMsg');
+  msg.textContent = text;
+  msg.className = 'save-msg ' + (type || '');
+  clearTimeout(msg._t);
+  msg._t = setTimeout(() => msg.textContent = '', 3500);
+}
+
+// ── SAVE ALL MENU ─────────────────────────────────────────
 document.getElementById('btnSaveAllMenu').addEventListener('click', async () => {
-  if (Object.keys(pendingChanges).length === 0) {
-    const msg = document.getElementById('menuMsg');
-    msg.textContent = 'Tidak ada perubahan.';
+  const btn = document.getElementById('btnSaveAllMenu');
+  const msg = document.getElementById('menuMsg');
+
+  if (!Object.keys(pendingChanges).length) {
+    msg.textContent = 'Tidak ada perubahan yang perlu disimpan.';
     msg.className = 'save-msg';
     setTimeout(() => msg.textContent = '', 3000);
     return;
   }
 
-  const msg = document.getElementById('menuMsg');
-  msg.textContent = 'Menyimpan...';
-  msg.className = 'save-msg';
-
-  // Apply to menuData in memory
+  // Apply ke data lokal
   Object.entries(pendingChanges).forEach(([id, ov]) => {
-    const item = menuData.find(m => m.id === parseInt(id));
+    const item = adminMenuData.find(m => m.id === parseInt(id));
     if (item) {
       if (ov.harga  !== undefined) item.harga  = ov.harga;
       if (ov.status !== undefined) item.status = ov.status;
     }
   });
 
-  try {
-    const res = await apiPost(API_SAVE, { type: 'menu', data: pendingChanges });
-    if (res.success) {
-      msg.textContent = '✅ ' + res.message;
-      msg.className = 'save-msg success';
-      pendingChanges = {};
-      document.querySelectorAll('.badge-changed').forEach(b => b.classList.remove('visible'));
-      updateStats();
-    } else {
-      msg.textContent = '⚠️ ' + res.message;
+  const finalize = () => {
+    pendingChanges = {};
+    document.querySelectorAll('.menu-edit-card.changed').forEach(c => c.classList.remove('changed'));
+    updateStats();
+    setTimeout(() => msg.textContent = '', 3500);
+  };
+
+  if (useServer) {
+    btn.disabled = true;
+    try {
+      const res    = await fetch(API_SAVE, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'menu', data: pendingChanges }) });
+      const result = await res.json();
+      if (res.ok && result.success) {
+        msg.textContent = result.message || 'Perubahan menu berhasil disimpan.';
+        msg.className = 'save-msg success';
+        finalize();
+      } else {
+        msg.textContent = result.message || 'Gagal menyimpan menu.';
+        msg.className = 'save-msg error';
+      }
+    } catch {
+      msg.textContent = 'Gagal terhubung ke server.';
       msg.className = 'save-msg error';
+    } finally {
+      btn.disabled = false;
     }
-  } catch {
-    msg.textContent = '❌ Gagal terhubung ke server.';
-    msg.className = 'save-msg error';
+    return;
   }
-  setTimeout(() => msg.textContent = '', 4000);
+
+  // Fallback localStorage
+  const existing = JSON.parse(localStorage.getItem(SK_MENU) || '{}');
+  Object.entries(pendingChanges).forEach(([id, ov]) => {
+    existing[id] = { ...existing[id], ...ov };
+  });
+  localStorage.setItem(SK_MENU, JSON.stringify(existing));
+  msg.textContent = 'Tersimpan secara lokal.';
+  msg.className = 'save-msg success';
+  finalize();
 });
 
-// ── CHANGE PASSWORD (informasi) ────────────────────────────
+// ── CHANGE PASSWORD ───────────────────────────────────────
 document.getElementById('btnChangePass').addEventListener('click', () => {
   const np  = document.getElementById('newPass').value;
   const cp  = document.getElementById('confirmPass').value;
   const msg = document.getElementById('passMsg');
+  const box = document.getElementById('passResultBox');
+  const cod = document.getElementById('passResultCode');
+
+  box.classList.remove('visible');
 
   if (!np || np.length < 8) {
-    msg.textContent = '⚠️ Password minimal 8 karakter.';
+    msg.textContent = 'Password minimal 8 karakter.';
     msg.className = 'save-msg error';
     return;
   }
   if (np !== cp) {
-    msg.textContent = '⚠️ Password tidak cocok.';
+    msg.textContent = 'Password tidak cocok.';
     msg.className = 'save-msg error';
     return;
   }
 
-  msg.innerHTML = `✅ Salin password ini ke file <code>admin/auth.php</code> baris <code>ADMIN_PASSWORD</code>:<br>
-    <strong style="font-size:15px;color:#8B1A1A;">${np}</strong>`;
-  msg.className = 'save-msg success';
+  msg.textContent = '';
+  cod.textContent = np;
+  box.classList.add('visible');
+  document.getElementById('newPass').value    = '';
+  document.getElementById('confirmPass').value = '';
 });
 
-// ── INIT ───────────────────────────────────────────────────
-function initAdminPage() {
-  // Ambil data dari variabel global yang di-load oleh script.js
-  if (typeof window.menuData !== 'undefined')     menuData     = window.menuData;
-  if (typeof window.kategoriData !== 'undefined') kategoriData = window.kategoriData;
-
-  checkSession();
-}
-
-// Fallback: jalankan jika script.js tidak bisa di-load
-window.addEventListener('DOMContentLoaded', () => {
-  // akan dipanggil oleh initAdminPage setelah script load
-});
+// ── INIT ──────────────────────────────────────────────────
+checkSession();
 </script>
+
 </body>
 </html>

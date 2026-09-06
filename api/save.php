@@ -62,10 +62,11 @@ switch ($body['type']) {
 
         foreach ($body['data'] as $id => $override) {
             $id = (string)$id;
-            $existing[$id] = [
-                'harga'  => isset($override['harga'])  ? (int)$override['harga']       : null,
-                'status' => isset($override['status']) ? (string)$override['status']   : null,
-            ];
+            if (!isset($existing[$id])) $existing[$id] = [];
+            if (isset($override['harga']))  $existing[$id]['harga']  = (int)$override['harga'];
+            if (isset($override['status'])) $existing[$id]['status'] = (string)$override['status'];
+            // Pertahankan img jika sudah ada dan tidak di-override
+            if (isset($override['img']))    $existing[$id]['img']    = (string)$override['img'];
         }
 
         file_put_contents($dataDir . 'menu_overrides.json', json_encode($existing, JSON_PRETTY_PRINT));
