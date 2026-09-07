@@ -19,11 +19,33 @@ echo "Timestamp: $TS"
 echo "Prev release: ${PREV_LINK:-none}"
 echo "New release: $NEW_RELEASE"
 
-# Buat release dir baru + symlink persistent
+# Buat release dir baru + symlink persistent (ABSOLUT — anti rusak)
+# Relatif seperti ../../../shared/data pecah karena current/ adalah symlink
+# (di-resolve ke /var/www/releases/... yang tidak ada). Absolut selalu benar.
 mkdir -p "$NEW_RELEASE"
 mkdir -p "$NEW_RELEASE/images"
-ln -sfn ../../../shared/data "$NEW_RELEASE/data"
-ln -sfn ../../../shared/images/menu "$NEW_RELEASE/images/menu"
+mkdir -p "$SHARED_DIR/data" "$SHARED_DIR/images/menu"
+ln -sfn "$SHARED_DIR/data" "$NEW_RELEASE/data"
+ln -sfn "$SHARED_DIR/images/menu" "$NEW_RELEASE/images/menu"
+
+# Validasi symlink: target HARUS ada (gagalkan deploy bila rusak)
+for L in "$NEW_RELEASE/data" "$NEW_RELEASE/images/menu"; do
+  if [ ! -e "$L" ]; then
+    echo "ERROR: symlink rusak: $L -> $(readlink "$L")"
+    rm -rf "$NEW_RELEASE"
+    exit 1
+  fi
+done
+echo "Symlink OK: data -> $SHARED_DIR/data, images/menu -> $SHARED_DIR/images/menu"
+
+# .env persisten: pastikan ada + bisa dibaca ubuntu (CLI) & www-data (FPM)
+# Isinya TETAP milik user (tidak pernah ditimpa bila sudah ada).
+if [ ! -f "$SHARED_DIR/.env" ]; then
+  echo "Buat $SHARED_DIR/.env default dari .env.example (mode local, aman)"
+  cp "$NEW_RELEASE/.env.example" "$SHARED_DIR/.env" 2>/dev/null || printf 'STORAGE_DRIVER=local\n' > "$SHARED_DIR/.env"
+fi
+chown ubuntu:www-data "$SHARED_DIR/.env" 2>/dev/null || chown www-data:www-data "$SHARED_DIR/.env" 2>/dev/null || true
+chmod 640 "$SHARED_DIR/.env" 2>/dev/null || true
 
 # Ekstrak tarball (kode statis)
 tar -xzf "$TARBALL" -C "$NEW_RELEASE"

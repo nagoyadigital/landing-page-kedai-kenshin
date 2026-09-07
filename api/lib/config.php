@@ -5,7 +5,8 @@
  *
  * Urutan baca .env (yang pertama ditemukan dipakai):
  *   1. <release>/.env                  (dibuat manual di VPS, tidak di-commit)
- *   2. <shared>/.env                   (persisten, tidak hilang saat deploy)
+ *   2. <shared>/.env                   (persisten, tidak hilang saat deploy;
+ *       di-resolve langsung, tetap ketemu walau symlink data/ rusak)
  *   3. Environment bawaan PHP-FPM / shell
  */
 
@@ -13,9 +14,26 @@ function kenshin_config_path() {
     $candidates = [];
 
     // 1. .env di root release (samping index.html)
-    $candidates[] = dirname(__DIR__, 2) . '/.env';
+    $releaseRoot = dirname(__DIR__, 2);
+    $candidates[] = $releaseRoot . '/.env';
 
-    // 2. .env di shared/ (di-resolve lewat symlink data/ -> shared/data)
+    // 2. .env di shared/ — turunkan dari release root TANPA lewat symlink
+    //    Layout: /var/www/kedaikenshin.com/releases/<TS>  ->  shared di ../../shared
+    //            /var/www/kedaikenshin.com/current (symlink ke release)
+    $root = $releaseRoot;
+    if (is_link($root)) {
+        $resolved = readlink($root);
+        if ($resolved !== false) {
+            if ($resolved[0] !== '/') {
+                $resolved = dirname($root) . '/' . $resolved;
+            }
+            $root = $resolved;
+        }
+    }
+    $sharedEnv = dirname(dirname($root)) . '/shared/.env';
+    $candidates[] = $sharedEnv;
+
+    // 3. Fallback lama: via symlink data/ (hanya bila targetnya valid)
     $dataReal = realpath(__DIR__ . '/../../data');
     if ($dataReal !== false) {
         $candidates[] = dirname($dataReal) . '/.env';
