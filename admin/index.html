@@ -1575,9 +1575,12 @@ const SK_MENU     = 'kenshin_menu_overrides';
 const SK_SESSION  = 'kenshin_admin_session';
 
 // ── API endpoints (relatif dari admin/) ───────────────────
-const API_AUTH = 'auth.php';
-const API_LOAD = '../api/load.php';
-const API_SAVE = '../api/save.php';
+const API_AUTH   = 'auth.php';
+const API_LOAD   = '../api/load.php';
+const API_SAVE   = '../api/save.php';
+const API_MENU   = '../api/menu-action';
+const API_KAT    = '../api/kategori-action';
+const API_UPLOAD = '../api/upload-image';
 
 // ── State ─────────────────────────────────────────────────
 let useServer = false;
@@ -1689,14 +1692,16 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 async function loadSettings() {
   let settings  = {};
   let overrides = {};
+  let customKat = [];
 
   if (useServer) {
     try {
       const res  = await fetch(API_LOAD, { cache: 'no-store' });
       const data = await res.json();
       if (res.ok && data.success) {
-        settings  = data.settings       || {};
-        overrides = data.menu_overrides || {};
+        settings  = data.settings        || {};
+        overrides = data.menu_overrides  || {};
+        customKat = data.custom_kategori || [];
       }
     } catch { settings = null; }
   }
@@ -1704,29 +1709,78 @@ async function loadSettings() {
   if (!useServer || settings === null) {
     settings  = JSON.parse(localStorage.getItem(SK_SETTINGS) || '{}');
     overrides = JSON.parse(localStorage.getItem(SK_MENU)     || '{}');
+    customKat = [];
   }
 
+  // ── Isi form settings ─────────────────────────────────
   document.getElementById('inputWA').value      = settings.wa_number   || '';
   document.getElementById('inputAlamat').value  = settings.alamat      || '';
   document.getElementById('toggleBuka').checked = settings.status_buka !== false;
 
-  // Terapkan override ke salinan lokal adminMenuData
+  // ── Merge custom_kategori ke adminKategoriData ────────
+  customKat.forEach(ck => {
+    if (!adminKategoriData.find(k => k.id === ck.id)) {
+      adminKategoriData.push(ck);
+    }
+  });
+
+  // ── Terapkan menu_overrides ke adminMenuData ──────────
   Object.entries(overrides || {}).forEach(([id, ov]) => {
-    const item = adminMenuData.find(m => m.id === parseInt(id));
-    if (item && ov) {
-      if (ov.harga  != null) item.harga  = ov.harga;
-      if (ov.status != null) item.status = ov.status;
+    if (!ov) return;
+    const numId   = parseInt(id);
+    const existing = adminMenuData.find(m => m.id === numId);
+
+    // Menu dihapus (soft-delete) — hapus dari adminMenuData
+    if (ov._deleted) {
+      const idx = adminMenuData.findIndex(m => m.id === numId);
+      if (idx !== -1) adminMenuData.splice(idx, 1);
+      return;
+    }
+
+    // Menu custom (ditambahkan lewat admin)
+    if (ov._isCustom) {
+      if (!existing) {
+        adminMenuData.push({
+          id:       numId,
+          name:     ov.name     || 'Menu Baru',
+          kategori: ov.kategori || 'specials',
+          harga:    ov.harga    || 0,
+          desc:     ov.desc     || '',
+          img:      ov.img      || null,
+          status:   ov.status   || 'tersedia',
+          _isCustom: true,
+        });
+      } else {
+        // Update field jika menu custom sudah ada (misalnya diedit ulang)
+        if (ov.name)     existing.name     = ov.name;
+        if (ov.kategori) existing.kategori = ov.kategori;
+        if (ov.harga  != null) existing.harga  = ov.harga;
+        if (ov.desc   != null) existing.desc   = ov.desc;
+        if (ov.img    != null) existing.img    = ov.img;
+        if (ov.status != null) existing.status = ov.status;
+      }
+      return;
+    }
+
+    // Override menu statis (harga, status, img, nama)
+    if (existing) {
+      if (ov.harga  != null) existing.harga  = ov.harga;
+      if (ov.status != null) existing.status = ov.status;
+      if (ov.img    != null) existing.img    = ov.img;
+      if (ov.name   != null) existing.name   = ov.name;
+      if (ov.desc   != null) existing.desc   = ov.desc;
     }
   });
 }
 
 // ── STATS ─────────────────────────────────────────────────
 function updateStats() {
-  const tersedia = adminMenuData.filter(m => m.status === 'tersedia').length;
-  const habis    = adminMenuData.filter(m => m.status === 'habis').length;
+  const active   = adminMenuData.filter(m => !m._deleted);
+  const tersedia = active.filter(m => m.status === 'tersedia').length;
+  const habis    = active.filter(m => m.status === 'habis').length;
   document.getElementById('statTersedia').textContent = tersedia;
   document.getElementById('statHabis').textContent    = habis;
-  document.getElementById('statTotal').textContent    = adminMenuData.length;
+  document.getElementById('statTotal').textContent    = active.length;
 }
 
 function updateSessionInfo() {
@@ -2153,8 +2207,8 @@ document.getElementById('btnSaveMenu').addEventListener('click', async () => {
   // Fallback localStorage
   const ex = JSON.parse(localStorage.getItem(SK_MENU) || '{}');
   if (action === 'add') {
-    const maxId = Math.max(84, ...adminMenuData.map(m => m.id || 0));
-    const newId = maxId + 1;
+    const customIds = Object.keys(ex).map(k => parseInt(k)).filter(n => n >= 1000);
+    const newId = Math.max(999, ...customIds) + 1;
     adminMenuData.push({ id: newId, name, kategori, harga, desc, status, img: null, _isCustom: true });
     ex[String(newId)] = { _isCustom: true, name, kategori, harga, desc, status, img: null };
   } else {

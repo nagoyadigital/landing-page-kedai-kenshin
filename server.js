@@ -226,10 +226,15 @@ const server = http.createServer(async (req, res) => {
       if (!body.data) return json(res, 400, { success: false, message: 'Data menu tidak valid' });
       const existing = readJSON('menu_overrides.json', {});
       Object.entries(body.data).forEach(([id, ov]) => {
-        existing[String(id)] = {
-          harga:  ov.harga  !== undefined ? parseInt(ov.harga)  : null,
-          status: ov.status !== undefined ? String(ov.status)   : null,
-        };
+        const key = String(id);
+        // Merge — jangan timpa field yang sudah ada (img, _isCustom, name, dll)
+        if (!existing[key]) existing[key] = {};
+        if (ov.harga  !== undefined && ov.harga  !== null) existing[key].harga  = parseInt(ov.harga);
+        if (ov.status !== undefined && ov.status !== null) existing[key].status = String(ov.status);
+        if (ov.img    !== undefined && ov.img    !== null) existing[key].img    = String(ov.img);
+        if (ov.name   !== undefined && ov.name   !== null) existing[key].name   = String(ov.name);
+        if (ov.desc   !== undefined && ov.desc   !== null) existing[key].desc   = String(ov.desc);
+        if (ov.kategori !== undefined) existing[key].kategori = String(ov.kategori);
       });
       writeJSON('menu_overrides.json', existing);
       return json(res, 200, { success: true, message: 'Menu berhasil disimpan' });
@@ -290,9 +295,9 @@ const server = http.createServer(async (req, res) => {
       // ID baru: ambil max existing ID + 1
       const existingIds = Object.keys(overrides)
         .map(k => parseInt(k)).filter(n => !isNaN(n));
-      // juga hitung dari data statis menu-data.js
-      const staticMax = 84; // ID tertinggi di menu-data.js
-      const newId = String(Math.max(staticMax, ...existingIds, 0) + 1);
+      // Mulai dari 1000 untuk menu custom agar tidak pernah bentrok dengan ID statis
+      const customMax = existingIds.filter(n => n >= 1000);
+      const newId = String(Math.max(999, ...customMax) + 1);
 
       overrides[newId] = {
         _isCustom: true,
