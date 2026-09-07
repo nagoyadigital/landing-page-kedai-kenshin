@@ -1001,6 +1001,103 @@
       .card-footer { padding: 12px 16px; }
       .menu-toolbar { padding: 12px 16px 10px; }
     }
+
+    /* -- Modal admin (form tambah/edit) -- */
+    .admin-modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.48);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999; padding: 16px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.18s;
+    }
+    .admin-modal-overlay.open { opacity: 1; pointer-events: all; }
+    .admin-modal {
+      background: var(--white); border-radius: 14px;
+      width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+      transform: translateY(20px); transition: transform 0.18s;
+    }
+    .admin-modal-overlay.open .admin-modal { transform: translateY(0); }
+    .admin-modal-header {
+      padding: 18px 22px 14px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .admin-modal-title { font-size: 15px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .btn-modal-close {
+      width: 30px; height: 30px; border: none; background: var(--bg);
+      border-radius: 7px; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; color: var(--muted); transition: background 0.15s; flex-shrink: 0;
+    }
+    .btn-modal-close:hover { background: var(--border); color: var(--text); }
+    .admin-modal-body { padding: 18px 22px; display: flex; flex-direction: column; gap: 14px; }
+    .admin-modal-footer {
+      padding: 12px 22px 18px; display: flex; gap: 8px; justify-content: flex-end;
+      border-top: 1px solid var(--border);
+    }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-grid-2 .field-full { grid-column: 1/-1; }
+    .field-label-sm { font-size: 11px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 5px; display: block; }
+    .field-input-sm {
+      width: 100%; padding: 9px 12px; border: 1.5px solid var(--border-2); border-radius: var(--radius-sm);
+      font-size: 13px; font-family: inherit; color: var(--text); outline: none;
+      transition: border-color 0.15s; background: var(--white);
+    }
+    .field-input-sm:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(123,21,21,0.08); }
+    select.field-input-sm { cursor: pointer; }
+    textarea.field-input-sm { resize: vertical; line-height: 1.5; }
+    .card-actions {
+      display: flex; gap: 6px; padding: 8px 10px 10px;
+      border-top: 1px solid var(--border); background: #FAFAFA;
+    }
+    .btn-card-action {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 4px;
+      padding: 6px 4px; border-radius: var(--radius-sm);
+      font-size: 11px; font-weight: 600; font-family: inherit;
+      cursor: pointer; border: 1px solid; transition: all 0.15s;
+    }
+    .btn-card-edit   { color: var(--blue); border-color: #BFDBFE; background: var(--blue-bg); }
+    .btn-card-edit:hover   { background: #DBEAFE; }
+    .btn-card-delete { color: var(--red); border-color: #FCA5A5; background: var(--red-bg); }
+    .btn-card-delete:hover { background: #FEE2E2; }
+    .kat-manager-list { display: flex; flex-direction: column; gap: 8px; }
+    .kat-mgr-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 8px; transition: background 0.12s;
+    }
+    .kat-mgr-row:hover { background: #EBEBF0; }
+    .kat-mgr-icon { font-size: 20px; width: 32px; text-align: center; flex-shrink: 0; }
+    .kat-mgr-info { flex: 1; min-width: 0; }
+    .kat-mgr-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .kat-mgr-id   { font-size: 10px; color: var(--muted); font-family: monospace; }
+    .kat-mgr-count {
+      font-size: 10px; font-weight: 600; background: var(--white);
+      border: 1px solid var(--border-2); border-radius: 20px;
+      padding: 2px 8px; color: var(--muted); flex-shrink: 0;
+    }
+    .btn-kat-del {
+      width: 28px; height: 28px; border: 1px solid #FCA5A5; background: var(--red-bg);
+      color: var(--red); border-radius: 6px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .btn-kat-del:hover { background: #FEE2E2; }
+    .kat-mgr-row.builtin .btn-kat-del { opacity: 0.25; pointer-events: none; }
+    .inline-confirm {
+      display: none; gap: 8px; align-items: center;
+      margin-top: 6px; padding: 8px 12px;
+      background: #FEF2F2; border: 1px solid #FCA5A5;
+      border-radius: 6px; font-size: 12px; color: var(--red);
+    }
+    .inline-confirm.visible { display: flex; }
+    .inline-confirm button {
+      padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 700;
+      font-family: inherit; cursor: pointer; border: 1px solid;
+    }
+    .btn-confirm-yes { background: var(--red); color: #fff; border-color: var(--red); }
+    .btn-confirm-no  { background: var(--white); color: var(--muted); border-color: var(--border-2); }
+
   </style>
 </head>
 <body>
@@ -1130,6 +1227,10 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Keamanan
       </button>
+      <button class="tab-btn" data-tab="kategori">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+        Kategori
+      </button>
     </div>
 
     <!-- ══ TAB: PENGATURAN ══ -->
@@ -1231,6 +1332,10 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
             Simpan Perubahan
           </button>
+          <button class="btn-primary" id="btnAddMenu" style="background:var(--green);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tambah Menu
+          </button>
         </div>
 
         <!-- Grid -->
@@ -1316,7 +1421,131 @@
 
     </div><!-- /tab-security -->
 
+    <!-- ══ TAB: KATEGORI ══ -->
+    <div class="tab-pane" id="tab-kategori">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+          </div>
+          <div class="card-header-text">
+            <div class="card-title">Kelola Kategori</div>
+            <div class="card-desc">Tambah kategori baru atau hapus kategori yang tidak digunakan.</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="kat-manager-list" id="katManagerList">
+            <p style="color:var(--muted);font-size:13px;">Memuat...</p>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn-primary" id="btnAddKategori">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tambah Kategori
+          </button>
+        </div>
+      </div>
+    </div><!-- /tab-kategori -->
+
   </main>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MODAL FORM TAMBAH / EDIT MENU
+═══════════════════════════════════════ -->
+<div class="admin-modal-overlay" id="modalMenu">
+  <div class="admin-modal">
+    <div class="admin-modal-header">
+      <div class="admin-modal-title" id="modalMenuTitle">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Tambah Menu
+      </div>
+      <button class="btn-modal-close" id="btnCloseModalMenu">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="admin-modal-body">
+      <input type="hidden" id="formMenuId" />
+      <div class="form-grid-2">
+        <div class="field-full">
+          <label class="field-label-sm">Nama Menu *</label>
+          <input type="text" id="formMenuName" class="field-input-sm" placeholder="Contoh: Nasi Goreng Spesial" />
+        </div>
+        <div>
+          <label class="field-label-sm">Kategori *</label>
+          <select id="formMenuKategori" class="field-input-sm">
+          </select>
+        </div>
+        <div>
+          <label class="field-label-sm">Harga (¥) *</label>
+          <input type="number" id="formMenuHarga" class="field-input-sm" placeholder="0" min="0" />
+        </div>
+        <div>
+          <label class="field-label-sm">Status</label>
+          <select id="formMenuStatus" class="field-input-sm">
+            <option value="tersedia">✅ Tersedia</option>
+            <option value="habis">❌ Habis</option>
+          </select>
+        </div>
+        <div class="field-full">
+          <label class="field-label-sm">Deskripsi</label>
+          <textarea id="formMenuDesc" class="field-input-sm" rows="3" placeholder="Deskripsi singkat menu..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button class="btn-secondary" id="btnCancelMenu">Batal</button>
+      <button class="btn-primary" id="btnSaveMenu">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Simpan
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MODAL FORM TAMBAH KATEGORI
+═══════════════════════════════════════ -->
+<div class="admin-modal-overlay" id="modalKategori">
+  <div class="admin-modal">
+    <div class="admin-modal-header">
+      <div class="admin-modal-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Tambah Kategori
+      </div>
+      <button class="btn-modal-close" id="btnCloseModalKat">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="admin-modal-body">
+      <div class="form-grid-2">
+        <div>
+          <label class="field-label-sm">Nama Kategori *</label>
+          <input type="text" id="formKatName" class="field-input-sm" placeholder="Contoh: Indonesian Foods" />
+        </div>
+        <div>
+          <label class="field-label-sm">ID (slug) *</label>
+          <input type="text" id="formKatId" class="field-input-sm" placeholder="indonesian-foods" />
+          <p style="font-size:10px;color:var(--muted);margin-top:4px;">Huruf kecil, gunakan tanda hubung</p>
+        </div>
+        <div>
+          <label class="field-label-sm">Icon (emoji)</label>
+          <input type="text" id="formKatIcon" class="field-input-sm" placeholder="🍽️" maxlength="4" />
+        </div>
+        <div>
+          <label class="field-label-sm">Nama Jepang (opsional)</label>
+          <input type="text" id="formKatJp" class="field-input-sm" placeholder="インドネシア料理" />
+        </div>
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button class="btn-secondary" id="btnCancelKat">Batal</button>
+      <button class="btn-primary" id="btnSaveKat">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Simpan Kategori
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════

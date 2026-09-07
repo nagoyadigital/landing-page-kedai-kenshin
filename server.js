@@ -199,10 +199,11 @@ const server = http.createServer(async (req, res) => {
 
   // ── API: api/load.php ──────────────────────────────────
   if (p === '/api/load.php' && method === 'GET') {
-    const settings      = readJSON('settings.json',      { wa_number: '', alamat: '', status_buka: true });
+    const settings       = readJSON('settings.json', { wa_number: '', alamat: '', status_buka: true });
     const menu_overrides = readJSON('menu_overrides.json', {});
+    const custom_kategori = settings.custom_kategori || [];
     res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
-    return res.end(JSON.stringify({ success: true, settings, menu_overrides }));
+    return res.end(JSON.stringify({ success: true, settings, menu_overrides, custom_kategori }));
   }
 
   // ── API: api/save.php ──────────────────────────────────
@@ -274,6 +275,106 @@ const server = http.createServer(async (req, res) => {
 
     return json(res, 200, { success: true, img: imgPath, message: 'Foto berhasil diupload' });
   }
+
+  // ── API: api/menu-action (tambah / edit / hapus menu) ─────────────────
+  if ((p === '/api/menu-action' || p === '/api/menu-action.php') && method === 'POST') {
+    if (!getSession(req)) return json(res, 401, { success: false, message: 'Unauthorized' });
+    const body = await readBody(req);
+
+    // ── TAMBAH menu baru ──────────────────────────────────
+    if (body.action === 'add') {
+      const { name, kategori, harga, desc, status } = body.data || {};
+      if (!name || !kategori) return json(res, 400, { success: false, message: 'Nama dan kategori wajib diisi' });
+
+      const overrides = readJSON('menu_overrides.json', {});
+      // ID baru: ambil max existing ID + 1
+      const existingIds = Object.keys(overrides)
+        .map(k => parseInt(k)).filter(n => !isNaN(n));
+      // juga hitung dari data statis menu-data.js
+      const staticMax = 84; // ID tertinggi di menu-data.js
+      const newId = String(Math.max(staticMax, ...existingIds, 0) + 1);
+
+      overrides[newId] = {
+        _isCustom: true,
+        name:      String(name).trim(),
+        kategori:  String(kategori),
+        harga:     parseInt(harga) || 0,
+        desc:      String(desc || '').trim(),
+        status:    status === 'habis' ? 'habis' : 'tersedia',
+        img:       null,
+      };
+      writeJSON('menu_overrides.json', overrides);
+      return json(res, 200, { success: true, id: newId, message: 'Menu berhasil ditambahkan' });
+    }
+
+    // ── EDIT menu ─────────────────────────────────────────
+    if (body.action === 'edit') {
+      const { id, name, kategori, harga, desc, status } = body.data || {};
+      if (!id) return json(res, 400, { success: false, message: 'ID menu diperlukan' });
+
+      const overrides = readJSON('menu_overrides.json', {});
+      if (!overrides[String(id)]) overrides[String(id)] = {};
+      const ov = overrides[String(id)];
+      if (name     !== undefined) ov.name     = String(name).trim();
+      if (kategori !== undefined) ov.kategori = String(kategori);
+      if (harga    !== undefined) ov.harga    = parseInt(harga) || 0;
+      if (desc     !== undefined) ov.desc     = String(desc).trim();
+      if (status   !== undefined) ov.status   = status === 'habis' ? 'habis' : 'tersedia';
+      writeJSON('menu_overrides.json', overrides);
+      return json(res, 200, { success: true, message: 'Menu berhasil diupdate' });
+    }
+
+    // ── HAPUS menu ────────────────────────────────────────
+    if (body.action === 'delete') {
+      const { id } = body.data || {};
+      if (!id) return json(res, 400, { success: false, message: 'ID menu diperlukan' });
+
+      const overrides = readJSON('menu_overrides.json', {});
+      if (overrides[String(id)]) {
+        overrides[String(id)]._deleted = true;
+        writeJSON('menu_overrides.json', overrides);
+      }
+      return json(res, 200, { success: true, message: 'Menu berhasil dihapus' });
+    }
+
+    return json(res, 400, { success: false, message: 'Action tidak dikenal' });
+  }
+
+  // ── API: api/kategori-action (tambah / hapus kategori) ────────────────
+  if ((p === '/api/kategori-action' || p === '/api/kategori-action.php') && method === 'POST') {
+    if (!getSession(req)) return json(res, 401, { success: false, message: 'Unauthorized' });
+    const body = await readBody(req);
+
+    const settings = readJSON('settings.json', {});
+    if (!settings.custom_kategori) settings.custom_kategori = [];
+
+    if (body.action === 'add') {
+      const { id, name, jp, icon } = body.data || {};
+      if (!id || !name) return json(res, 400, { success: false, message: 'ID dan nama kategori wajib diisi' });
+      const exists = settings.custom_kategori.find(k => k.id === id);
+      if (exists) return json(res, 400, { success: false, message: 'ID kategori sudah ada' });
+      settings.custom_kategori.push({
+        id: String(id).toLowerCase().replace(/\s+/g, '-'),
+        name: String(name).trim(),
+        jp:   String(jp || '').trim(),
+        icon: String(icon || '🍽️'),
+      });
+      writeJSON('settings.json', settings);
+      return json(res, 200, { success: true, message: 'Kategori berhasil ditambahkan' });
+    }
+
+    if (body.action === 'delete') {
+      const { id } = body.data || {};
+      settings.custom_kategori = settings.custom_kategori.filter(k => k.id !== id);
+      writeJSON('settings.json', settings);
+      return json(res, 200, { success: true, message: 'Kategori berhasil dihapus' });
+    }
+
+    return json(res, 400, { success: false, message: 'Action tidak dikenal' });
+  }
+
+  // ── API: api/load.php (tambah custom_kategori & custom_menu) ──────────
+  // (sudah ditangani di atas, tapi kita perlu update load agar sertakan kategori custom)
 
   // ── Static files ───────────────────────────────────────
   // /admin/ → admin/index.html
