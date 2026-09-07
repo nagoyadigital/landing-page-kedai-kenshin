@@ -1790,8 +1790,8 @@ function populateKatFilter() {
   const sel     = document.getElementById('menuFilterKat');
   const current = sel.value;
   while (sel.options.length > 1) sel.remove(1);
-  adminKategoriData.filter(k => k.id !== 'semua').forEach(k => {
-    const count = adminMenuData.filter(m => m.kategori === k.id).length;
+  adminKatData.filter(k => k.id !== 'semua').forEach(k => {
+    const count = adminMenuData.filter(m => m.kategori === k.id && !m._deleted).length;
     if (!count) return;
     const opt = document.createElement('option');
     opt.value = k.id;
@@ -1801,15 +1801,15 @@ function populateKatFilter() {
   sel.value = current;
 }
 
-function renderMenuTable() {
-  populateKatFilter();
-  filterAndRender();
-}
+// Alias — dipanggil dari tab click
+function renderMenuTable()  { renderMenuGrid(); }
+function renderMenuGrid()   { populateKatFilter(); filterAndRender(); }
 
 function filterAndRender() {
   const search   = document.getElementById('menuSearch').value.toLowerCase().trim();
   const kat      = document.getElementById('menuFilterKat').value;
   const filtered = adminMenuData.filter(item =>
+    !item._deleted &&
     (kat === 'semua' || item.kategori === kat) &&
     (!search || item.name.toLowerCase().includes(search))
   );
@@ -1833,22 +1833,20 @@ function filterAndRender() {
   }
 
   filtered.forEach(item => {
-    const katObj  = adminKategoriData.find(k => k.id === item.kategori) || {};
-    const katName = katObj.name || item.kategori;
-    const imgSrc  = item.img ? `../${item.img}` : null;
+    const katObj    = adminKatData.find(k => k.id === item.kategori) || {};
+    const katName   = katObj.name || item.kategori;
+    const imgSrc    = item.img ? `../${item.img}` : null;
     const isChanged = !!pendingChanges[item.id];
-    const statusClass = item.status === 'tersedia' ? 'tersedia' : 'habis';
-    const statusLabel = item.status === 'tersedia' ? 'Tersedia' : 'Habis';
+    const stClass   = item.status === 'tersedia' ? 'tersedia' : 'habis';
+    const stLabel   = item.status === 'tersedia' ? 'Tersedia' : 'Habis';
 
     const card = document.createElement('div');
     card.className = 'menu-edit-card' + (isChanged ? ' changed' : '');
     card.dataset.id = item.id;
 
     card.innerHTML = `
-      <!-- Badge diubah -->
       <span class="card-changed-dot">Diubah</span>
 
-      <!-- Foto -->
       <label class="card-photo-wrap" title="Klik untuk upload foto">
         ${imgSrc
           ? `<img class="card-photo-img" id="cimg-${item.id}" src="${imgSrc}" alt="${item.name}"
@@ -1872,85 +1870,80 @@ function filterAndRender() {
           </svg>
           <span>Upload Foto</span>
         </div>
-        <div class="card-upload-spinner" id="cspinner-${item.id}">
-          <div class="spinner-ring"></div>
-        </div>
+        <div class="card-upload-spinner" id="cspinner-${item.id}"><div class="spinner-ring"></div></div>
         <input type="file" class="card-upload-input" accept="image/jpeg,image/png,image/webp,image/gif"
                data-id="${item.id}" />
       </label>
 
-      <!-- Body -->
       <div class="card-body-edit">
         <div>
           <div class="card-item-name" title="${item.name}">${item.name}</div>
           <div class="card-item-kat">${katName}</div>
         </div>
-
         <div class="card-divider"></div>
-
-        <!-- Harga -->
         <div class="card-price-row">
           <span class="card-price-prefix">¥</span>
           <input type="number" class="card-price-input" value="${item.harga}"
                  min="0" step="10" data-id="${item.id}" />
         </div>
+        <button class="card-status-btn ${stClass}" data-id="${item.id}">
+          <span class="dot"></span>${stLabel}
+        </button>
+      </div>
 
-        <!-- Status toggle -->
-        <button class="card-status-btn ${statusClass}" data-id="${item.id}">
-          <span class="dot"></span>${statusLabel}
+      <div class="card-actions">
+        <button class="btn-card-action btn-card-edit" data-id="${item.id}">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+          Edit
+        </button>
+        <button class="btn-card-action btn-card-delete" data-id="${item.id}">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14H6L5 6"/>
+            <path d="M10 11v6M14 11v6"/>
+            <path d="M9 6V4h6v2"/>
+          </svg>
+          Hapus
         </button>
       </div>
     `;
 
-    // ── Upload foto ──────────────────────────────────────
-    card.querySelector('.card-upload-input').addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      if (file.size > 5 * 1024 * 1024) { alert('Ukuran file maksimal 5MB.'); e.target.value = ''; return; }
-
+    // Upload foto
+    card.querySelector('.card-upload-input').addEventListener('change', async e => {
+      const file = e.target.files[0]; if (!file) return;
+      if (file.size > 5*1024*1024) { alert('Maksimal 5MB.'); e.target.value=''; return; }
       const spinner = document.getElementById(`cspinner-${item.id}`);
       spinner.classList.add('active');
-
-      const fd = new FormData();
-      fd.append('menu_id', item.id);
-      fd.append('foto', file);
-
+      const fd = new FormData(); fd.append('menu_id', item.id); fd.append('foto', file);
       try {
-        const res    = await fetch('../api/upload-image', { method: 'POST', body: fd });
-        const result = await res.json();
-
-        if (result.success) {
-          item.img = result.img;
+        const res = await fetch(API_UPLOAD, { method: 'POST', body: fd });
+        const r   = await res.json();
+        if (r.success) {
+          item.img = r.img;
           const emptyEl = document.getElementById(`cempty-${item.id}`);
-          let   imgEl   = document.getElementById(`cimg-${item.id}`);
-
+          let imgEl = document.getElementById(`cimg-${item.id}`);
           if (!imgEl) {
             imgEl = document.createElement('img');
-            imgEl.id        = `cimg-${item.id}`;
-            imgEl.className = 'card-photo-img';
-            imgEl.alt       = item.name;
+            imgEl.id = `cimg-${item.id}`; imgEl.className = 'card-photo-img'; imgEl.alt = item.name;
             card.querySelector('.card-photo-wrap').insertBefore(imgEl, emptyEl);
           }
-          imgEl.src           = `../${result.img}?t=${Date.now()}`;
-          imgEl.style.display = 'block';
+          imgEl.src = `../${r.img}?t=${Date.now()}`; imgEl.style.display = 'block';
           if (emptyEl) emptyEl.style.display = 'none';
-
           markChanged(item.id, card);
           if (!pendingChanges[item.id]) pendingChanges[item.id] = {};
-          pendingChanges[item.id].img = result.img;
+          pendingChanges[item.id].img = r.img;
           showMenuMsg('✓ Foto berhasil diupload', 'success');
-        } else {
-          alert('Upload gagal: ' + (result.message || 'Error tidak diketahui'));
-        }
-      } catch {
-        alert('Gagal terhubung ke server.');
-      } finally {
-        spinner.classList.remove('active');
-        e.target.value = '';
-      }
+        } else alert('Upload gagal: ' + (r.message || 'Error'));
+      } catch { alert('Gagal terhubung ke server.'); }
+      finally { spinner.classList.remove('active'); e.target.value = ''; }
     });
 
-    // ── Edit harga ───────────────────────────────────────
+    // Edit harga
     card.querySelector('.card-price-input').addEventListener('input', e => {
       const id = parseInt(e.target.dataset.id);
       if (!pendingChanges[id]) pendingChanges[id] = {};
@@ -1958,7 +1951,7 @@ function filterAndRender() {
       markChanged(id, card);
     });
 
-    // ── Toggle status ────────────────────────────────────
+    // Toggle status
     card.querySelector('.card-status-btn').addEventListener('click', e => {
       const id    = parseInt(e.currentTarget.dataset.id);
       const mItem = adminMenuData.find(m => m.id === id);
@@ -1971,13 +1964,24 @@ function filterAndRender() {
       markChanged(id, card);
     });
 
+    // Tombol Edit
+    card.querySelector('.btn-card-edit').addEventListener('click', e => {
+      e.stopPropagation();
+      openMenuModal(item);
+    });
+
+    // Tombol Hapus
+    card.querySelector('.btn-card-delete').addEventListener('click', e => {
+      e.stopPropagation();
+      if (!confirm(`Hapus "${item.name}"?\nAksi ini tidak bisa dibatalkan.`)) return;
+      deleteMenu(item.id, card);
+    });
+
     grid.appendChild(card);
   });
 }
 
-function markChanged(id, card) {
-  card.classList.add('changed');
-}
+function markChanged(id, card) { card.classList.add('changed'); }
 
 document.getElementById('menuSearch').addEventListener('input', filterAndRender);
 document.getElementById('menuFilterKat').addEventListener('change', filterAndRender);
