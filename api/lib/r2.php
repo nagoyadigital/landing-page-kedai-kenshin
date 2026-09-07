@@ -60,23 +60,20 @@ function kenshin_r2_sign($method, $key, $payloadHash, $contentType, $amzDate, $d
     $bucket  = kenshin_env('R2_BUCKET');
     $uri     = '/' . $bucket . '/' . ltrim($key, '/');
 
-    $headers = strtolower("host:$host\nx-amz-content-sha256:$payloadHash\nx-amz-date:$amzDate\n");
-    $signed  = 'host;x-amz-content-sha256;x-amz-date';
-    $ct      = $contentType !== '' ? "\n" : '';
-
-    // Canonical request (S3 SigV4). Content-Type tidak di-sign agar
-    // perilaku upload konsisten antara PUT curl dan presign nanti.
-    $canonical = implode("\n", [
-        $method,
-        $uri,
-        '',
-        "host:$host",
-        "x-amz-content-sha256:$payloadHash",
-        "x-amz-date:$amzDate",
-        '',
-        $signed,
-        $payloadHash,
-    ]) . $ct;
+    // Canonical request standar AWS SigV4 (S3):
+    //   <METHOD>\n<URI>\n<query>\n<canonical-headers>\n<signed-headers>\n<payload-hash>
+    // Content-Type TIDAK di-sign (tidak dikirim sebagai x-amz-*, jadi tidak
+    // boleh masuk canonical headers — kalau masuk, signature pasti mismatch).
+    $signed = 'host;x-amz-content-sha256;x-amz-date';
+    $canonical = $method . "\n"
+        . $uri . "\n"
+        . "\n"
+        . "host:" . $host . "\n"
+        . "x-amz-content-sha256:" . $payloadHash . "\n"
+        . "x-amz-date:" . $amzDate . "\n"
+        . "\n"
+        . $signed . "\n"
+        . $payloadHash;
 
     $scope = "$dateStamp/$region/$service/aws4_request";
     $toSign = "AWS4-HMAC-SHA256\n$amzDate\n$scope\n" . hash('sha256', $canonical);
