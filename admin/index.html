@@ -2059,6 +2059,264 @@ document.getElementById('btnSaveAllMenu').addEventListener('click', async () => 
   finalize();
 });
 
+// ════════════════════════════════════════════════════════════
+//  TAMBAH / EDIT MENU — Modal
+// ════════════════════════════════════════════════════════════
+
+document.getElementById('btnAddMenu').addEventListener('click', () => openMenuModal(null));
+
+function openMenuModal(item) {
+  const isEdit = !!item;
+
+  // Title
+  document.getElementById('modalMenuTitle').innerHTML = isEdit
+    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Menu`
+    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Tambah Menu`;
+
+  // Isi field
+  document.getElementById('formMenuId').value     = item ? item.id    : '';
+  document.getElementById('formMenuName').value   = item ? item.name  : '';
+  document.getElementById('formMenuHarga').value  = item ? item.harga : '';
+  document.getElementById('formMenuDesc').value   = item ? (item.desc || '') : '';
+  document.getElementById('formMenuStatus').value = item ? (item.status || 'tersedia') : 'tersedia';
+
+  // Isi dropdown kategori
+  const sel = document.getElementById('formMenuKategori');
+  sel.innerHTML = '';
+  adminKategoriData.filter(k => k.id !== 'semua').forEach(k => {
+    const o = document.createElement('option');
+    o.value = k.id;
+    o.textContent = k.name;
+    sel.appendChild(o);
+  });
+  if (item) sel.value = item.kategori;
+
+  document.getElementById('modalMenu').classList.add('open');
+}
+
+function closeMenuModal() {
+  document.getElementById('modalMenu').classList.remove('open');
+}
+
+document.getElementById('btnCloseModalMenu').addEventListener('click', closeMenuModal);
+document.getElementById('btnCancelMenu').addEventListener('click', closeMenuModal);
+document.getElementById('modalMenu').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalMenu')) closeMenuModal();
+});
+
+document.getElementById('btnSaveMenu').addEventListener('click', async () => {
+  const id       = document.getElementById('formMenuId').value;
+  const name     = document.getElementById('formMenuName').value.trim();
+  const kategori = document.getElementById('formMenuKategori').value;
+  const harga    = parseInt(document.getElementById('formMenuHarga').value) || 0;
+  const desc     = document.getElementById('formMenuDesc').value.trim();
+  const status   = document.getElementById('formMenuStatus').value;
+
+  if (!name)     { alert('Nama menu wajib diisi.'); return; }
+  if (!kategori) { alert('Pilih kategori.'); return; }
+
+  const btn    = document.getElementById('btnSaveMenu');
+  btn.disabled = true;
+  btn.textContent = 'Menyimpan...';
+
+  const action  = id ? 'edit' : 'add';
+  const payload = { action, data: { id: id || undefined, name, kategori, harga, desc, status } };
+
+  if (useServer) {
+    try {
+      const res = await fetch(API_MENU, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const r = await res.json();
+      if (r.success) {
+        if (action === 'add') {
+          adminMenuData.push({ id: parseInt(r.id), name, kategori, harga, desc, status, img: null, _isCustom: true });
+        } else {
+          const it = adminMenuData.find(m => m.id === parseInt(id));
+          if (it) Object.assign(it, { name, kategori, harga, desc, status });
+        }
+        closeMenuModal();
+        renderMenuGrid();
+        updateStats();
+        showMenuMsg(r.message || 'Tersimpan.', 'success');
+      } else {
+        alert(r.message || 'Gagal menyimpan.');
+      }
+    } catch { alert('Gagal terhubung ke server.'); }
+    finally { btn.disabled = false; btn.textContent = 'Simpan'; }
+    return;
+  }
+
+  // Fallback localStorage
+  const ex = JSON.parse(localStorage.getItem(SK_MENU) || '{}');
+  if (action === 'add') {
+    const maxId = Math.max(84, ...adminMenuData.map(m => m.id || 0));
+    const newId = maxId + 1;
+    adminMenuData.push({ id: newId, name, kategori, harga, desc, status, img: null, _isCustom: true });
+    ex[String(newId)] = { _isCustom: true, name, kategori, harga, desc, status, img: null };
+  } else {
+    const it = adminMenuData.find(m => m.id === parseInt(id));
+    if (it) Object.assign(it, { name, kategori, harga, desc, status });
+    ex[String(id)] = { ...(ex[String(id)] || {}), name, kategori, harga, desc, status };
+  }
+  localStorage.setItem(SK_MENU, JSON.stringify(ex));
+  btn.disabled = false;
+  btn.textContent = 'Simpan';
+  closeMenuModal();
+  renderMenuGrid();
+  updateStats();
+  showMenuMsg('Tersimpan secara lokal.', 'success');
+});
+
+// ── HAPUS MENU ────────────────────────────────────────────
+async function deleteMenu(id, card) {
+  if (useServer) {
+    try {
+      const res = await fetch(API_MENU, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete', data: { id } }),
+      });
+      const r = await res.json();
+      if (!r.success) { alert(r.message || 'Gagal menghapus.'); return; }
+    } catch { alert('Gagal terhubung ke server.'); return; }
+  } else {
+    const ex = JSON.parse(localStorage.getItem(SK_MENU) || '{}');
+    ex[String(id)] = { ...(ex[String(id)] || {}), _deleted: true };
+    localStorage.setItem(SK_MENU, JSON.stringify(ex));
+  }
+  const idx = adminMenuData.findIndex(m => m.id === parseInt(id));
+  if (idx !== -1) adminMenuData.splice(idx, 1);
+  card.style.transition = 'opacity 0.2s, transform 0.2s';
+  card.style.opacity = '0';
+  card.style.transform = 'scale(0.92)';
+  setTimeout(() => { card.remove(); updateStats(); }, 220);
+  showMenuMsg('Menu berhasil dihapus.', 'success');
+}
+
+// ════════════════════════════════════════════════════════════
+//  KATEGORI MANAGER
+// ════════════════════════════════════════════════════════════
+
+const BUILTIN_KAT_IDS = new Set((typeof kategoriData !== 'undefined' ? kategoriData : []).map(k => k.id));
+
+function renderKatManager() {
+  const list = document.getElementById('katManagerList');
+  list.innerHTML = '';
+  const kats = adminKategoriData.filter(k => k.id !== 'semua');
+  if (!kats.length) {
+    list.innerHTML = '<p style="color:var(--muted);font-size:13px;">Belum ada kategori.</p>';
+    return;
+  }
+  kats.forEach(kat => {
+    const count   = adminMenuData.filter(m => m.kategori === kat.id && !m._deleted).length;
+    const builtin = BUILTIN_KAT_IDS.has(kat.id);
+    const row     = document.createElement('div');
+    row.className = 'kat-mgr-row' + (builtin ? ' builtin' : '');
+    row.innerHTML = `
+      <div class="kat-mgr-icon">${kat.icon || '🍽️'}</div>
+      <div class="kat-mgr-info">
+        <div class="kat-mgr-name">${kat.name}</div>
+        <div class="kat-mgr-id">${kat.id}</div>
+      </div>
+      <span class="kat-mgr-count">${count} menu</span>
+      <button class="btn-kat-del" title="${builtin ? 'Kategori bawaan tidak bisa dihapus' : 'Hapus kategori'}" data-id="${kat.id}">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+        </svg>
+      </button>
+    `;
+    if (!builtin) {
+      row.querySelector('.btn-kat-del').addEventListener('click', () => {
+        if (!confirm(`Hapus kategori "${kat.name}"?`)) return;
+        deleteKategori(kat.id, row);
+      });
+    }
+    list.appendChild(row);
+  });
+}
+
+document.getElementById('btnAddKategori').addEventListener('click', () => {
+  ['formKatName', 'formKatId', 'formKatIcon', 'formKatJp'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.value = ''; delete el.dataset.manual; }
+  });
+  document.getElementById('modalKategori').classList.add('open');
+});
+
+document.getElementById('formKatName').addEventListener('input', e => {
+  const idField = document.getElementById('formKatId');
+  if (!idField.dataset.manual) {
+    idField.value = e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  }
+});
+document.getElementById('formKatId').addEventListener('input', e => {
+  e.target.dataset.manual = e.target.value ? '1' : '';
+});
+
+function closeKatModal() { document.getElementById('modalKategori').classList.remove('open'); }
+document.getElementById('btnCloseModalKat').addEventListener('click', closeKatModal);
+document.getElementById('btnCancelKat').addEventListener('click', closeKatModal);
+document.getElementById('modalKategori').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalKategori')) closeKatModal();
+});
+
+document.getElementById('btnSaveKat').addEventListener('click', async () => {
+  const name = document.getElementById('formKatName').value.trim();
+  const id   = document.getElementById('formKatId').value.trim().toLowerCase().replace(/\s+/g, '-');
+  const icon = document.getElementById('formKatIcon').value.trim() || '🍽️';
+  const jp   = document.getElementById('formKatJp').value.trim();
+
+  if (!name) { alert('Nama kategori wajib diisi.'); return; }
+  if (!id)   { alert('ID kategori wajib diisi.'); return; }
+  if (adminKategoriData.find(k => k.id === id)) { alert('ID sudah ada, gunakan ID lain.'); return; }
+
+  const btn = document.getElementById('btnSaveKat');
+  btn.disabled = true; btn.textContent = 'Menyimpan...';
+
+  if (useServer) {
+    try {
+      const res = await fetch(API_KAT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'add', data: { id, name, jp, icon } }),
+      });
+      const r = await res.json();
+      if (r.success) {
+        adminKategoriData.push({ id, name, jp, icon });
+        closeKatModal(); renderKatManager(); populateKatFilter();
+        showMenuMsg('Kategori berhasil ditambahkan!', 'success');
+      } else alert(r.message || 'Gagal.');
+    } catch { alert('Gagal terhubung ke server.'); }
+    finally { btn.disabled = false; btn.textContent = 'Simpan Kategori'; }
+    return;
+  }
+  adminKategoriData.push({ id, name, jp, icon });
+  btn.disabled = false; btn.textContent = 'Simpan Kategori';
+  closeKatModal(); renderKatManager(); populateKatFilter();
+  alert('Kategori ditambahkan secara lokal!');
+});
+
+async function deleteKategori(id, row) {
+  if (useServer) {
+    try {
+      const res = await fetch(API_KAT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete', data: { id } }),
+      });
+      const r = await res.json();
+      if (!r.success) { alert(r.message || 'Gagal.'); return; }
+    } catch { alert('Gagal terhubung.'); return; }
+  }
+  const idx = adminKategoriData.findIndex(k => k.id === id);
+  if (idx !== -1) adminKategoriData.splice(idx, 1);
+  row.style.transition = 'opacity 0.2s'; row.style.opacity = '0';
+  setTimeout(() => { row.remove(); populateKatFilter(); }, 200);
+}
+
 // ── CHANGE PASSWORD ───────────────────────────────────────
 document.getElementById('btnChangePass').addEventListener('click', () => {
   const np  = document.getElementById('newPass').value;
