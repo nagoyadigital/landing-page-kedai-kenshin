@@ -18,6 +18,10 @@ let liveKategoriData = kategoriData ? kategoriData.map(k => ({...k})) : [];
 function formatRupiah(angka) {
   return "¥" + Number(angka).toLocaleString("ja-JP");
 }
+// Harga dengan label 税抜 (belum termasuk pajak)
+function formatHarga(angka) {
+  return `<span class="price-amount">¥${Number(angka).toLocaleString("ja-JP")}</span><span class="price-zeinuki">税抜</span>`;
+}
 
 // ── FILTER MENU ────────────────────────────────────────────
 function getFilteredMenu() {
@@ -88,7 +92,7 @@ function buildMenuCard(item, idx) {
       <h3 class="menu-name">${item.name}</h3>
       <p class="menu-desc">${item.desc || ""}</p>
       <div class="menu-footer">
-        <span class="menu-price">${formatRupiah(item.harga)}</span>
+        <span class="menu-price">${formatHarga(item.harga)}</span>
         <button class="btn-order" ${item.status === "habis" ? "disabled" : ""} data-id="${item.id}">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
                stroke-linecap="round" stroke-linejoin="round">
@@ -194,7 +198,7 @@ function openModal(item) {
       <p class="modal-kat">${getKategoryName(item.kategori)}</p>
       <h2 class="modal-name">${item.name}</h2>
       <p class="modal-desc">${item.desc || ""}</p>
-      <p class="modal-price">${formatRupiah(item.harga)}</p>
+      <p class="modal-price">${formatHarga(item.harga)}</p>
       <div class="modal-actions">
         <button class="btn-close-modal" id="btnCloseModal">Tutup</button>
         <a href="#" class="btn-wa" id="btnWaModal"

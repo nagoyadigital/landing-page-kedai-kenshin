@@ -1,9 +1,74 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" prefix="og: https://ogp.me/ns#">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Menu - Okayama Kedai Kenshin</title>
+
+  <!-- ── Primary SEO ────────────────────────────────── -->
+  <title>Okayama Kedai Kenshin | Menu Halal Japanese Cuisine di Okayama</title>
+  <meta name="description" content="Okayama Kedai Kenshin — restoran halal masakan Jepang dan Indonesia di Okayama. Lihat menu lengkap: Paket Liwet, Seafood, Sate Angkringan, Drinks, dan masih banyak lagi. Semua harga belum termasuk pajak (税抜)." />
+  <meta name="keywords" content="kedai kenshin, okayama halal, restoran halal jepang, halal japanese cuisine, menu halal okayama, indonesian food okayama, liwet okayama, seafood halal, angkringan jepang, 岡山 ハラール, kedai kenshin okayama" />
+  <meta name="author" content="Okayama Kedai Kenshin" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="theme-color" content="#7B1515" />
+  <link rel="canonical" href="https://kedaikenshin.com/" />
+
+  <!-- ── Favicon ────────────────────────────────────── -->
+  <link rel="icon" type="image/png" href="images/logo.PNG" />
+  <link rel="shortcut icon" href="images/logo.PNG" />
+  <link rel="apple-touch-icon" href="images/logo.PNG" />
+
+  <!-- ── Open Graph (Facebook, LINE, WhatsApp) ─────── -->
+  <meta property="og:type"        content="restaurant.restaurant" />
+  <meta property="og:title"       content="Okayama Kedai Kenshin | Halal Japanese Cuisine" />
+  <meta property="og:description" content="Restoran halal masakan Jepang & Indonesia di Okayama. Menu lengkap: Liwet, Seafood, Sate Angkringan, Drinks & lebih. Harga 税抜 (belum pajak)." />
+  <meta property="og:url"         content="https://kedaikenshin.com/" />
+  <meta property="og:image"       content="https://kedaikenshin.com/images/logo.PNG" />
+  <meta property="og:image:width"  content="512" />
+  <meta property="og:image:height" content="512" />
+  <meta property="og:image:alt"    content="Logo Okayama Kedai Kenshin" />
+  <meta property="og:site_name"   content="Okayama Kedai Kenshin" />
+  <meta property="og:locale"      content="id_ID" />
+
+  <!-- ── Twitter Card ──────────────────────────────── -->
+  <meta name="twitter:card"        content="summary" />
+  <meta name="twitter:title"       content="Okayama Kedai Kenshin | Halal Japanese Cuisine" />
+  <meta name="twitter:description" content="Restoran halal masakan Jepang & Indonesia di Okayama. Menu lengkap tersedia online." />
+  <meta name="twitter:image"       content="https://kedaikenshin.com/images/logo.PNG" />
+
+  <!-- ── Structured Data — Restaurant (JSON-LD) ────── -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "Okayama Kedai Kenshin",
+    "description": "Restoran halal masakan Jepang dan Indonesia di Okayama. Menyajikan menu liwet, seafood, sate angkringan, drinks, dan banyak lagi.",
+    "url": "https://kedaikenshin.com/",
+    "logo": "https://kedaikenshin.com/images/logo.PNG",
+    "image": "https://kedaikenshin.com/images/logo.PNG",
+    "servesCuisine": ["Japanese", "Indonesian", "Halal"],
+    "hasMenu": "https://kedaikenshin.com/",
+    "priceRange": "¥250〜¥6000",
+    "currenciesAccepted": "JPY",
+    "paymentAccepted": "Cash",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Okayama",
+      "addressCountry": "JP"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "addressCountry": "JP"
+    },
+    "sameAs": [],
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+    }
+  }
+  </script>
+
+  <!-- ── Styles & Fonts ─────────────────────────────── -->
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -104,7 +169,10 @@
         <span>·</span>
         <a href="#">Lokasi</a>
       </div>
-      <p class="footer-copy">© 2024 Okayama Kedai Kenshin · Developed with ❤️ by <a href="https://nagoyadigital.com" target="_blank" rel="noopener noreferrer" class="footer-credit">Nagoya Digital</a></p>
+      <div class="footer-bottom">
+        <p class="footer-copy">© 2026 Okayama Kedai Kenshin. All rights reserved.</p>
+        <p class="footer-dev">Developed with ❤️ by <a href="https://nagoyadigital.com" target="_blank" rel="noopener noreferrer" class="footer-credit">Nagoya Digital</a></p>
+      </div>
     </div>
   </footer>
 

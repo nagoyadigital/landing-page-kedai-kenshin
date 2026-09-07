@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel — Okayama Kedai Kenshin</title>
+  <link rel="icon" type="image/png" href="../images/logo.PNG" />
+  <link rel="shortcut icon" href="../images/logo.PNG" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -665,7 +667,7 @@
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: 12px;
-      overflow: hidden;
+      overflow: visible; /* jangan hidden — card-actions harus terlihat */
       display: flex;
       flex-direction: column;
       transition: box-shadow 0.18s, transform 0.18s;
@@ -709,6 +711,7 @@
       overflow: hidden;
       flex-shrink: 0;
       display: block;
+      border-radius: 12px 12px 0 0; /* rounded hanya di atas */
     }
 
     .card-photo-img {
@@ -1049,6 +1052,7 @@
     .card-actions {
       display: flex; gap: 6px; padding: 8px 10px 10px;
       border-top: 1px solid var(--border); background: #FAFAFA;
+      border-radius: 0 0 12px 12px; /* rounded hanya di bawah */
     }
     .btn-card-action {
       flex: 1; display: flex; align-items: center; justify-content: center; gap: 4px;

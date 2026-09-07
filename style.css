@@ -547,6 +547,29 @@ body {
   font-size: 15px;
   font-weight: 700;
   color: var(--primary);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.price-amount {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.price-zeinuki {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--muted);
+  background: rgba(0,0,0,0.06);
+  border-radius: 3px;
+  padding: 1px 4px;
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+  font-family: 'Noto Sans JP', sans-serif;
+  white-space: nowrap;
+  align-self: center;
 }
 
 .btn-order {
@@ -630,6 +653,25 @@ body {
 .footer-copy {
   font-size: 11px;
   color: rgba(255,255,255,0.4);
+  text-align: center;
+}
+
+.footer-bottom {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  width: 100%;
+  text-align: center;
+}
+
+.footer-dev {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
 }
 
 .footer-credit {
@@ -707,7 +749,19 @@ body {
 .modal-kat { font-size: 11px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
 .modal-name { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
 .modal-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
-.modal-price { font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 20px; }
+.modal-price {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 20px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.modal-price .price-zeinuki {
+  font-size: 11px;
+  align-self: center;
+}
 
 .modal-actions {
   display: flex;
@@ -782,7 +836,8 @@ body {
   .kat-group-name    { font-size: 14px; }
 
   .menu-name  { font-size: 13px; }
-  .menu-price { font-size: 14px; }
+  .menu-price { font-size: 13px; }
+  .price-amount { font-size: 13px; }
   .menu-body  { padding: 10px 12px 12px; }
 }
 
@@ -815,7 +870,8 @@ body {
   }
 
   .menu-name         { font-size: 12px; }
-  .menu-price        { font-size: 13px; }
+  .menu-price        { font-size: 12px; }
+  .price-amount      { font-size: 12px; }
   .menu-desc         { font-size: 11px; -webkit-line-clamp: 2; }
   .menu-body         { padding: 9px 10px 11px; }
   .menu-kategori-tag { font-size: 9px; }
