@@ -4,3 +4,9 @@ Salinan index.html
 
 # Session file (generated at runtime, tidak perlu di-commit)
 data/_sessions.json
+
+# Kredensial asli — JANGAN PERNAH di-commit.
+# Di VPS: simpan di /var/www/kedaikenshin.com/shared/.env (persisten).
+.env
+*.env
+!.env.example

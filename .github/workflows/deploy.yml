@@ -54,7 +54,7 @@ jobs:
           mkdir -p "$STAGING"
 
           # Copy required files into staging dir (outside working tree)
-          for f in index.html menu-data.js script.js style.css; do
+          for f in index.html menu-data.js script.js style.css .env.example; do
             if [ -f "$f" ]; then cp "$f" "$STAGING/"; fi
           done
           for d in admin api images; do
@@ -62,6 +62,9 @@ jobs:
               cp -r "$d" "$STAGING/"
             fi
           done
+
+          # Sertakan script migrasi (jalankan manual di VPS, bukan saat deploy)
+          if [ -f "migrate-to-r2.sh" ]; then cp "migrate-to-r2.sh" "$STAGING/"; fi
 
           # Remove runtime data that must stay on VPS
           rm -rf "$STAGING/images/menu"

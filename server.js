@@ -198,9 +198,18 @@ const server = http.createServer(async (req, res) => {
   }
 
   // ── API: api/load.php ──────────────────────────────────
+  // Dev mirror: normalisasi 'r2:...' ke URL publik bila R2_PUBLIC_BASE_URL di-set.
   if (p === '/api/load.php' && method === 'GET') {
     const settings      = readJSON('settings.json',      { wa_number: '', alamat: '', status_buka: true });
     const menu_overrides = readJSON('menu_overrides.json', {});
+    const r2base = (process.env.R2_PUBLIC_BASE_URL || '').replace(/\/$/, '');
+    if (r2base && menu_overrides && typeof menu_overrides === 'object') {
+      Object.values(menu_overrides).forEach(ov => {
+        if (ov && typeof ov.img === 'string' && ov.img.startsWith('r2:')) {
+          ov.img = r2base + '/' + ov.img.slice(3).replace(/^\//, '');
+        }
+      });
+    }
     res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
     return res.end(JSON.stringify({ success: true, settings, menu_overrides }));
   }

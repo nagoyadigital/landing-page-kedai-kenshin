@@ -68,7 +68,7 @@ function buildMenuCard(item, idx) {
   card.style.animationDelay = (idx * 0.05) + "s";
 
   const imgHtml = item.img
-    ? `<img class="menu-img" src="${item.img}" alt="${item.name}" loading="lazy"
+    ? `<img class="menu-img" src="${item.img}" alt="${item.name}" loading="lazy" decoding="async" fetchpriority="low"
            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'" />
        <div class="menu-img-placeholder" style="display:none;">${getCategoryIcon(item.kategori)}</div>`
     : `<div class="menu-img-placeholder">${getCategoryIcon(item.kategori)}</div>`;
@@ -181,7 +181,7 @@ function openModal(item) {
   const overlay = document.getElementById("modalOverlay");
 
   const imgHtml = item.img
-    ? `<img class="modal-img" src="${item.img}" alt="${item.name}"
+    ? `<img class="modal-img" src="${item.img}" alt="${item.name}" loading="lazy" decoding="async"
            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'" />
        <div class="modal-img-placeholder" style="display:none;">${getCategoryIcon(item.kategori)}</div>`
     : `<div class="modal-img-placeholder">${getCategoryIcon(item.kategori)}</div>`;
@@ -253,13 +253,14 @@ async function loadFromAPI() {
       badgeOpen.style.background = "var(--red)";
     }
 
-    // Apply menu overrides (harga & status)
+    // Apply menu overrides (harga, status, foto)
     if (data.menu_overrides) {
       Object.entries(data.menu_overrides).forEach(([id, ov]) => {
         const item = menuData.find(m => m.id === parseInt(id));
         if (item) {
           if (ov.harga  !== null && ov.harga  !== undefined) item.harga  = ov.harga;
           if (ov.status !== null && ov.status !== undefined) item.status = ov.status;
+          if (typeof ov.img === 'string' && ov.img !== '')   item.img    = ov.img;
         }
       });
     }
