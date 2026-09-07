@@ -1669,6 +1669,8 @@ async function showAdminScreen() {
   await loadSettings();
   updateStats();
   updateSessionInfo();
+  // Render grid langsung karena tab Editor Menu aktif by default
+  renderMenuGrid();
 }
 
 // ── TABS ──────────────────────────────────────────────────
@@ -1790,7 +1792,7 @@ function populateKatFilter() {
   const sel     = document.getElementById('menuFilterKat');
   const current = sel.value;
   while (sel.options.length > 1) sel.remove(1);
-  adminKatData.filter(k => k.id !== 'semua').forEach(k => {
+  adminKategoriData.filter(k => k.id !== 'semua').forEach(k => {
     const count = adminMenuData.filter(m => m.kategori === k.id && !m._deleted).length;
     if (!count) return;
     const opt = document.createElement('option');
@@ -1833,7 +1835,7 @@ function filterAndRender() {
   }
 
   filtered.forEach(item => {
-    const katObj    = adminKatData.find(k => k.id === item.kategori) || {};
+    const katObj    = adminKategoriData.find(k => k.id === item.kategori) || {};
     const katName   = katObj.name || item.kategori;
     const imgSrc    = item.img ? `../${item.img}` : null;
     const isChanged = !!pendingChanges[item.id];
