@@ -375,6 +375,19 @@ const server = http.createServer(async (req, res) => {
       return json(res, 200, { success: true, message: 'Kategori berhasil dihapus' });
     }
 
+    if (body.action === 'edit') {
+      const { id, name, icon, jp } = body.data || {};
+      if (!id || !name) return json(res, 400, { success: false, message: 'ID dan nama wajib diisi' });
+      const kat = settings.custom_kategori.find(k => k.id === id);
+      if (kat) {
+        kat.name = String(name).trim();
+        kat.icon = String(icon || '🍽️');
+        kat.jp   = String(jp || '').trim();
+      }
+      writeJSON('settings.json', settings);
+      return json(res, 200, { success: true, message: 'Kategori berhasil diupdate' });
+    }
+
     return json(res, 400, { success: false, message: 'Action tidak dikenal' });
   }
 

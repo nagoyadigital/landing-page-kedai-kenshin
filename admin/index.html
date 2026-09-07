@@ -1508,8 +1508,61 @@
 </div>
 
 <!-- ═══════════════════════════════════════
-     MODAL FORM TAMBAH KATEGORI
+     MODAL EDIT KATEGORI
 ═══════════════════════════════════════ -->
+<div class="admin-modal-overlay" id="modalKatEdit">
+  <div class="admin-modal">
+    <div class="admin-modal-header">
+      <div class="admin-modal-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Edit Kategori
+      </div>
+      <button class="btn-modal-close" id="btnCloseModalKatEdit">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="admin-modal-body">
+      <input type="hidden" id="formKatEditId" />
+      <div class="form-grid-2">
+        <div class="field-full">
+          <label class="field-label-sm">Nama Kategori *</label>
+          <input type="text" id="formKatEditName" class="field-input-sm" placeholder="Contoh: Indonesian Foods" />
+        </div>
+        <div>
+          <label class="field-label-sm">Icon (emoji)</label>
+          <input type="text" id="formKatEditIcon" class="field-input-sm" placeholder="🍽️" maxlength="4" />
+        </div>
+        <div>
+          <label class="field-label-sm">Nama Jepang (opsional)</label>
+          <input type="text" id="formKatEditJp" class="field-input-sm" placeholder="インドネシア料理" />
+        </div>
+        <div class="field-full">
+          <label class="field-label-sm">ID (slug) — tidak bisa diubah</label>
+          <input type="text" id="formKatEditIdShow" class="field-input-sm"
+                 style="background:var(--bg);color:var(--muted);cursor:not-allowed;" readonly />
+        </div>
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button class="btn-secondary" id="btnCancelKatEdit">Batal</button>
+      <button class="btn-primary" id="btnSaveKatEdit">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+          <polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+        </svg>
+        Simpan Perubahan
+      </button>
+    </div>
+  </div>
+</div>
 <div class="admin-modal-overlay" id="modalKategori">
   <div class="admin-modal">
     <div class="admin-modal-header">
@@ -2268,27 +2321,49 @@ function renderKatManager() {
   kats.forEach(kat => {
     const count   = adminMenuData.filter(m => m.kategori === kat.id && !m._deleted).length;
     const builtin = BUILTIN_KAT_IDS.has(kat.id);
-    const row     = document.createElement('div');
-    row.className = 'kat-mgr-row' + (builtin ? ' builtin' : '');
+    // Kategori builtin boleh dihapus selama tidak ada menu yang pakai
+    const canDelete = !builtin || count === 0;
+
+    const row = document.createElement('div');
+    row.className = 'kat-mgr-row';
     row.innerHTML = `
       <div class="kat-mgr-icon">${kat.icon || '🍽️'}</div>
       <div class="kat-mgr-info">
         <div class="kat-mgr-name">${kat.name}</div>
-        <div class="kat-mgr-id">${kat.id}</div>
+        <div class="kat-mgr-id">${kat.id}${builtin ? ' · <span style="color:var(--amber);font-size:9px;font-weight:700;">BAWAAN</span>' : ''}</div>
       </div>
       <span class="kat-mgr-count">${count} menu</span>
-      <button class="btn-kat-del" title="${builtin ? 'Kategori bawaan tidak bisa dihapus' : 'Hapus kategori'}" data-id="${kat.id}">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+      <button class="btn-card-action btn-card-edit" style="flex:none;padding:6px 10px;" data-id="${kat.id}" title="Edit kategori">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Edit
+      </button>
+      <button class="btn-kat-del" title="${canDelete ? 'Hapus kategori' : 'Tidak bisa dihapus — masih ada ' + count + ' menu'}"
+              data-id="${kat.id}" ${canDelete ? '' : 'disabled style="opacity:0.3;cursor:not-allowed;"'}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+          <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
         </svg>
       </button>
     `;
-    if (!builtin) {
+
+    // Edit kategori
+    row.querySelector('.btn-card-edit').addEventListener('click', () => {
+      openKatEditModal(kat);
+    });
+
+    // Hapus kategori
+    if (canDelete) {
       row.querySelector('.btn-kat-del').addEventListener('click', () => {
-        if (!confirm(`Hapus kategori "${kat.name}"?`)) return;
+        if (!confirm(`Hapus kategori "${kat.name}"?\n\nKategori bisa dihapus karena tidak ada menu yang menggunakannya.`)) return;
         deleteKategori(kat.id, row);
       });
     }
+
     list.appendChild(row);
   });
 }
@@ -2371,6 +2446,61 @@ async function deleteKategori(id, row) {
   row.style.transition = 'opacity 0.2s'; row.style.opacity = '0';
   setTimeout(() => { row.remove(); populateKatFilter(); }, 200);
 }
+
+// ── EDIT KATEGORI ─────────────────────────────────────────
+function openKatEditModal(kat) {
+  document.getElementById('formKatEditId').value     = kat.id;
+  document.getElementById('formKatEditIdShow').value = kat.id;
+  document.getElementById('formKatEditName').value   = kat.name;
+  document.getElementById('formKatEditIcon').value   = kat.icon || '';
+  document.getElementById('formKatEditJp').value     = kat.jp   || '';
+  document.getElementById('modalKatEdit').classList.add('open');
+}
+
+function closeKatEditModal() { document.getElementById('modalKatEdit').classList.remove('open'); }
+document.getElementById('btnCloseModalKatEdit').addEventListener('click', closeKatEditModal);
+document.getElementById('btnCancelKatEdit').addEventListener('click', closeKatEditModal);
+document.getElementById('modalKatEdit').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalKatEdit')) closeKatEditModal();
+});
+
+document.getElementById('btnSaveKatEdit').addEventListener('click', async () => {
+  const id   = document.getElementById('formKatEditId').value;
+  const name = document.getElementById('formKatEditName').value.trim();
+  const icon = document.getElementById('formKatEditIcon').value.trim() || '🍽️';
+  const jp   = document.getElementById('formKatEditJp').value.trim();
+
+  if (!name) { alert('Nama kategori wajib diisi.'); return; }
+
+  const btn = document.getElementById('btnSaveKatEdit');
+  btn.disabled = true; btn.textContent = 'Menyimpan...';
+
+  if (useServer) {
+    try {
+      const res = await fetch(API_KAT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'edit', data: { id, name, icon, jp } }),
+      });
+      const r = await res.json();
+      if (r.success) {
+        const kat = adminKategoriData.find(k => k.id === id);
+        if (kat) { kat.name = name; kat.icon = icon; kat.jp = jp; }
+        closeKatEditModal(); renderKatManager(); populateKatFilter();
+        showMenuMsg('Kategori berhasil diupdate.', 'success');
+      } else alert(r.message || 'Gagal menyimpan.');
+    } catch { alert('Gagal terhubung ke server.'); }
+    finally { btn.disabled = false; btn.textContent = 'Simpan Perubahan'; }
+    return;
+  }
+
+  // Fallback lokal
+  const kat = adminKategoriData.find(k => k.id === id);
+  if (kat) { kat.name = name; kat.icon = icon; kat.jp = jp; }
+  btn.disabled = false; btn.textContent = 'Simpan Perubahan';
+  closeKatEditModal(); renderKatManager(); populateKatFilter();
+  showMenuMsg('Tersimpan secara lokal.', 'success');
+});
 
 // ── CHANGE PASSWORD ───────────────────────────────────────
 document.getElementById('btnChangePass').addEventListener('click', () => {
