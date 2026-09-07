@@ -547,6 +547,29 @@ body {
   font-size: 15px;
   font-weight: 700;
   color: var(--primary);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.price-amount {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.price-zeinuki {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--muted);
+  background: rgba(0,0,0,0.06);
+  border-radius: 3px;
+  padding: 1px 4px;
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+  font-family: 'Noto Sans JP', sans-serif;
+  white-space: nowrap;
+  align-self: center;
 }
 
 .btn-order {
@@ -568,7 +591,111 @@ body {
 .btn-order:hover { background: var(--primary-light); transform: scale(1.03); }
 .btn-order:disabled { background: var(--gray); cursor: not-allowed; transform: none; }
 
-/* Empty State */
+/* Social media footer */
+.footer-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 16px 0 4px;
+  flex-wrap: wrap;
+}
+
+.social-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, transform 0.15s, border-color 0.2s;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+.social-btn:hover {
+  transform: translateY(-3px);
+}
+
+/* Instagram — gradient merah-ungu */
+.social-btn-ig { color: #fff; }
+.social-btn-ig:hover {
+  background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  border-color: transparent;
+}
+
+/* TikTok — hitam/cyan */
+.social-btn-tt { color: #fff; }
+.social-btn-tt:hover { background: #010101; border-color: #69C9D0; }
+
+/* Google — putih transparan */
+.social-btn-g { color: #fff; }
+.social-btn-g:hover { background: rgba(255,255,255,0.20); border-color: rgba(255,255,255,0.3); }
+
+/* WhatsApp — hijau */
+.social-btn-wa {
+  background: rgba(37,211,102,0.18);
+  border-color: rgba(37,211,102,0.35);
+  color: #25D366;
+}
+.social-btn-wa:hover { background: #25D366; color: #fff; border-color: #25D366; }
+
+/* Sembunyikan tombol pesan */
+.btn-order { display: none; }
+
+/* ── WA Float Button ── */
+.wa-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  background: #25D366;
+  color: #fff;
+  border-radius: 50px;
+  padding: 13px 20px 13px 16px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+}
+.wa-float:hover {
+  background: #1EBE5B;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(37,211,102,0.55);
+}
+.wa-float-label {
+  white-space: nowrap;
+}
+
+@keyframes wa-pulse {
+  0%   { box-shadow: 0 4px 20px rgba(37,211,102,0.45), 0 0 0 0 rgba(37,211,102,0.5); }
+  70%  { box-shadow: 0 4px 20px rgba(37,211,102,0.45), 0 0 0 14px rgba(37,211,102,0); }
+  100% { box-shadow: 0 4px 20px rgba(37,211,102,0.45), 0 0 0 0 rgba(37,211,102,0); }
+}
+.wa-float { animation: wa-pulse 2.5s infinite; }
+
+/* Mobile — WA float jadi bulat, sembunyikan teks */
+@media (max-width: 480px) {
+  .wa-float {
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    border-radius: 50%;
+    justify-content: center;
+    bottom: 20px;
+    right: 16px;
+  }
+  .wa-float-label { display: none; }
+  .social-btn { width: 42px; height: 42px; border-radius: 10px; }
+}
 .empty-state {
   text-align: center;
   padding: 60px 20px;
@@ -630,6 +757,25 @@ body {
 .footer-copy {
   font-size: 11px;
   color: rgba(255,255,255,0.4);
+  text-align: center;
+}
+
+.footer-bottom {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  width: 100%;
+  text-align: center;
+}
+
+.footer-dev {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
 }
 
 .footer-credit {
@@ -707,7 +853,19 @@ body {
 .modal-kat { font-size: 11px; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
 .modal-name { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
 .modal-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
-.modal-price { font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 20px; }
+.modal-price {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 20px;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.modal-price .price-zeinuki {
+  font-size: 11px;
+  align-self: center;
+}
 
 .modal-actions {
   display: flex;
@@ -782,7 +940,8 @@ body {
   .kat-group-name    { font-size: 14px; }
 
   .menu-name  { font-size: 13px; }
-  .menu-price { font-size: 14px; }
+  .menu-price { font-size: 13px; }
+  .price-amount { font-size: 13px; }
   .menu-body  { padding: 10px 12px 12px; }
 }
 
@@ -815,7 +974,8 @@ body {
   }
 
   .menu-name         { font-size: 12px; }
-  .menu-price        { font-size: 13px; }
+  .menu-price        { font-size: 12px; }
+  .price-amount      { font-size: 12px; }
   .menu-desc         { font-size: 11px; -webkit-line-clamp: 2; }
   .menu-body         { padding: 9px 10px 11px; }
   .menu-kategori-tag { font-size: 9px; }

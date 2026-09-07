@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel — Okayama Kedai Kenshin</title>
+  <link rel="icon" type="image/png" href="../images/logo.PNG" />
+  <link rel="shortcut icon" href="../images/logo.PNG" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -180,7 +182,7 @@
     }
 
     /* ─────────────────────────────────────────
-       ADMIN LAYOUT
+       ADMIN LAYOUT — SIDEBAR
     ───────────────────────────────────────── */
     #adminScreen { display: none; min-height: 100vh; flex-direction: column; }
     #adminScreen.visible { display: flex; }
@@ -188,93 +190,173 @@
     /* ── Topbar ── */
     .topbar {
       background: var(--primary-dark);
-      height: 56px;
-      padding: 0 24px;
+      height: 54px;
+      padding: 0 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
       position: sticky;
       top: 0;
-      z-index: 100;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    }
-
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .topbar-logo {
-      width: 32px;
-      height: 32px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      z-index: 200;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
       flex-shrink: 0;
     }
-
-    .topbar-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #FFFFFF;
-      letter-spacing: 0.1px;
+    .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .topbar-logo {
+      width: 30px; height: 30px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
+    .topbar-title { font-size: 14px; font-weight: 700; color: #fff; letter-spacing: 0.1px; }
+    .topbar-sub   { font-size: 11px; color: rgba(255,255,255,0.48); margin-top: 1px; }
+    .topbar-right { display: flex; align-items: center; gap: 8px; }
 
-    .topbar-sub {
-      font-size: 11px;
-      color: rgba(255,255,255,0.50);
-      margin-top: 1px;
-    }
-
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    /* hamburger untuk mobile */
+    .btn-sidebar-toggle {
+      display: none;
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 7px; cursor: pointer;
+      align-items: center; justify-content: center; color: #fff;
     }
 
     .btn-topbar {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 600;
-      font-family: inherit;
-      cursor: pointer;
-      border: none;
-      text-decoration: none;
-      transition: background 0.15s;
-      letter-spacing: 0.2px;
-      white-space: nowrap;
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border-radius: 6px;
+      font-size: 12px; font-weight: 600; font-family: inherit;
+      cursor: pointer; border: none; text-decoration: none;
+      transition: background 0.15s; letter-spacing: 0.2px; white-space: nowrap;
     }
-
     .btn-topbar-ghost {
-      background: rgba(255,255,255,0.10);
-      color: rgba(255,255,255,0.90);
+      background: rgba(255,255,255,0.10); color: rgba(255,255,255,0.90);
       border: 1px solid rgba(255,255,255,0.15);
     }
     .btn-topbar-ghost:hover { background: rgba(255,255,255,0.18); }
-
     .btn-topbar-danger {
-      background: rgba(220,38,38,0.20);
-      color: #FCA5A5;
+      background: rgba(220,38,38,0.20); color: #FCA5A5;
       border: 1px solid rgba(220,38,38,0.25);
     }
     .btn-topbar-danger:hover { background: rgba(220,38,38,0.32); }
 
-    /* ── Content ── */
-    .admin-content {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 28px 24px 64px;
-      width: 100%;
+    /* ── Body wrapper (sidebar + content) ── */
+    .admin-body {
+      display: flex;
+      flex: 1;
+      min-height: 0;
     }
+
+    /* ── Sidebar — fixed, full height ── */
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: var(--primary-dark);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      z-index: 100;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    /* Logo area di atas sidebar */
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 14px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0;
+    }
+    .sidebar-brand-icon {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .sidebar-brand-title { font-size: 13px; font-weight: 700; color: #fff; line-height: 1.2; }
+    .sidebar-brand-sub   { font-size: 10px; color: rgba(255,255,255,0.45); margin-top: 1px; }
+
+    /* Nav area scrollable */
+    .sidebar-nav {
+      flex: 1;
+      padding: 12px 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow-y: auto;
+    }
+
+    /* Footer sidebar — tombol keluar di bawah */
+    .sidebar-footer {
+      padding: 10px 10px 16px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .sidebar-section-label {
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.30);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 12px 10px 4px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.65);
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+      text-align: left;
+      width: 100%;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9); }
+    .nav-item.active {
+      background: rgba(255,255,255,0.14);
+      color: #fff;
+      font-weight: 600;
+    }
+    .nav-item.active .nav-icon { opacity: 1; }
+    .nav-icon { opacity: 0.6; flex-shrink: 0; }
+    .nav-item.active .nav-icon { opacity: 1; }
+
+    .sidebar-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.08);
+      margin: 8px 4px;
+    }
+
+    /* ── Main content — margin kiri = lebar sidebar ── */
+    .admin-content {
+      flex: 1;
+      margin-left: 220px;
+      overflow-y: auto;
+      min-height: 100vh;
+      padding: 28px 32px 64px;
+      min-width: 0;
+    }
+
+    /* Topbar disembunyikan di desktop — brand ada di sidebar */
+    .topbar { display: none; }
 
     /* ── Stats bar ── */
     .stats-grid {
@@ -283,89 +365,45 @@
       gap: 14px;
       margin-bottom: 24px;
     }
-
     .stat-card {
       background: var(--white);
       border-radius: var(--radius);
-      padding: 18px 20px;
+      padding: 16px 18px;
       box-shadow: var(--shadow);
-      display: flex;
-      align-items: center;
-      gap: 14px;
+      display: flex; align-items: center; gap: 12px;
       border: 1px solid var(--border);
     }
-
     .stat-icon-wrap {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-
     .stat-card.green .stat-icon-wrap { background: var(--green-bg); }
     .stat-card.red   .stat-icon-wrap { background: var(--red-bg);   }
     .stat-card.blue  .stat-icon-wrap { background: var(--blue-bg);  }
+    .stat-value { font-size: 24px; font-weight: 700; color: var(--text); line-height: 1.1; }
+    .stat-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-    .stat-info {}
-    .stat-value {
-      font-size: 26px;
+    /* ── Page title ── */
+    .page-title {
+      font-size: 18px;
       font-weight: 700;
       color: var(--text);
-      line-height: 1.1;
-    }
-    .stat-label {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    /* ── Tabs ── */
-    .tabs-bar {
-      display: flex;
-      gap: 2px;
       margin-bottom: 20px;
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 5px;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-    }
-
-    .tab-btn {
-      flex: 1;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 7px;
-      padding: 9px 14px;
-      font-size: 13px;
-      font-weight: 500;
-      font-family: inherit;
-      background: none;
-      border: none;
-      border-radius: var(--radius-sm);
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.15s;
-      white-space: nowrap;
+      gap: 10px;
     }
-
-    .tab-btn.active {
+    .page-title-icon {
+      width: 34px; height: 34px;
       background: var(--primary);
-      color: #FFFFFF;
-      font-weight: 600;
-      box-shadow: 0 2px 5px rgba(123,21,21,0.30);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
     }
 
-    .tab-btn:hover:not(.active) {
-      background: var(--bg);
-      color: var(--text-2);
-    }
-
+    /* Tab pane masih dipakai untuk show/hide konten */
     .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
     .tab-pane.active { display: block; }
 
     /* ── Card ── */
@@ -665,7 +703,7 @@
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: 12px;
-      overflow: hidden;
+      overflow: visible; /* jangan hidden — card-actions harus terlihat */
       display: flex;
       flex-direction: column;
       transition: box-shadow 0.18s, transform 0.18s;
@@ -709,6 +747,7 @@
       overflow: hidden;
       flex-shrink: 0;
       display: block;
+      border-radius: 12px 12px 0 0; /* rounded hanya di atas */
     }
 
     .card-photo-img {
@@ -989,18 +1028,135 @@
        RESPONSIVE
     ───────────────────────────────────────── */
     @media (max-width: 700px) {
-      .admin-content { padding: 16px 12px 48px; }
+      /* Topbar muncul di mobile */
+      .topbar {
+        display: flex;
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 200;
+        height: 52px;
+        padding: 0 14px;
+      }
+      .topbar-sub { display: none; }
+      /* Sidebar overlay di mobile */
+      .sidebar {
+        left: -220px;
+        top: 0;
+        transition: left 0.25s;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.4);
+        z-index: 150;
+      }
+      .sidebar.open { left: 0; }
+      .btn-sidebar-toggle { display: flex; }
+      /* Content tidak margin kiri di mobile */
+      .admin-content {
+        margin-left: 0;
+        margin-top: 52px;
+        padding: 18px 16px 48px;
+      }
       .stats-grid { grid-template-columns: 1fr 1fr; }
       .stats-grid .stat-card:last-child { grid-column: 1/-1; }
-      .topbar { padding: 0 14px; }
-      .topbar-sub { display: none; }
-      .tabs-bar { flex-wrap: wrap; }
-      .tab-btn  { flex: none; font-size: 12px; }
-      .card-header { padding: 14px 16px 12px; }
-      .card-body   { padding: 16px; }
-      .card-footer { padding: 12px 16px; }
-      .menu-toolbar { padding: 12px 16px 10px; }
+      .menu-grid { grid-template-columns: repeat(2,1fr); gap: 10px; padding: 12px; }
+      .menu-toolbar { padding: 10px 12px; }
     }
+
+    /* -- Modal admin (form tambah/edit) -- */
+    .admin-modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.48);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999; padding: 16px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.18s;
+    }
+    .admin-modal-overlay.open { opacity: 1; pointer-events: all; }
+    .admin-modal {
+      background: var(--white); border-radius: 14px;
+      width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+      transform: translateY(20px); transition: transform 0.18s;
+    }
+    .admin-modal-overlay.open .admin-modal { transform: translateY(0); }
+    .admin-modal-header {
+      padding: 18px 22px 14px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .admin-modal-title { font-size: 15px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .btn-modal-close {
+      width: 30px; height: 30px; border: none; background: var(--bg);
+      border-radius: 7px; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; color: var(--muted); transition: background 0.15s; flex-shrink: 0;
+    }
+    .btn-modal-close:hover { background: var(--border); color: var(--text); }
+    .admin-modal-body { padding: 18px 22px; display: flex; flex-direction: column; gap: 14px; }
+    .admin-modal-footer {
+      padding: 12px 22px 18px; display: flex; gap: 8px; justify-content: flex-end;
+      border-top: 1px solid var(--border);
+    }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-grid-2 .field-full { grid-column: 1/-1; }
+    .field-label-sm { font-size: 11px; font-weight: 600; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 5px; display: block; }
+    .field-input-sm {
+      width: 100%; padding: 9px 12px; border: 1.5px solid var(--border-2); border-radius: var(--radius-sm);
+      font-size: 13px; font-family: inherit; color: var(--text); outline: none;
+      transition: border-color 0.15s; background: var(--white);
+    }
+    .field-input-sm:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(123,21,21,0.08); }
+    select.field-input-sm { cursor: pointer; }
+    textarea.field-input-sm { resize: vertical; line-height: 1.5; }
+    .card-actions {
+      display: flex; gap: 6px; padding: 8px 10px 10px;
+      border-top: 1px solid var(--border); background: #FAFAFA;
+      border-radius: 0 0 12px 12px; /* rounded hanya di bawah */
+    }
+    .btn-card-action {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 4px;
+      padding: 6px 4px; border-radius: var(--radius-sm);
+      font-size: 11px; font-weight: 600; font-family: inherit;
+      cursor: pointer; border: 1px solid; transition: all 0.15s;
+    }
+    .btn-card-edit   { color: var(--blue); border-color: #BFDBFE; background: var(--blue-bg); }
+    .btn-card-edit:hover   { background: #DBEAFE; }
+    .btn-card-delete { color: var(--red); border-color: #FCA5A5; background: var(--red-bg); }
+    .btn-card-delete:hover { background: #FEE2E2; }
+    .kat-manager-list { display: flex; flex-direction: column; gap: 8px; }
+    .kat-mgr-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 8px; transition: background 0.12s;
+    }
+    .kat-mgr-row:hover { background: #EBEBF0; }
+    .kat-mgr-icon { font-size: 20px; width: 32px; text-align: center; flex-shrink: 0; }
+    .kat-mgr-info { flex: 1; min-width: 0; }
+    .kat-mgr-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .kat-mgr-id   { font-size: 10px; color: var(--muted); font-family: monospace; }
+    .kat-mgr-count {
+      font-size: 10px; font-weight: 600; background: var(--white);
+      border: 1px solid var(--border-2); border-radius: 20px;
+      padding: 2px 8px; color: var(--muted); flex-shrink: 0;
+    }
+    .btn-kat-del {
+      width: 28px; height: 28px; border: 1px solid #FCA5A5; background: var(--red-bg);
+      color: var(--red); border-radius: 6px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .btn-kat-del:hover { background: #FEE2E2; }
+    .kat-mgr-row.builtin .btn-kat-del { opacity: 0.25; pointer-events: none; }
+    .inline-confirm {
+      display: none; gap: 8px; align-items: center;
+      margin-top: 6px; padding: 8px 12px;
+      background: #FEF2F2; border: 1px solid #FCA5A5;
+      border-radius: 6px; font-size: 12px; color: var(--red);
+    }
+    .inline-confirm.visible { display: flex; }
+    .inline-confirm button {
+      padding: 4px 10px; border-radius: 5px; font-size: 11px; font-weight: 700;
+      font-family: inherit; cursor: pointer; border: 1px solid;
+    }
+    .btn-confirm-yes { background: var(--red); color: #fff; border-color: var(--red); }
+    .btn-confirm-no  { background: var(--white); color: var(--muted); border-color: var(--border-2); }
+
   </style>
 </head>
 <body>
@@ -1054,11 +1210,11 @@
   <!-- Topbar -->
   <header class="topbar">
     <div class="topbar-left">
+      <button class="btn-sidebar-toggle" id="btnSidebarToggle" aria-label="Menu">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
       <div class="topbar-logo">
-        <!-- Store icon -->
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
-        </svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       </div>
       <div>
         <div class="topbar-title">Kedai Kenshin</div>
@@ -1067,46 +1223,118 @@
     </div>
     <div class="topbar-right">
       <a href="../index.html" target="_blank" class="btn-topbar btn-topbar-ghost">
-        <!-- External link -->
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         Lihat Website
       </a>
       <button class="btn-topbar btn-topbar-danger" id="btnLogout">
-        <!-- Logout icon -->
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         Keluar
       </button>
     </div>
   </header>
 
-  <!-- Main -->
-  <main class="admin-content">
+  <!-- Body: Sidebar + Content -->
+  <div class="admin-body">
+
+    <!-- ── SIDEBAR ── -->
+    <nav class="sidebar" id="adminSidebar">
+
+      <!-- Brand -->
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div>
+          <div class="sidebar-brand-title">Kedai Kenshin</div>
+          <div class="sidebar-brand-sub">Admin Dashboard</div>
+        </div>
+      </div>
+
+      <!-- Nav items -->
+      <div class="sidebar-nav">
+
+        <span class="sidebar-section-label">Dashboard</span>
+
+        <button class="nav-item active" data-tab="settings">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </span>
+          Pengaturan
+        </button>
+
+        <div class="sidebar-divider"></div>
+        <span class="sidebar-section-label">Menu</span>
+
+        <button class="nav-item" data-tab="menu">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </span>
+          Editor Menu
+        </button>
+
+        <button class="nav-item" data-tab="kategori">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+          </span>
+          Kelola Kategori
+        </button>
+
+        <div class="sidebar-divider"></div>
+        <span class="sidebar-section-label">Sistem</span>
+
+        <button class="nav-item" data-tab="security">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </span>
+          Keamanan
+        </button>
+
+      </div><!-- /sidebar-nav -->
+
+      <!-- Footer sidebar — Lihat Website + Keluar -->
+      <div class="sidebar-footer">
+        <a href="../index.html" target="_blank" class="nav-item" style="text-decoration:none;">
+          <span class="nav-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </span>
+          Lihat Website
+        </a>
+        <button class="nav-item" id="btnLogout"
+                style="color:#FCA5A5;background:rgba(220,38,38,0.12);border:1px solid rgba(220,38,38,0.20);">
+          <span class="nav-icon" style="opacity:1;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FCA5A5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </span>
+          Keluar
+        </button>
+      </div>
+
+    </nav>
+
+    <!-- ── MAIN CONTENT ── -->
+    <main class="admin-content" id="adminMainContent">
 
     <!-- Stats -->
     <div class="stats-grid" id="statsBar">
       <div class="stat-card green">
         <div class="stat-icon-wrap">
-          <!-- Check circle -->
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         </div>
         <div class="stat-info">
           <div class="stat-value" id="statTersedia">—</div>
-          <div class="stat-label">Menu Tersedia</div>
+          <div class="stat-label">Tersedia</div>
         </div>
       </div>
       <div class="stat-card red">
         <div class="stat-icon-wrap">
-          <!-- X circle -->
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
         </div>
         <div class="stat-info">
           <div class="stat-value" id="statHabis">—</div>
-          <div class="stat-label">Menu Habis</div>
+          <div class="stat-label">Habis</div>
         </div>
       </div>
       <div class="stat-card blue">
         <div class="stat-icon-wrap">
-          <!-- Grid / menu icon -->
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
         </div>
         <div class="stat-info">
@@ -1114,22 +1342,6 @@
           <div class="stat-label">Total Menu</div>
         </div>
       </div>
-    </div>
-
-    <!-- Tabs -->
-    <div class="tabs-bar">
-      <button class="tab-btn active" data-tab="settings">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        Pengaturan
-      </button>
-      <button class="tab-btn" data-tab="menu">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-        Editor Menu
-      </button>
-      <button class="tab-btn" data-tab="security">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        Keamanan
-      </button>
     </div>
 
     <!-- ══ TAB: PENGATURAN ══ -->
@@ -1231,6 +1443,10 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
             Simpan Perubahan
           </button>
+          <button class="btn-primary" id="btnAddMenu" style="background:var(--green);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tambah Menu
+          </button>
         </div>
 
         <!-- Grid -->
@@ -1316,7 +1532,186 @@
 
     </div><!-- /tab-security -->
 
-  </main>
+    <!-- ══ TAB: KATEGORI ══ -->
+    <div class="tab-pane" id="tab-kategori">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+          </div>
+          <div class="card-header-text">
+            <div class="card-title">Kelola Kategori</div>
+            <div class="card-desc">Tambah kategori baru atau hapus kategori yang tidak digunakan.</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="kat-manager-list" id="katManagerList">
+            <p style="color:var(--muted);font-size:13px;">Memuat...</p>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn-primary" id="btnAddKategori">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tambah Kategori
+          </button>
+        </div>
+      </div>
+    </div><!-- /tab-kategori -->
+
+  </main><!-- /admin-content -->
+  </div><!-- /admin-body -->
+
+</div><!-- /adminScreen -->
+
+<!-- ═══════════════════════════════════════
+     MODAL FORM TAMBAH / EDIT MENU
+═══════════════════════════════════════ -->
+<div class="admin-modal-overlay" id="modalMenu">
+  <div class="admin-modal">
+    <div class="admin-modal-header">
+      <div class="admin-modal-title" id="modalMenuTitle">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Tambah Menu
+      </div>
+      <button class="btn-modal-close" id="btnCloseModalMenu">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="admin-modal-body">
+      <input type="hidden" id="formMenuId" />
+      <div class="form-grid-2">
+        <div class="field-full">
+          <label class="field-label-sm">Nama Menu *</label>
+          <input type="text" id="formMenuName" class="field-input-sm" placeholder="Contoh: Nasi Goreng Spesial" />
+        </div>
+        <div>
+          <label class="field-label-sm">Kategori *</label>
+          <select id="formMenuKategori" class="field-input-sm">
+          </select>
+        </div>
+        <div>
+          <label class="field-label-sm">Harga (¥) *</label>
+          <input type="number" id="formMenuHarga" class="field-input-sm" placeholder="0" min="0" />
+        </div>
+        <div>
+          <label class="field-label-sm">Status</label>
+          <select id="formMenuStatus" class="field-input-sm">
+            <option value="tersedia">✅ Tersedia</option>
+            <option value="habis">❌ Habis</option>
+          </select>
+        </div>
+        <div class="field-full">
+          <label class="field-label-sm">Deskripsi</label>
+          <textarea id="formMenuDesc" class="field-input-sm" rows="3" placeholder="Deskripsi singkat menu..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button class="btn-secondary" id="btnCancelMenu">Batal</button>
+      <button class="btn-primary" id="btnSaveMenu">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Simpan
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     MODAL EDIT KATEGORI
+═══════════════════════════════════════ -->
+<div class="admin-modal-overlay" id="modalKatEdit">
+  <div class="admin-modal">
+    <div class="admin-modal-header">
+      <div class="admin-modal-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Edit Kategori
+      </div>
+      <button class="btn-modal-close" id="btnCloseModalKatEdit">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="admin-modal-body">
+      <input type="hidden" id="formKatEditId" />
+      <div class="form-grid-2">
+        <div class="field-full">
+          <label class="field-label-sm">Nama Kategori *</label>
+          <input type="text" id="formKatEditName" class="field-input-sm" placeholder="Contoh: Indonesian Foods" />
+        </div>
+        <div>
+          <label class="field-label-sm">Icon (emoji)</label>
+          <input type="text" id="formKatEditIcon" class="field-input-sm" placeholder="🍽️" maxlength="4" />
+        </div>
+        <div>
+          <label class="field-label-sm">Nama Jepang (opsional)</label>
+          <input type="text" id="formKatEditJp" class="field-input-sm" placeholder="インドネシア料理" />
+        </div>
+        <div class="field-full">
+          <label class="field-label-sm">ID (slug) — tidak bisa diubah</label>
+          <input type="text" id="formKatEditIdShow" class="field-input-sm"
+                 style="background:var(--bg);color:var(--muted);cursor:not-allowed;" readonly />
+        </div>
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button class="btn-secondary" id="btnCancelKatEdit">Batal</button>
+      <button class="btn-primary" id="btnSaveKatEdit">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+          <polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+        </svg>
+        Simpan Perubahan
+      </button>
+    </div>
+  </div>
+</div>
+<div class="admin-modal-overlay" id="modalKategori">
+  <div class="admin-modal">
+    <div class="admin-modal-header">
+      <div class="admin-modal-title">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Tambah Kategori
+      </div>
+      <button class="btn-modal-close" id="btnCloseModalKat">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="admin-modal-body">
+      <div class="form-grid-2">
+        <div>
+          <label class="field-label-sm">Nama Kategori *</label>
+          <input type="text" id="formKatName" class="field-input-sm" placeholder="Contoh: Indonesian Foods" />
+        </div>
+        <div>
+          <label class="field-label-sm">ID (slug) *</label>
+          <input type="text" id="formKatId" class="field-input-sm" placeholder="indonesian-foods" />
+          <p style="font-size:10px;color:var(--muted);margin-top:4px;">Huruf kecil, gunakan tanda hubung</p>
+        </div>
+        <div>
+          <label class="field-label-sm">Icon (emoji)</label>
+          <input type="text" id="formKatIcon" class="field-input-sm" placeholder="🍽️" maxlength="4" />
+        </div>
+        <div>
+          <label class="field-label-sm">Nama Jepang (opsional)</label>
+          <input type="text" id="formKatJp" class="field-input-sm" placeholder="インドネシア料理" />
+        </div>
+      </div>
+    </div>
+    <div class="admin-modal-footer">
+      <button class="btn-secondary" id="btnCancelKat">Batal</button>
+      <button class="btn-primary" id="btnSaveKat">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Simpan Kategori
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════════════════════════════════
@@ -1342,9 +1737,12 @@ const SK_MENU     = 'kenshin_menu_overrides';
 const SK_SESSION  = 'kenshin_admin_session';
 
 // ── API endpoints (relatif dari admin/) ───────────────────
-const API_AUTH = 'auth.php';
-const API_LOAD = '../api/load.php';
-const API_SAVE = '../api/save.php';
+const API_AUTH   = 'auth.php';
+const API_LOAD   = '../api/load.php';
+const API_SAVE   = '../api/save.php';
+const API_MENU   = '../api/menu-action';
+const API_KAT    = '../api/kategori-action';
+const API_UPLOAD = '../api/upload-image';
 
 // ── State ─────────────────────────────────────────────────
 let useServer = false;
@@ -1436,16 +1834,30 @@ async function showAdminScreen() {
   await loadSettings();
   updateStats();
   updateSessionInfo();
+  // Render grid langsung karena tab Editor Menu aktif by default
+  renderMenuGrid();
 }
 
-// ── TABS ──────────────────────────────────────────────────
-document.querySelectorAll('.tab-btn').forEach(btn => {
+// ── SIDEBAR TOGGLE (mobile) ───────────────────────────────
+document.getElementById('btnSidebarToggle')?.addEventListener('click', () => {
+  document.getElementById('adminSidebar').classList.toggle('open');
+});
+// Tutup sidebar saat klik di luar (mobile)
+document.getElementById('adminMainContent')?.addEventListener('click', () => {
+  document.getElementById('adminSidebar').classList.remove('open');
+});
+
+// ── NAVIGASI SIDEBAR ──────────────────────────────────────
+document.querySelectorAll('.nav-item[data-tab]').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-    if (btn.dataset.tab === 'menu') renderMenuTable();
+    if (btn.dataset.tab === 'menu')     renderMenuTable();
+    if (btn.dataset.tab === 'kategori') renderKatManager();
+    // Tutup sidebar di mobile setelah pilih menu
+    document.getElementById('adminSidebar').classList.remove('open');
   });
 });
 
@@ -1453,14 +1865,16 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 async function loadSettings() {
   let settings  = {};
   let overrides = {};
+  let customKat = [];
 
   if (useServer) {
     try {
       const res  = await fetch(API_LOAD, { cache: 'no-store' });
       const data = await res.json();
       if (res.ok && data.success) {
-        settings  = data.settings       || {};
-        overrides = data.menu_overrides || {};
+        settings  = data.settings        || {};
+        overrides = data.menu_overrides  || {};
+        customKat = data.custom_kategori || [];
       }
     } catch { settings = null; }
   }
@@ -1468,29 +1882,78 @@ async function loadSettings() {
   if (!useServer || settings === null) {
     settings  = JSON.parse(localStorage.getItem(SK_SETTINGS) || '{}');
     overrides = JSON.parse(localStorage.getItem(SK_MENU)     || '{}');
+    customKat = [];
   }
 
+  // ── Isi form settings ─────────────────────────────────
   document.getElementById('inputWA').value      = settings.wa_number   || '';
   document.getElementById('inputAlamat').value  = settings.alamat      || '';
   document.getElementById('toggleBuka').checked = settings.status_buka !== false;
 
-  // Terapkan override ke salinan lokal adminMenuData
+  // ── Merge custom_kategori ke adminKategoriData ────────
+  customKat.forEach(ck => {
+    if (!adminKategoriData.find(k => k.id === ck.id)) {
+      adminKategoriData.push(ck);
+    }
+  });
+
+  // ── Terapkan menu_overrides ke adminMenuData ──────────
   Object.entries(overrides || {}).forEach(([id, ov]) => {
-    const item = adminMenuData.find(m => m.id === parseInt(id));
-    if (item && ov) {
-      if (ov.harga  != null) item.harga  = ov.harga;
-      if (ov.status != null) item.status = ov.status;
+    if (!ov) return;
+    const numId   = parseInt(id);
+    const existing = adminMenuData.find(m => m.id === numId);
+
+    // Menu dihapus (soft-delete) — hapus dari adminMenuData
+    if (ov._deleted) {
+      const idx = adminMenuData.findIndex(m => m.id === numId);
+      if (idx !== -1) adminMenuData.splice(idx, 1);
+      return;
+    }
+
+    // Menu custom (ditambahkan lewat admin)
+    if (ov._isCustom) {
+      if (!existing) {
+        adminMenuData.push({
+          id:       numId,
+          name:     ov.name     || 'Menu Baru',
+          kategori: ov.kategori || 'specials',
+          harga:    ov.harga    || 0,
+          desc:     ov.desc     || '',
+          img:      ov.img      || null,
+          status:   ov.status   || 'tersedia',
+          _isCustom: true,
+        });
+      } else {
+        // Update field jika menu custom sudah ada (misalnya diedit ulang)
+        if (ov.name)     existing.name     = ov.name;
+        if (ov.kategori) existing.kategori = ov.kategori;
+        if (ov.harga  != null) existing.harga  = ov.harga;
+        if (ov.desc   != null) existing.desc   = ov.desc;
+        if (ov.img    != null) existing.img    = ov.img;
+        if (ov.status != null) existing.status = ov.status;
+      }
+      return;
+    }
+
+    // Override menu statis (harga, status, img, nama)
+    if (existing) {
+      if (ov.harga  != null) existing.harga  = ov.harga;
+      if (ov.status != null) existing.status = ov.status;
+      if (ov.img    != null) existing.img    = ov.img;
+      if (ov.name   != null) existing.name   = ov.name;
+      if (ov.desc   != null) existing.desc   = ov.desc;
     }
   });
 }
 
 // ── STATS ─────────────────────────────────────────────────
 function updateStats() {
-  const tersedia = adminMenuData.filter(m => m.status === 'tersedia').length;
-  const habis    = adminMenuData.filter(m => m.status === 'habis').length;
+  const active   = adminMenuData.filter(m => !m._deleted);
+  const tersedia = active.filter(m => m.status === 'tersedia').length;
+  const habis    = active.filter(m => m.status === 'habis').length;
   document.getElementById('statTersedia').textContent = tersedia;
   document.getElementById('statHabis').textContent    = habis;
-  document.getElementById('statTotal').textContent    = adminMenuData.length;
+  document.getElementById('statTotal').textContent    = active.length;
 }
 
 function updateSessionInfo() {
@@ -1558,7 +2021,7 @@ function populateKatFilter() {
   const current = sel.value;
   while (sel.options.length > 1) sel.remove(1);
   adminKategoriData.filter(k => k.id !== 'semua').forEach(k => {
-    const count = adminMenuData.filter(m => m.kategori === k.id).length;
+    const count = adminMenuData.filter(m => m.kategori === k.id && !m._deleted).length;
     if (!count) return;
     const opt = document.createElement('option');
     opt.value = k.id;
@@ -1568,15 +2031,15 @@ function populateKatFilter() {
   sel.value = current;
 }
 
-function renderMenuTable() {
-  populateKatFilter();
-  filterAndRender();
-}
+// Alias — dipanggil dari tab click
+function renderMenuTable()  { renderMenuGrid(); }
+function renderMenuGrid()   { populateKatFilter(); filterAndRender(); }
 
 function filterAndRender() {
   const search   = document.getElementById('menuSearch').value.toLowerCase().trim();
   const kat      = document.getElementById('menuFilterKat').value;
   const filtered = adminMenuData.filter(item =>
+    !item._deleted &&
     (kat === 'semua' || item.kategori === kat) &&
     (!search || item.name.toLowerCase().includes(search))
   );
@@ -1600,22 +2063,20 @@ function filterAndRender() {
   }
 
   filtered.forEach(item => {
-    const katObj  = adminKategoriData.find(k => k.id === item.kategori) || {};
-    const katName = katObj.name || item.kategori;
-    const imgSrc  = item.img ? `../${item.img}` : null;
+    const katObj    = adminKategoriData.find(k => k.id === item.kategori) || {};
+    const katName   = katObj.name || item.kategori;
+    const imgSrc    = item.img ? `../${item.img}` : null;
     const isChanged = !!pendingChanges[item.id];
-    const statusClass = item.status === 'tersedia' ? 'tersedia' : 'habis';
-    const statusLabel = item.status === 'tersedia' ? 'Tersedia' : 'Habis';
+    const stClass   = item.status === 'tersedia' ? 'tersedia' : 'habis';
+    const stLabel   = item.status === 'tersedia' ? 'Tersedia' : 'Habis';
 
     const card = document.createElement('div');
     card.className = 'menu-edit-card' + (isChanged ? ' changed' : '');
     card.dataset.id = item.id;
 
     card.innerHTML = `
-      <!-- Badge diubah -->
       <span class="card-changed-dot">Diubah</span>
 
-      <!-- Foto -->
       <label class="card-photo-wrap" title="Klik untuk upload foto">
         ${imgSrc
           ? `<img class="card-photo-img" id="cimg-${item.id}" src="${imgSrc}" alt="${item.name}"
@@ -1639,85 +2100,80 @@ function filterAndRender() {
           </svg>
           <span>Upload Foto</span>
         </div>
-        <div class="card-upload-spinner" id="cspinner-${item.id}">
-          <div class="spinner-ring"></div>
-        </div>
+        <div class="card-upload-spinner" id="cspinner-${item.id}"><div class="spinner-ring"></div></div>
         <input type="file" class="card-upload-input" accept="image/jpeg,image/png,image/webp,image/gif"
                data-id="${item.id}" />
       </label>
 
-      <!-- Body -->
       <div class="card-body-edit">
         <div>
           <div class="card-item-name" title="${item.name}">${item.name}</div>
           <div class="card-item-kat">${katName}</div>
         </div>
-
         <div class="card-divider"></div>
-
-        <!-- Harga -->
         <div class="card-price-row">
           <span class="card-price-prefix">¥</span>
           <input type="number" class="card-price-input" value="${item.harga}"
                  min="0" step="10" data-id="${item.id}" />
         </div>
+        <button class="card-status-btn ${stClass}" data-id="${item.id}">
+          <span class="dot"></span>${stLabel}
+        </button>
+      </div>
 
-        <!-- Status toggle -->
-        <button class="card-status-btn ${statusClass}" data-id="${item.id}">
-          <span class="dot"></span>${statusLabel}
+      <div class="card-actions">
+        <button class="btn-card-action btn-card-edit" data-id="${item.id}">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+          Edit
+        </button>
+        <button class="btn-card-action btn-card-delete" data-id="${item.id}">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14H6L5 6"/>
+            <path d="M10 11v6M14 11v6"/>
+            <path d="M9 6V4h6v2"/>
+          </svg>
+          Hapus
         </button>
       </div>
     `;
 
-    // ── Upload foto ──────────────────────────────────────
-    card.querySelector('.card-upload-input').addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      if (file.size > 5 * 1024 * 1024) { alert('Ukuran file maksimal 5MB.'); e.target.value = ''; return; }
-
+    // Upload foto
+    card.querySelector('.card-upload-input').addEventListener('change', async e => {
+      const file = e.target.files[0]; if (!file) return;
+      if (file.size > 5*1024*1024) { alert('Maksimal 5MB.'); e.target.value=''; return; }
       const spinner = document.getElementById(`cspinner-${item.id}`);
       spinner.classList.add('active');
-
-      const fd = new FormData();
-      fd.append('menu_id', item.id);
-      fd.append('foto', file);
-
+      const fd = new FormData(); fd.append('menu_id', item.id); fd.append('foto', file);
       try {
-        const res    = await fetch('../api/upload-image', { method: 'POST', body: fd });
-        const result = await res.json();
-
-        if (result.success) {
-          item.img = result.img;
+        const res = await fetch(API_UPLOAD, { method: 'POST', body: fd });
+        const r   = await res.json();
+        if (r.success) {
+          item.img = r.img;
           const emptyEl = document.getElementById(`cempty-${item.id}`);
-          let   imgEl   = document.getElementById(`cimg-${item.id}`);
-
+          let imgEl = document.getElementById(`cimg-${item.id}`);
           if (!imgEl) {
             imgEl = document.createElement('img');
-            imgEl.id        = `cimg-${item.id}`;
-            imgEl.className = 'card-photo-img';
-            imgEl.alt       = item.name;
+            imgEl.id = `cimg-${item.id}`; imgEl.className = 'card-photo-img'; imgEl.alt = item.name;
             card.querySelector('.card-photo-wrap').insertBefore(imgEl, emptyEl);
           }
-          imgEl.src           = `../${result.img}?t=${Date.now()}`;
-          imgEl.style.display = 'block';
+          imgEl.src = `../${r.img}?t=${Date.now()}`; imgEl.style.display = 'block';
           if (emptyEl) emptyEl.style.display = 'none';
-
           markChanged(item.id, card);
           if (!pendingChanges[item.id]) pendingChanges[item.id] = {};
-          pendingChanges[item.id].img = result.img;
+          pendingChanges[item.id].img = r.img;
           showMenuMsg('✓ Foto berhasil diupload', 'success');
-        } else {
-          alert('Upload gagal: ' + (result.message || 'Error tidak diketahui'));
-        }
-      } catch {
-        alert('Gagal terhubung ke server.');
-      } finally {
-        spinner.classList.remove('active');
-        e.target.value = '';
-      }
+        } else alert('Upload gagal: ' + (r.message || 'Error'));
+      } catch { alert('Gagal terhubung ke server.'); }
+      finally { spinner.classList.remove('active'); e.target.value = ''; }
     });
 
-    // ── Edit harga ───────────────────────────────────────
+    // Edit harga
     card.querySelector('.card-price-input').addEventListener('input', e => {
       const id = parseInt(e.target.dataset.id);
       if (!pendingChanges[id]) pendingChanges[id] = {};
@@ -1725,7 +2181,7 @@ function filterAndRender() {
       markChanged(id, card);
     });
 
-    // ── Toggle status ────────────────────────────────────
+    // Toggle status
     card.querySelector('.card-status-btn').addEventListener('click', e => {
       const id    = parseInt(e.currentTarget.dataset.id);
       const mItem = adminMenuData.find(m => m.id === id);
@@ -1738,13 +2194,24 @@ function filterAndRender() {
       markChanged(id, card);
     });
 
+    // Tombol Edit
+    card.querySelector('.btn-card-edit').addEventListener('click', e => {
+      e.stopPropagation();
+      openMenuModal(item);
+    });
+
+    // Tombol Hapus
+    card.querySelector('.btn-card-delete').addEventListener('click', e => {
+      e.stopPropagation();
+      if (!confirm(`Hapus "${item.name}"?\nAksi ini tidak bisa dibatalkan.`)) return;
+      deleteMenu(item.id, card);
+    });
+
     grid.appendChild(card);
   });
 }
 
-function markChanged(id, card) {
-  card.classList.add('changed');
-}
+function markChanged(id, card) { card.classList.add('changed'); }
 
 document.getElementById('menuSearch').addEventListener('input', filterAndRender);
 document.getElementById('menuFilterKat').addEventListener('change', filterAndRender);
@@ -1818,6 +2285,341 @@ document.getElementById('btnSaveAllMenu').addEventListener('click', async () => 
   msg.textContent = 'Tersimpan secara lokal.';
   msg.className = 'save-msg success';
   finalize();
+});
+
+// ════════════════════════════════════════════════════════════
+//  TAMBAH / EDIT MENU — Modal
+// ════════════════════════════════════════════════════════════
+
+document.getElementById('btnAddMenu').addEventListener('click', () => openMenuModal(null));
+
+function openMenuModal(item) {
+  const isEdit = !!item;
+
+  // Title
+  document.getElementById('modalMenuTitle').innerHTML = isEdit
+    ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Edit Menu`
+    : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Tambah Menu`;
+
+  // Isi field
+  document.getElementById('formMenuId').value     = item ? item.id    : '';
+  document.getElementById('formMenuName').value   = item ? item.name  : '';
+  document.getElementById('formMenuHarga').value  = item ? item.harga : '';
+  document.getElementById('formMenuDesc').value   = item ? (item.desc || '') : '';
+  document.getElementById('formMenuStatus').value = item ? (item.status || 'tersedia') : 'tersedia';
+
+  // Isi dropdown kategori
+  const sel = document.getElementById('formMenuKategori');
+  sel.innerHTML = '';
+  adminKategoriData.filter(k => k.id !== 'semua').forEach(k => {
+    const o = document.createElement('option');
+    o.value = k.id;
+    o.textContent = k.name;
+    sel.appendChild(o);
+  });
+  if (item) sel.value = item.kategori;
+
+  document.getElementById('modalMenu').classList.add('open');
+}
+
+function closeMenuModal() {
+  document.getElementById('modalMenu').classList.remove('open');
+}
+
+document.getElementById('btnCloseModalMenu').addEventListener('click', closeMenuModal);
+document.getElementById('btnCancelMenu').addEventListener('click', closeMenuModal);
+document.getElementById('modalMenu').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalMenu')) closeMenuModal();
+});
+
+document.getElementById('btnSaveMenu').addEventListener('click', async () => {
+  const id       = document.getElementById('formMenuId').value;
+  const name     = document.getElementById('formMenuName').value.trim();
+  const kategori = document.getElementById('formMenuKategori').value;
+  const harga    = parseInt(document.getElementById('formMenuHarga').value) || 0;
+  const desc     = document.getElementById('formMenuDesc').value.trim();
+  const status   = document.getElementById('formMenuStatus').value;
+
+  if (!name)     { alert('Nama menu wajib diisi.'); return; }
+  if (!kategori) { alert('Pilih kategori.'); return; }
+
+  const btn    = document.getElementById('btnSaveMenu');
+  btn.disabled = true;
+  btn.textContent = 'Menyimpan...';
+
+  const action  = id ? 'edit' : 'add';
+  const payload = { action, data: { id: id || undefined, name, kategori, harga, desc, status } };
+
+  if (useServer) {
+    try {
+      const res = await fetch(API_MENU, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const r = await res.json();
+      if (r.success) {
+        if (action === 'add') {
+          adminMenuData.push({ id: parseInt(r.id), name, kategori, harga, desc, status, img: null, _isCustom: true });
+        } else {
+          const it = adminMenuData.find(m => m.id === parseInt(id));
+          if (it) Object.assign(it, { name, kategori, harga, desc, status });
+        }
+        closeMenuModal();
+        renderMenuGrid();
+        updateStats();
+        showMenuMsg(r.message || 'Tersimpan.', 'success');
+      } else {
+        alert(r.message || 'Gagal menyimpan.');
+      }
+    } catch { alert('Gagal terhubung ke server.'); }
+    finally { btn.disabled = false; btn.textContent = 'Simpan'; }
+    return;
+  }
+
+  // Fallback localStorage
+  const ex = JSON.parse(localStorage.getItem(SK_MENU) || '{}');
+  if (action === 'add') {
+    const customIds = Object.keys(ex).map(k => parseInt(k)).filter(n => n >= 1000);
+    const newId = Math.max(999, ...customIds) + 1;
+    adminMenuData.push({ id: newId, name, kategori, harga, desc, status, img: null, _isCustom: true });
+    ex[String(newId)] = { _isCustom: true, name, kategori, harga, desc, status, img: null };
+  } else {
+    const it = adminMenuData.find(m => m.id === parseInt(id));
+    if (it) Object.assign(it, { name, kategori, harga, desc, status });
+    ex[String(id)] = { ...(ex[String(id)] || {}), name, kategori, harga, desc, status };
+  }
+  localStorage.setItem(SK_MENU, JSON.stringify(ex));
+  btn.disabled = false;
+  btn.textContent = 'Simpan';
+  closeMenuModal();
+  renderMenuGrid();
+  updateStats();
+  showMenuMsg('Tersimpan secara lokal.', 'success');
+});
+
+// ── HAPUS MENU ────────────────────────────────────────────
+async function deleteMenu(id, card) {
+  if (useServer) {
+    try {
+      const res = await fetch(API_MENU, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete', data: { id } }),
+      });
+      const r = await res.json();
+      if (!r.success) { alert(r.message || 'Gagal menghapus.'); return; }
+    } catch { alert('Gagal terhubung ke server.'); return; }
+  } else {
+    const ex = JSON.parse(localStorage.getItem(SK_MENU) || '{}');
+    ex[String(id)] = { ...(ex[String(id)] || {}), _deleted: true };
+    localStorage.setItem(SK_MENU, JSON.stringify(ex));
+  }
+  const idx = adminMenuData.findIndex(m => m.id === parseInt(id));
+  if (idx !== -1) adminMenuData.splice(idx, 1);
+  card.style.transition = 'opacity 0.2s, transform 0.2s';
+  card.style.opacity = '0';
+  card.style.transform = 'scale(0.92)';
+  setTimeout(() => { card.remove(); updateStats(); }, 220);
+  showMenuMsg('Menu berhasil dihapus.', 'success');
+}
+
+// ════════════════════════════════════════════════════════════
+//  KATEGORI MANAGER
+// ════════════════════════════════════════════════════════════
+
+const BUILTIN_KAT_IDS = new Set((typeof kategoriData !== 'undefined' ? kategoriData : []).map(k => k.id));
+
+function renderKatManager() {
+  const list = document.getElementById('katManagerList');
+  list.innerHTML = '';
+  const kats = adminKategoriData.filter(k => k.id !== 'semua');
+  if (!kats.length) {
+    list.innerHTML = '<p style="color:var(--muted);font-size:13px;">Belum ada kategori.</p>';
+    return;
+  }
+  kats.forEach(kat => {
+    const count   = adminMenuData.filter(m => m.kategori === kat.id && !m._deleted).length;
+    const builtin = BUILTIN_KAT_IDS.has(kat.id);
+    // Kategori builtin boleh dihapus selama tidak ada menu yang pakai
+    const canDelete = !builtin || count === 0;
+
+    const row = document.createElement('div');
+    row.className = 'kat-mgr-row';
+    row.innerHTML = `
+      <div class="kat-mgr-icon">${kat.icon || '🍽️'}</div>
+      <div class="kat-mgr-info">
+        <div class="kat-mgr-name">${kat.name}</div>
+        <div class="kat-mgr-id">${kat.id}${builtin ? ' · <span style="color:var(--amber);font-size:9px;font-weight:700;">BAWAAN</span>' : ''}</div>
+      </div>
+      <span class="kat-mgr-count">${count} menu</span>
+      <button class="btn-card-action btn-card-edit" style="flex:none;padding:6px 10px;" data-id="${kat.id}" title="Edit kategori">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+        Edit
+      </button>
+      <button class="btn-kat-del" title="${canDelete ? 'Hapus kategori' : 'Tidak bisa dihapus — masih ada ' + count + ' menu'}"
+              data-id="${kat.id}" ${canDelete ? '' : 'disabled style="opacity:0.3;cursor:not-allowed;"'}>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+          <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+        </svg>
+      </button>
+    `;
+
+    // Edit kategori
+    row.querySelector('.btn-card-edit').addEventListener('click', () => {
+      openKatEditModal(kat);
+    });
+
+    // Hapus kategori
+    if (canDelete) {
+      row.querySelector('.btn-kat-del').addEventListener('click', () => {
+        if (!confirm(`Hapus kategori "${kat.name}"?\n\nKategori bisa dihapus karena tidak ada menu yang menggunakannya.`)) return;
+        deleteKategori(kat.id, row);
+      });
+    }
+
+    list.appendChild(row);
+  });
+}
+
+document.getElementById('btnAddKategori').addEventListener('click', () => {
+  ['formKatName', 'formKatId', 'formKatIcon', 'formKatJp'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.value = ''; delete el.dataset.manual; }
+  });
+  document.getElementById('modalKategori').classList.add('open');
+});
+
+document.getElementById('formKatName').addEventListener('input', e => {
+  const idField = document.getElementById('formKatId');
+  if (!idField.dataset.manual) {
+    idField.value = e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  }
+});
+document.getElementById('formKatId').addEventListener('input', e => {
+  e.target.dataset.manual = e.target.value ? '1' : '';
+});
+
+function closeKatModal() { document.getElementById('modalKategori').classList.remove('open'); }
+document.getElementById('btnCloseModalKat').addEventListener('click', closeKatModal);
+document.getElementById('btnCancelKat').addEventListener('click', closeKatModal);
+document.getElementById('modalKategori').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalKategori')) closeKatModal();
+});
+
+document.getElementById('btnSaveKat').addEventListener('click', async () => {
+  const name = document.getElementById('formKatName').value.trim();
+  const id   = document.getElementById('formKatId').value.trim().toLowerCase().replace(/\s+/g, '-');
+  const icon = document.getElementById('formKatIcon').value.trim() || '🍽️';
+  const jp   = document.getElementById('formKatJp').value.trim();
+
+  if (!name) { alert('Nama kategori wajib diisi.'); return; }
+  if (!id)   { alert('ID kategori wajib diisi.'); return; }
+  if (adminKategoriData.find(k => k.id === id)) { alert('ID sudah ada, gunakan ID lain.'); return; }
+
+  const btn = document.getElementById('btnSaveKat');
+  btn.disabled = true; btn.textContent = 'Menyimpan...';
+
+  if (useServer) {
+    try {
+      const res = await fetch(API_KAT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'add', data: { id, name, jp, icon } }),
+      });
+      const r = await res.json();
+      if (r.success) {
+        adminKategoriData.push({ id, name, jp, icon });
+        closeKatModal(); renderKatManager(); populateKatFilter();
+        showMenuMsg('Kategori berhasil ditambahkan!', 'success');
+      } else alert(r.message || 'Gagal.');
+    } catch { alert('Gagal terhubung ke server.'); }
+    finally { btn.disabled = false; btn.textContent = 'Simpan Kategori'; }
+    return;
+  }
+  adminKategoriData.push({ id, name, jp, icon });
+  btn.disabled = false; btn.textContent = 'Simpan Kategori';
+  closeKatModal(); renderKatManager(); populateKatFilter();
+  alert('Kategori ditambahkan secara lokal!');
+});
+
+async function deleteKategori(id, row) {
+  if (useServer) {
+    try {
+      const res = await fetch(API_KAT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete', data: { id } }),
+      });
+      const r = await res.json();
+      if (!r.success) { alert(r.message || 'Gagal.'); return; }
+    } catch { alert('Gagal terhubung.'); return; }
+  }
+  const idx = adminKategoriData.findIndex(k => k.id === id);
+  if (idx !== -1) adminKategoriData.splice(idx, 1);
+  row.style.transition = 'opacity 0.2s'; row.style.opacity = '0';
+  setTimeout(() => { row.remove(); populateKatFilter(); }, 200);
+}
+
+// ── EDIT KATEGORI ─────────────────────────────────────────
+function openKatEditModal(kat) {
+  document.getElementById('formKatEditId').value     = kat.id;
+  document.getElementById('formKatEditIdShow').value = kat.id;
+  document.getElementById('formKatEditName').value   = kat.name;
+  document.getElementById('formKatEditIcon').value   = kat.icon || '';
+  document.getElementById('formKatEditJp').value     = kat.jp   || '';
+  document.getElementById('modalKatEdit').classList.add('open');
+}
+
+function closeKatEditModal() { document.getElementById('modalKatEdit').classList.remove('open'); }
+document.getElementById('btnCloseModalKatEdit').addEventListener('click', closeKatEditModal);
+document.getElementById('btnCancelKatEdit').addEventListener('click', closeKatEditModal);
+document.getElementById('modalKatEdit').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalKatEdit')) closeKatEditModal();
+});
+
+document.getElementById('btnSaveKatEdit').addEventListener('click', async () => {
+  const id   = document.getElementById('formKatEditId').value;
+  const name = document.getElementById('formKatEditName').value.trim();
+  const icon = document.getElementById('formKatEditIcon').value.trim() || '🍽️';
+  const jp   = document.getElementById('formKatEditJp').value.trim();
+
+  if (!name) { alert('Nama kategori wajib diisi.'); return; }
+
+  const btn = document.getElementById('btnSaveKatEdit');
+  btn.disabled = true; btn.textContent = 'Menyimpan...';
+
+  if (useServer) {
+    try {
+      const res = await fetch(API_KAT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'edit', data: { id, name, icon, jp } }),
+      });
+      const r = await res.json();
+      if (r.success) {
+        const kat = adminKategoriData.find(k => k.id === id);
+        if (kat) { kat.name = name; kat.icon = icon; kat.jp = jp; }
+        closeKatEditModal(); renderKatManager(); populateKatFilter();
+        showMenuMsg('Kategori berhasil diupdate.', 'success');
+      } else alert(r.message || 'Gagal menyimpan.');
+    } catch { alert('Gagal terhubung ke server.'); }
+    finally { btn.disabled = false; btn.textContent = 'Simpan Perubahan'; }
+    return;
+  }
+
+  // Fallback lokal
+  const kat = adminKategoriData.find(k => k.id === id);
+  if (kat) { kat.name = name; kat.icon = icon; kat.jp = jp; }
+  btn.disabled = false; btn.textContent = 'Simpan Perubahan';
+  closeKatEditModal(); renderKatManager(); populateKatFilter();
+  showMenuMsg('Tersimpan secara lokal.', 'success');
 });
 
 // ── CHANGE PASSWORD ───────────────────────────────────────

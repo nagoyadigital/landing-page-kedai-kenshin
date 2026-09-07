@@ -59,14 +59,23 @@ switch ($body['type']) {
         $existing = file_exists($dataDir . 'menu_overrides.json')
             ? json_decode(file_get_contents($dataDir . 'menu_overrides.json'), true)
             : [];
+        if (!is_array($existing)) $existing = [];
 
         foreach ($body['data'] as $id => $override) {
             $id = (string)$id;
+            // Merge — jangan timpa field yang sudah ada
             if (!isset($existing[$id])) $existing[$id] = [];
-            if (isset($override['harga']))  $existing[$id]['harga']  = (int)$override['harga'];
-            if (isset($override['status'])) $existing[$id]['status'] = (string)$override['status'];
-            // Pertahankan img jika sudah ada dan tidak di-override
-            if (isset($override['img']))    $existing[$id]['img']    = (string)$override['img'];
+
+            // Field yang boleh di-override
+            if (isset($override['harga']))    $existing[$id]['harga']    = (int)$override['harga'];
+            if (isset($override['status']))   $existing[$id]['status']   = (string)$override['status'];
+            if (isset($override['img']))      $existing[$id]['img']      = (string)$override['img'];
+            if (isset($override['name']))     $existing[$id]['name']     = (string)$override['name'];
+            if (isset($override['desc']))     $existing[$id]['desc']     = (string)$override['desc'];
+            if (isset($override['kategori'])) $existing[$id]['kategori'] = (string)$override['kategori'];
+            // Pertahankan flag internal
+            if (isset($override['_isCustom'])) $existing[$id]['_isCustom'] = (bool)$override['_isCustom'];
+            if (isset($override['_deleted']))  $existing[$id]['_deleted']  = (bool)$override['_deleted'];
         }
 
         file_put_contents($dataDir . 'menu_overrides.json', json_encode($existing, JSON_PRETTY_PRINT));
