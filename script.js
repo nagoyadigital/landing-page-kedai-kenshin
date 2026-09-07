@@ -210,7 +210,53 @@ function orderWhatsApp(item) {
   window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, "_blank");
 }
 
-// ── LOAD DATA DARI API ─────────────────────────────────────
+// ── JAM OPERASIONAL (JST / UTC+9) ──────────────────────────
+// Selasa–Sabtu: 12.00–00.00 | Minggu: 12.00–21.00 | Senin: 17.00–22.00
+const JAM_BUKA = {
+  0: null,              // Minggu: override di bawah
+  1: [17 * 60, 22 * 60], // Senin: 17:00–22:00
+  2: [12 * 60, 24 * 60], // Selasa: 12:00–24:00
+  3: [12 * 60, 24 * 60], // Rabu
+  4: [12 * 60, 24 * 60], // Kamis
+  5: [12 * 60, 24 * 60], // Jumat
+  6: [12 * 60, 24 * 60], // Sabtu: 12:00–24:00
+};
+const JAM_BUKA_MINGGU = [12 * 60, 21 * 60]; // Minggu: 12:00–21:00
+
+function isKedaiBuka() {
+  // Waktu saat ini dalam JST (UTC+9)
+  const now   = new Date();
+  const utc   = now.getTime() + now.getTimezoneOffset() * 60000;
+  const jst   = new Date(utc + 9 * 3600000);
+  const day   = jst.getDay();   // 0=Minggu, 1=Senin, ...
+  const menit = jst.getHours() * 60 + jst.getMinutes();
+
+  const range = day === 0 ? JAM_BUKA_MINGGU : JAM_BUKA[day];
+  if (!range) return false;
+  return menit >= range[0] && menit < range[1];
+}
+
+function updateBadgeStatus(manualOverride) {
+  const badge = document.querySelector(".badge-open");
+  if (!badge) return;
+
+  // Manual override dari admin (settings.json) selalu menang
+  if (manualOverride === false) {
+    badge.textContent = "● Tutup";
+    badge.style.background = "var(--red, #DC2626)";
+    return;
+  }
+
+  // Otomatis berdasarkan jam JST
+  const buka = isKedaiBuka();
+  badge.textContent = buka ? "● Buka Sekarang" : "● Tutup";
+  badge.style.background = buka
+    ? "var(--primary, #7B1515)"
+    : "var(--red, #DC2626)";
+}
+
+// Update badge setiap menit
+setInterval(() => updateBadgeStatus(), 60000);
 async function loadFromAPI() {
   try {
     const res  = await fetch("api/load.php");
@@ -222,11 +268,10 @@ async function loadFromAPI() {
     if (data.settings?.wa_number) WA_NUMBER = data.settings.wa_number;
     const el = document.getElementById("footerAlamat");
     if (el && data.settings?.alamat) el.textContent = data.settings.alamat;
-    const badge = document.querySelector(".badge-open");
-    if (badge && data.settings?.status_buka === false) {
-      badge.textContent = "● Tutup";
-      badge.style.background = "var(--red)";
-    }
+
+    // Badge status — manual override jika admin set false, otherwise otomatis
+    const manualOverride = data.settings?.status_buka;
+    updateBadgeStatus(manualOverride);
 
     // Kategori custom — tambahkan ke liveKategoriData
     if (data.custom_kategori?.length) {
@@ -292,6 +337,8 @@ async function loadFromAPI() {
 
 // ── INIT ───────────────────────────────────────────────────
 async function init() {
+  // Set badge status otomatis dulu sebelum API selesai
+  updateBadgeStatus();
   await loadFromAPI();
 
   const modalOverlay = document.createElement("div");
