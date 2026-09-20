@@ -71,6 +71,11 @@ ln -sfn "$NEW_RELEASE" "$CURRENT_LINK"
 # Reload nginx (tanpa restart, tanpa ganggu app)
 sudo nginx -t && sudo systemctl reload nginx
 
+# Restart PHP-FPM: opcache per-release (realpath) membuat kode lama
+# masih bisa dieksekusi setelah switch; restart menjamin kode baru aktif.
+# PHP landing saja — app Node (PM2) tidak terpengaruh.
+sudo systemctl restart php8.3-fpm
+
 echo "=== HEALTH CHECK ==="
 sleep 2
 CODE_ROOT=$(curl -sk -o /dev/null -w "%{http_code}" --max-time 15 https://kedaikenshin.com/)
