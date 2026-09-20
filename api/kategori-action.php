@@ -35,7 +35,7 @@ function kenshin_save_settings($dir, $settings) {
 
 function kenshin_slug($id) {
     $s = strtolower(trim((string)$id));
-    $s = preg_replace('/\s+/g', '-', $s);
+    $s = preg_replace('/\s+/', '-', $s);
     return preg_replace('/[^a-z0-9-]/', '', $s);
 }
 
