@@ -1742,7 +1742,14 @@ const API_LOAD   = '../api/load.php';
 const API_SAVE   = '../api/save.php';
 const API_MENU   = '../api/menu-action';
 const API_KAT    = '../api/kategori-action';
-const API_UPLOAD = '../api/upload-image';
+const API_UPLOAD = '../api/upload-image.php';
+
+// Nilai img bisa path lokal relatif ('images/menu/x') atau URL absolut R2
+// ('https://cdn...'). Hanya path relatif yang perlu diawali '../'.
+function adminImgSrc(v) {
+  if (!v) return null;
+  return /^(https?:)?\/\//i.test(v) ? v : `../${v}`;
+}
 
 // ── State ─────────────────────────────────────────────────
 let useServer = false;
@@ -2065,7 +2072,7 @@ function filterAndRender() {
   filtered.forEach(item => {
     const katObj    = adminKategoriData.find(k => k.id === item.kategori) || {};
     const katName   = katObj.name || item.kategori;
-    const imgSrc    = item.img ? `../${item.img}` : null;
+    const imgSrc    = adminImgSrc(item.img);
     const isChanged = !!pendingChanges[item.id];
     const stClass   = item.status === 'tersedia' ? 'tersedia' : 'habis';
     const stLabel   = item.status === 'tersedia' ? 'Tersedia' : 'Habis';
@@ -2162,7 +2169,7 @@ function filterAndRender() {
             imgEl.id = `cimg-${item.id}`; imgEl.className = 'card-photo-img'; imgEl.alt = item.name;
             card.querySelector('.card-photo-wrap').insertBefore(imgEl, emptyEl);
           }
-          imgEl.src = `../${r.img}?t=${Date.now()}`; imgEl.style.display = 'block';
+          imgEl.src = adminImgSrc(r.img) + `?t=${Date.now()}`; imgEl.style.display = 'block';
           if (emptyEl) emptyEl.style.display = 'none';
           markChanged(item.id, card);
           if (!pendingChanges[item.id]) pendingChanges[item.id] = {};
